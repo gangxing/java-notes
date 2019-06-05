@@ -15,14 +15,14 @@ public class ShellSort implements Sort {
      */
     @Override
     public void sort(int[] arr) {
-        int round = 1;
-        int segment = 2 << round;
-        int segmentSize = arr.length / segment;
-        while (segmentSize>1){
-            InsertionSort sort=new InsertionSort();
-            sort.sort(arr,);
-            round++;
-        }
+//        int round = 1;
+//        int segment = 2 << round;
+//        int segmentSize = arr.length / segment;
+//        while (segmentSize>1){
+//            InsertionSort sort=new InsertionSort();
+//            sort.sort(arr,);
+//            round++;
+//        }
 
 
 
