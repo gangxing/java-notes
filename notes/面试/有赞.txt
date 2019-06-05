@@ -1,0 +1,10 @@
+https://www.nowcoder.com/discuss/51799
+
+1.Hashmap 是线程安全的吗？Hashtable为什么是线程安全的？
+HashMap不是线程安全的，Hashtable是 ，采用了synchronized 但是已经过时 不建议再使用 可以用ConcurrentHashMap来保证线程安全
+
+ConcurrentHashMap基于什么方案保证了线程安全？
+在1.6
+
+
+SpringMVC工作原理
