@@ -28,6 +28,7 @@
         <module>mq</module>
         <module>jvm</module>
         <module>algorathim</module>
+        <module>jdk</module>
     </modules>
 
 
