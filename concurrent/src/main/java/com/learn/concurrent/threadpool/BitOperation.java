@@ -130,6 +130,9 @@ public class BitOperation {
         return Integer.parseInt(binary, 2);
     }
 
+    private static boolean isEven(int n) {
+        return (n & 1) == 0;
+    }
 
     private static void swap(int a, int b) {
         System.err.println("a=" + a + ";b=" + b);
@@ -183,7 +186,7 @@ public class BitOperation {
         System.err.println(CAPACITY);
     }
 
-    public static void main(String[] args) {
+    public static void main2(String[] args) {
         /*
          * 利用位运算将字符串类型的ip地址转换成一个数字存储
          * 因为有四段 所以每段用8位来存储
@@ -202,6 +205,14 @@ public class BitOperation {
             System.err.println(ip + "-->" + res + " 解析" + (ip.equals(decode) ? "成功" : "失败") + " " + decode);
             System.err.println(count);
         }
+    }
+
+    public static void main(String[] args) {
+//        for (int i=-10;i<100;i++){
+//            boolean isEven=isEven(i);
+//            System.err.println(i+(isEven?"是":"不是")+"偶数");
+//        }
+        System.err.println(int2BinaryStr(Integer.MAX_VALUE*2));
     }
 
     static Random random = new Random();
