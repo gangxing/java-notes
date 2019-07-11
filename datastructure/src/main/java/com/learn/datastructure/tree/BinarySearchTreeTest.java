@@ -12,10 +12,12 @@ public class BinarySearchTreeTest {
 
 
     public static void main(String[] args) {
-        BinarySearchTree tree = new BinarySearchTree();
-        tree.add(9);
-        tree.add(10);
-        tree.add(5);
+        BinarySearchTree<String> tree = new BinarySearchTree<>();
+        int[] keys = {11, 8, 5, 10, 16, 18};
+        for (int key : keys) {
+            BinarySearchTree.Node<String> parent = tree.add(key, "value" + key);
+            System.err.println(key + " find parent " + (parent == null ? "null" : parent));
+        }
 
         Iterator<Integer> iterator = tree.iterator();
         while (iterator.hasNext()) {
