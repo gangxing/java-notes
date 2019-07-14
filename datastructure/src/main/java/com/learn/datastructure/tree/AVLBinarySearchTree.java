@@ -6,19 +6,19 @@ import java.util.NoSuchElementException;
 
 /**
  * @ClassName BinarySearchTree
- * @Description <href>https://juejin.im/post/5ad56de7f265da2391489be3</href>
+ * @Description <href>https://www.cnblogs.com/suimeng/p/4560056.html</href>
  * @Author xgangzai@gmail.com
  * @Date 2019/7/11 01:02
  */
-public class BinarySearchTree<V> extends AbstractBinaryTree<V> {
+public class AVLBinarySearchTree<V> extends AbstractBinaryTree<V> {
 
     private Node<V> root;
 
-    public BinarySearchTree(Node<V> root) {
+    public AVLBinarySearchTree(Node<V> root) {
         this.root = root;
     }
 
-    public BinarySearchTree() {
+    public AVLBinarySearchTree() {
         this(null);
     }
 
@@ -39,11 +39,7 @@ public class BinarySearchTree<V> extends AbstractBinaryTree<V> {
             root = node;
             return;
         }
-        //因为没有重复的节点 所以遇到相等的节点则负载value
-        //判断key跟root节点是否相等
-        if (key == node.key) {
-            return;
-        }
+
 
         Node<V> parent;
         while (true) {
@@ -57,7 +53,7 @@ public class BinarySearchTree<V> extends AbstractBinaryTree<V> {
                 node = parent.right;
             }
             if (node == null) {
-                node = new Node<>(key, value);
+                node = new Node<>(key, value,parent);
                 if (key < parent.key) {
                     parent.left = node;
                 } else {
@@ -67,7 +63,114 @@ public class BinarySearchTree<V> extends AbstractBinaryTree<V> {
             }
 
         }
+    }
 
+    /**
+     * 左旋
+     * O(失衡节点) A
+     *  O B
+     *   O C
+     *
+     *   |
+     *   V
+     *
+     *    O B
+     *
+     * O A   O C
+     * @param node 失衡节点
+     */
+    private void rotateLeft(Node<V> node){
+        Node<V> parent=node.parent;
+
+        Node<V> b=node.right;
+
+        //1.父节点
+        b.parent=parent;
+        node.parent=b;
+
+        node.right=null;
+
+        b.left=node;
+
+        setBalance(node);
+        setBalance(b);
+
+        if (node==root){
+            root=b;
+        }
+
+    }
+
+    /**
+     * 右旋
+     * @param node 失衡点
+     */
+    private void rotateRight(Node<V> node){
+        Node<V> parent=node.parent;
+
+        Node<V> b=node.right;
+
+        //1.父节点
+        b.parent=parent;
+        node.parent=b;
+
+        node.left=null;
+
+        b.right=node;
+
+        setBalance(node);
+        setBalance(b);
+        if (node==root){
+            root=b;
+        }
+    }
+
+    /**
+     * 先左旋再右旋
+     *   O              O           O
+     * O         ->   O      ->  O    O
+     *   O          O
+     * @param node
+     */
+    private void rotateLeftAndRight(Node<V> node){
+        Node<V> b=node.left;
+        Node<V> c=b.right;
+        b.parent=c;
+        c.parent=node;
+        node.left=c;
+        c.left=b;
+        b.right=null;
+        rotateRight(node);
+    }
+
+    /**
+     * 先右旋再左旋
+     * @param node
+     */
+    private void rotateRightAndLeft(Node<V> node){
+        Node<V> b=node.right;
+        Node<V> c=b.left;
+        b.parent=c;
+        c.parent=node;
+        node.right=c;
+        c.right=b;
+        b.left=null;
+        rotateLeft(node);
+    }
+
+
+
+    //设置节点平衡度(=左子树高度-右子树高度)
+    private void setBalance(Node node){
+        if (node!=null){
+            node.balance=height(node.left)-height((node.right));
+        }
+    }
+
+    private int height(Node node) {
+        if (node == null)
+            return -1;
+        return 1 + Math.max(height(node.left), height(node.right));
     }
 
 
@@ -132,9 +235,7 @@ public class BinarySearchTree<V> extends AbstractBinaryTree<V> {
             System.err.println("[]");
             return;
         }
-//        printPreOrder(node);
         printInOrder(node);
-//        printPostOrder(node);
     }
 
     /**
@@ -332,20 +433,23 @@ public class BinarySearchTree<V> extends AbstractBinaryTree<V> {
 
         V value;
 
+        int balance;
+
+        Node<V> parent;
+
         Node<V> left;
 
         Node<V> right;
 
-        public Node(int key, V value, Node<V> left, Node<V> right) {
-            this.key = key;
-            this.value = value;
-            this.left = left;
-            this.right = right;
-        }
 
         public Node(int key, V value) {
+            this(key, value, null);
+        }
+
+        public Node(int key, V value, Node<V> parent) {
             this.key = key;
             this.value = value;
+            this.parent = parent;
         }
 
         @Override
@@ -356,5 +460,6 @@ public class BinarySearchTree<V> extends AbstractBinaryTree<V> {
                     '}';
         }
     }
+
 
 }
