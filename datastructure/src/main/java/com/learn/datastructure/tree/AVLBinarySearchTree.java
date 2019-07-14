@@ -53,117 +53,175 @@ public class AVLBinarySearchTree<V> extends AbstractBinaryTree<V> {
                 node = parent.right;
             }
             if (node == null) {
-                node = new Node<>(key, value,parent);
+                node = new Node<>(key, value, parent);
                 if (key < parent.key) {
                     parent.left = node;
                 } else {
                     parent.right = node;
                 }
+                balance(parent);
                 break;
             }
 
         }
     }
 
+
+    private void balance(Node<V> node) {
+        if (node != null) {
+            //更新节点的平衡度
+            setBalance(node);
+            //判断该节点是否为失衡节点
+            if (node.balance == 2) {
+                if (node.left.left != null) {
+                    rotateRight(node);
+                } else {
+                    rotateLeftAndRight(node);
+                }
+
+            } else if (node.balance == -2) {
+                if (node.right.right != null) {
+                    rotateLeft(node);
+                } else {
+                    rotateRightAndLeft(node);
+                }
+            }
+
+
+            if (node.parent != null) {
+                balance(node.parent);
+            }
+        }
+    }
+
     /**
      * 左旋
      * O(失衡节点) A
-     *  O B
-     *   O C
-     *
-     *   |
-     *   V
-     *
-     *    O B
-     *
+     * O B
+     * O C
+     * <p>
+     * |
+     * V
+     * <p>
+     * O B
+     * <p>
      * O A   O C
+     *
      * @param node 失衡节点
      */
-    private void rotateLeft(Node<V> node){
-        Node<V> parent=node.parent;
+    private void rotateLeft(Node<V> node) {
+        Node<V> parent = node.parent;
 
-        Node<V> b=node.right;
+        Node<V> b = node.right;
 
         //1.父节点
-        b.parent=parent;
-        node.parent=b;
+        b.parent = parent;
+        //新的顶点B来替代原来node
+        if (parent != null) {
+            if (node == parent.left) {
+                parent.left = b;
+            } else {
+                parent.right = b;
+            }
+        }
+        node.parent = b;
 
-        node.right=null;
+        node.right = null;
 
-        b.left=node;
+        if (b.left != null) {
+            Node<V> l = b.left;
+            l.parent = node;
+            node.right = l;
+        }
 
-        setBalance(node);
-        setBalance(b);
+        b.left = node;
 
-        if (node==root){
-            root=b;
+//        setBalance(node);
+//        setBalance(b);
+
+        if (node == root) {
+            root = b;
         }
 
     }
 
     /**
      * 右旋
+     *
      * @param node 失衡点
      */
-    private void rotateRight(Node<V> node){
-        Node<V> parent=node.parent;
+    private void rotateRight(Node<V> node) {
+        Node<V> parent = node.parent;
 
-        Node<V> b=node.right;
+        Node<V> b = node.right;
 
         //1.父节点
-        b.parent=parent;
-        node.parent=b;
+        b.parent = parent;
 
-        node.left=null;
+        if (parent != null) {
+            if (node == parent.left) {
+                parent.left = b;
+            } else {
+                parent.right = b;
+            }
+        }
+        node.parent = b;
+        node.left = null;
 
-        b.right=node;
 
-        setBalance(node);
-        setBalance(b);
-        if (node==root){
-            root=b;
+        if (b.right != null) {
+            Node<V> l = b.right;
+            l.parent = node;
+            node.left = l;
+        }
+
+        b.right = node;
+
+        if (node == root) {
+            root = b;
         }
     }
 
     /**
      * 先左旋再右旋
-     *   O              O           O
+     * O              O           O
      * O         ->   O      ->  O    O
-     *   O          O
+     * O          O
+     *
      * @param node
      */
-    private void rotateLeftAndRight(Node<V> node){
-        Node<V> b=node.left;
-        Node<V> c=b.right;
-        b.parent=c;
-        c.parent=node;
-        node.left=c;
-        c.left=b;
-        b.right=null;
+    private void rotateLeftAndRight(Node<V> node) {
+        Node<V> b = node.left;
+        Node<V> c = b.right;
+        b.parent = c;
+        c.parent = node;
+        node.left = c;
+        c.left = b;
+        b.right = null;
         rotateRight(node);
     }
 
     /**
      * 先右旋再左旋
+     *
      * @param node
      */
-    private void rotateRightAndLeft(Node<V> node){
-        Node<V> b=node.right;
-        Node<V> c=b.left;
-        b.parent=c;
-        c.parent=node;
-        node.right=c;
-        c.right=b;
-        b.left=null;
+    private void rotateRightAndLeft(Node<V> node) {
+        Node<V> b = node.right;
+        Node<V> c = b.left;
+        b.parent = c;
+        c.parent = node;
+        node.right = c;
+        c.right = b;
+        b.left = null;
         rotateLeft(node);
     }
 
 
-
     //设置节点平衡度(=左子树高度-右子树高度)
-    private void setBalance(Node node){
-        if (node!=null){
-            node.balance=height(node.left)-height((node.right));
+    private void setBalance(Node node) {
+        if (node != null) {
+            node.balance = height(node.left) - height((node.right));
         }
     }
 
@@ -174,53 +232,8 @@ public class AVLBinarySearchTree<V> extends AbstractBinaryTree<V> {
     }
 
 
-    public V search11(int key) {
-        Node<V> node = root;
-        if (node == null) {
-            return null;
-        }
-        if (key == node.key) {
-            return node.value;
-        }
-
-        while (node != null) {
-            if (key == node.key) {
-                break;
-            } else if (key < node.key) {
-                node = node.left;
-            } else {
-                node = node.right;
-            }
-        }
-
-        return node == null ? null : node.value;
-    }
-
     //递归实现方式，编码简单，但是如果数据量大的话，栈深度大，内存不友好
-    @Override
-    public V search(int key) {
-        Node<V> node = compare(root, key);
-        return node == null ? null : node.value;
-    }
 
-
-    private Node<V> compare(Node<V> node, int key) {
-        String keyStr = node == null ? "null" : node.key + "";
-//        System.err.println("Compare node[" + keyStr + "]");
-
-        if (node != null) {
-            if (key == node.key) {
-                return node;
-            }
-            if (key < node.key && node.left != null) {
-                return compare(node.left, key);
-            }
-            if (key > node.key && node.right != null) {
-                return compare(node.right, key);
-            }
-        }
-        return null;
-    }
 
     /*
         深度优先 广度优先

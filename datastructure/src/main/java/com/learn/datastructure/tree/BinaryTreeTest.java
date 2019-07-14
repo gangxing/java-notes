@@ -40,7 +40,7 @@ public class BinaryTreeTest {
 
     public static void main(String[] args) {
         BinaryTree<String> tree = new AVLBinarySearchTree<>();
-        int[] keys = {2,1,3,4};
+        int[] keys = {5,10,8};
         for (int key : keys) {
             tree.add(key, "value" + key);
         }
