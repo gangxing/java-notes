@@ -68,30 +68,28 @@ public class AVLBinarySearchTree<V> extends AbstractBinaryTree<V> {
 
 
     private void balance(Node<V> node) {
-        if (node != null) {
-            //更新节点的平衡度
-            setBalance(node);
-            //判断该节点是否为失衡节点
-            if (node.balance == 2) {
-                if (node.left.left != null) {
-                    rotateRight(node);
-                } else {
-                    rotateLeftAndRight(node);
-                }
-
-            } else if (node.balance == -2) {
-                if (node.right.right != null) {
-                    rotateLeft(node);
-                } else {
-                    rotateRightAndLeft(node);
-                }
+        if (node == null) {
+            return;
+        }
+        //更新节点的平衡度
+        int balance = getBalance(node);
+        //判断该节点是否为失衡节点
+        if (balance == 2) {
+            if (node.left.left != null) {
+                rotateRight(node);
+            } else {
+                rotateLeftAndRight(node);
             }
 
-
-            if (node.parent != null) {
-                balance(node.parent);
+        } else if (balance == -2) {
+            if (node.right.right != null) {
+                rotateLeft(node);
+            } else {
+                rotateRightAndLeft(node);
             }
         }
+
+        balance(node.parent);
     }
 
     /**
@@ -135,9 +133,6 @@ public class AVLBinarySearchTree<V> extends AbstractBinaryTree<V> {
         }
 
         b.left = node;
-
-//        setBalance(node);
-//        setBalance(b);
 
         if (node == root) {
             root = b;
@@ -219,10 +214,8 @@ public class AVLBinarySearchTree<V> extends AbstractBinaryTree<V> {
 
 
     //设置节点平衡度(=左子树高度-右子树高度)
-    private void setBalance(Node node) {
-        if (node != null) {
-            node.balance = height(node.left) - height((node.right));
-        }
+    private int getBalance(Node node) {
+        return height(node.left) - height((node.right));
     }
 
     private int height(Node node) {
@@ -445,8 +438,6 @@ public class AVLBinarySearchTree<V> extends AbstractBinaryTree<V> {
         int key;
 
         V value;
-
-        int balance;
 
         Node<V> parent;
 

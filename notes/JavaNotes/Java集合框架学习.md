@@ -423,9 +423,7 @@ Self-balancing binary search tree
 
 AVL树节点新增的属性
 
-1.balance-平衡度=左子树的高度-右子树的高度
-
-2.parent-父节点 这个属性干什么用，一定是必须的吗？？？
+2.parent-父节点 
 
 树(子树)的高度计算：从树(子树)根节点开始，递归查下去累计计数得到。如果根节点不存在，即一棵空树的高度是-1，实现如下
 
@@ -439,9 +437,25 @@ private int height(Node n) {
 
 先按照二叉搜索树的插入操作增加新的节点，然后找到离新增节点最近的失衡节点（需要向上找，所以需要持有父节点的引用？）。balance==2或-2时这个节点即为失衡节点，平衡之，然后递归向上再平衡之，直至不再有失衡点
 
+又搞了一下午，终于把平衡二叉搜索树的添加节点操作实现了
+
+四种基本类型
+
+LL型，右旋修正
+
+![](https://cdn.sinaimg.cn.52ecy.cn/large/005BYqpgly1g4zfz9zl2wj30b504s0st.jpg)
 
 
 
+RR型，左旋修正
+
+![](https://cdn.sinaimg.cn.52ecy.cn/large/005BYqpgly1g4zg6z2gkoj30c904wmx9.jpg)
+
+RL型，先对子树进行右旋，再对包括失衡节点的子树进行左旋
+
+
+
+![](https://cdn.sinaimg.cn.52ecy.cn/large/005BYqpgly1g4zgzrr5o9j30fl03qweo.jpg)
 
 当新增一个节点时，如果没有兄弟节点，才有可能产生失衡节点。
 
