@@ -14,7 +14,8 @@ public class Main {
 //        System.err.println("hashCode:"+"2".hashCode());
 //        testReference();
 //        testLoop();
-        testEquals();
+//        testEquals();
+        testCeil();
     }
 
     private static int testHashCode(){
@@ -54,5 +55,10 @@ public class Main {
         System.err.println("a==b:"+(a==b));
         System.err.println("a.equals(b):"+(a.equals(b)));
         System.err.println("a.compareTo(b)==0:"+(a.compareTo(b)==0));
+    }
+
+    private static void testCeil(){
+        double d=-2.9D;
+        System.err.println(Math.ceil(d));
     }
 }

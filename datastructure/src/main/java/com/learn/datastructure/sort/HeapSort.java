@@ -2,7 +2,7 @@ package com.learn.datastructure.sort;
 
 /**
  * @ClassName HeapSort
- * @Description TODO 也是一脸懵逼
+ * @Description TODO 也是一脸懵逼 要理解堆排序，肯定要先知道什么是堆 今天是2019-07-16花了一天的时间终于弄懂了什么是堆
  * @Author xianjun@ixiaopu.com
  * @Date 21/05/2018 22:07
  */
