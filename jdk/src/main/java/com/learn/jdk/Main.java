@@ -13,7 +13,8 @@ public class Main {
 //        int hashCode=testHashCode();
 //        System.err.println("hashCode:"+"2".hashCode());
 //        testReference();
-        testLoop();
+//        testLoop();
+        testEquals();
     }
 
     private static int testHashCode(){
@@ -45,5 +46,13 @@ public class Main {
         for (int i=0;i<5;i++){
             System.err.println(i);
         }
+    }
+
+    private static void testEquals(){
+        Integer a=3;
+        Integer b=3;
+        System.err.println("a==b:"+(a==b));
+        System.err.println("a.equals(b):"+(a.equals(b)));
+        System.err.println("a.compareTo(b)==0:"+(a.compareTo(b)==0));
     }
 }
