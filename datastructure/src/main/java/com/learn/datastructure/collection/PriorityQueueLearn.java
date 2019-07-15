@@ -16,7 +16,7 @@ public class PriorityQueueLearn {
         for (int i=10;i>0;i--) {
             queue.add(i);
         }
-        queue.remove(1);
+        queue.remove(1  );
         Iterator<Integer> iterator=queue.iterator();
         while (iterator.hasNext()){
             Integer next=iterator.next();
