@@ -437,14 +437,6 @@ public class RedblackTree<V> implements BinaryTree<V> {
         @Override
         public String toString() {
             return nestedNodeStr(this) + " parent=" + nestedNodeStr(parent) + " left=" + nestedNodeStr(left) + " right=" + nestedNodeStr(right);
-//            return "Node{" +
-//                    "key=" + key +
-//                    ", value=" + value +
-//                    ", color=" + (isRed ? "RED" : "BLACK") +
-//                    ", parent=" + nestedNodeStr(parent) +
-//                    ", left=" + nestedNodeStr(left) +
-//                    ", right=" + nestedNodeStr(right) +
-//                    '}';
         }
 
         private String nestedNodeStr(Node<V> node) {
