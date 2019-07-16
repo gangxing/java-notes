@@ -13,7 +13,7 @@ public class RedblackTreeTest {
     public static void main(String[] args) {
         RedblackTree<String> tree=new RedblackTree<>();
 
-        int[] keys = {10,8,5};
+        int[] keys = {1,2,3};
         for (int key : keys) {
             tree.add(key, "value" + key);
         }

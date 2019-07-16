@@ -174,10 +174,48 @@ public class RedblackTree<V> implements BinaryTree<V> {
                 uncle.setColor(Node.BLACK);
                 grandparent.setColor(Node.RED);
                 fix4Add(grandparent);
+            }else {
+                //左左
+                if (parent==grandparent.left){
+                    //场景4
+                    if (node==parent.left){//左左
+                        //右旋G
+                        rotateRight(grandparent);
+
+                        //P,G颜色对换
+                        parent.setColor(Node.BLACK);
+                        grandparent.setColor(Node.RED);
+                        //场景5
+                    }else {//左右
+                        //先左旋parent 再走场景4
+                        rotateLeft(parent);
+                        fix4Add(parent);
+                    }
+                }else {
+                    //场景6
+                    if (node==parent.right){//右右
+                        //右旋G
+                        rotateLeft(grandparent);
+
+                        //P,G颜色对换
+                        parent.setColor(Node.BLACK);
+                        grandparent.setColor(Node.RED);
+
+                        //场景7
+                    }else {//右左
+                        //先左旋parent 再走场景6
+                        rotateRight(parent);
+                        fix4Add(parent);
+                    }
+                }
+
+            }
 
                 //场景4 N是左节点
-            } else if (node == parent.left) {
+           /* } else if (node == parent.left) {
 
+
+//                左左
                 //右旋G
                 rotateRight(grandparent);
 
@@ -189,11 +227,11 @@ public class RedblackTree<V> implements BinaryTree<V> {
                 //场景5 N是右节点
             } else {
 
-                //左旋P
+                //左旋P TODO 这里要看P是做还是右
                 rotateLeft(parent);
                 //此时N和P的角色互换了，把原来的P当做新插入的节点，递归调用，走场景4修正
                 fix4Add(parent);
-            }
+            }*/
         }
         //P是黑色 no op
 
@@ -208,11 +246,12 @@ public class RedblackTree<V> implements BinaryTree<V> {
     }
 
     private boolean isBlack(Node<V> node) {
-        return node == null || node.isBlack();
+//        return node == null || node.isBlack();
+        return !isRed(node);
     }
 
     /**
-     * @param node 三角形原来的顶点
+     * @param node 三角形原来的顶点,向左移动中领头的节点
      */
     private void rotateLeft(Node<V> node) {
         Node<V> parent = node.parent;
@@ -248,7 +287,7 @@ public class RedblackTree<V> implements BinaryTree<V> {
     }
 
     /**
-     * @param node 三角形原来的顶点
+     * @param node 三角形原来的顶点，向右移动中领头的节点
      */
     private void rotateRight(Node<V> node) {
         Node<V> parent = node.parent;
