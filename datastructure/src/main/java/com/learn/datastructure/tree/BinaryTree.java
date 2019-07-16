@@ -34,8 +34,5 @@ public interface BinaryTree<V> {
     Iterator<Integer> iterator();
 
 
-    interface Node<V>{
-
-    };
 
 }

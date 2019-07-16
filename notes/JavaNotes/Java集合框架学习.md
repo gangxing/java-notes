@@ -673,7 +673,7 @@ private void siftDownComparable(int k, E x) {
 
 
 
-找了半天，还是发现[维基百科]([https://zh.wikipedia.org/wiki/%E7%BA%A2%E9%BB%91%E6%A0%91](https://zh.wikipedia.org/wiki/红黑树))讲得透彻，这种严谨、完整的叙述方式值得学习
+找了半天，还是发现[维基百科](https://zh.wikipedia.org/wiki/红黑树)讲得透彻，这种严谨、完整的叙述方式值得学习
 
 红黑树高度计算
 
@@ -705,17 +705,75 @@ private void siftDownComparable(int k, E x) {
 
 *3.新节点的父节点是红色*
 
+这种场景隐含的条件，新节点一定有祖父节点，因为根节点必须是黑色。
+
+后面两种场景太难理解 看看JDK的`TreeMap`怎么实现的,天呐，代码那么长。。。`HashMap`中也用到了红黑树，但是和`TreeMap`没有复用树的相关代码。
+
+JDK的代码没有注释，变量名也很短，看求不懂，还是只有慢慢啃逻辑，弄清插入逻辑后再去看JDK实现
+
+难点在于对插入节点后，需要修复的场景理不清，终于又找到了[一篇](https://github.com/julycoding/The-Art-Of-Programming-By-July/blob/master/ebook/zh/03.01.md),它对于插入时的场景归纳为3种，其实也是5种，只不过后面3种场景说得更简洁一点
+
+为了行文更简洁，每种节点以字母命名
+
+N-新增节点Node
+
+P-父节点Parent
+
+G-祖父节点Grandparent
+
+U-叔父节点Uncle
+
+LS-左兄弟节点Left Siblling
+
+RS-右兄弟节点Right Siblling
+
+LC-左子节点Left Child
+
+RC-右子节点Right Child
+
+*<font color="#dd0000">1.N为根节点</font>*
+
+将N改为黑色即可
+
+*<font color="#dd0000">2.N的P为黑色</font>*
+
+没有改变原有的树结构，不修正
+
+*<font color="#dd0000">3.N的P和U都是红色</font>*
+
+这时G一定存在，并且是黑色。先将P和U改为黑色，再将G改为红色。如果G为根节点，改回黑色，否则，继续将G作为新插入的节点往上验证，直至不满足场景3
+
+<font color="#6495ed">p.s.还得考虑N和P作为子节点身份来讲是RC还是LC。两两组合又得分四种情况。至于修正逻辑是否需要区分，先按照一种情况实现后再校验其他三种情况。</font>
+
+*<font color="#dd0000">4.N的P是红色，U(可能是NIL)是黑色，N是LC</font>*
+
+以G为顶点右旋，P和G的颜色对换（P改为黑色，G改为红色），P代替了G，颜色最终也是黑色，所以对上没有变动，对下，没有增加黑色节点数量，所以也无需再做修正
+
+*<font color="#dd0000">5.N的P是红色，U(可能是NIL)是黑色，N是RC</font>*
+
+先以P为顶点左旋，转换成场景4，再按照场景4的流程修正
 
 
-删除操作
 
 
 
-查询操作
 
 
 
-迭代
+
+**删除操作**
+
+
+
+**查询操作 **
+
+同二叉搜索树的查询
+
+
+
+**迭代**
+
+同二叉搜索树的迭代
 
 
 

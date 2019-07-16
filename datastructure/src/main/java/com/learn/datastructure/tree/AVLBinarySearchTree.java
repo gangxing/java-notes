@@ -10,7 +10,7 @@ import java.util.NoSuchElementException;
  * @Author xgangzai@gmail.com
  * @Date 2019/7/11 01:02
  */
-public class AVLBinarySearchTree<V> extends AbstractBinaryTree<V> {
+public class AVLBinarySearchTree<V> implements BinaryTree<V> {
 
     private Node<V> root;
 
@@ -66,6 +66,26 @@ public class AVLBinarySearchTree<V> extends AbstractBinaryTree<V> {
         }
     }
 
+    @Override
+    public V search(int key) {
+        Node<V> node = compare(root, key);
+        return node == null ? null : node.value;
+    }
+
+    Node<V> compare(Node<V> node, int key) {
+        if (node != null) {
+            if (key == node.key) {
+                return node;
+            }
+            if (key < node.key && node.left != null) {
+                return compare(node.left, key);
+            }
+            if (key > node.key && node.right != null) {
+                return compare(node.right, key);
+            }
+        }
+        return null;
+    }
 
     private void balance(Node<V> node) {
         if (node == null) {
