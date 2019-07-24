@@ -1,6 +1,7 @@
 package com.learn.datastructure.collection;
 
 import java.util.Date;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Random;
 
@@ -16,18 +17,23 @@ public class LinkedListLearn {
 
     public static void main(String[] args) {
 
-        for (int i=0;i<999;i++) {
+        for (int i=0;i<9;i++) {
             list.add(Student.random(i));
-            if (i%5==0){
-                try {
-                    Thread.sleep(80);
-                }catch (InterruptedException e){
-                    e.printStackTrace();
-                }
-            }
+//            if (i%5==0){
+//                try {
+//                    Thread.sleep(80);
+//                }catch (InterruptedException e){
+//                    e.printStackTrace();
+//                }
+//            }
         }
 
         print();
+        Iterator<Student> iterator=list.listIterator();
+        while (iterator.hasNext()){
+            Student next=iterator.next();
+            System.err.println(next);
+        }
     }
 
     private static void print() {
@@ -36,12 +42,18 @@ public class LinkedListLearn {
         }
     }
 
+    //逆序输出
     private static void reversePrint() {
 
         for (Student s : list) {
             System.err.println(s);
         }
     }
+
+
+
+
+
 
 
     static class Student{

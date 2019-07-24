@@ -15,7 +15,8 @@ public class Main {
 //        testReference();
 //        testLoop();
 //        testEquals();
-        testCeil();
+//        testCeil();
+        testBitOperation();
     }
 
     private static int testHashCode(){
@@ -60,5 +61,10 @@ public class Main {
     private static void testCeil(){
         double d=-2.9D;
         System.err.println(Math.ceil(d));
+    }
+
+    private static void testBitOperation(){
+        System.err.println(2<<4);
+        System.err.println(1<<5);
     }
 }

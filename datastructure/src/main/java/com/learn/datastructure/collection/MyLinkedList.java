@@ -12,14 +12,22 @@ public class MyLinkedList {
 
     private Node head;
 
-    private Node tail ;
+    private Node tail ;//要不要尾部引用 先要着 实现后再看JDK怎么实现的
 
-    private class Node {
+    public class Node {
 
         private int value;
 
 
         private Node next;
+
+        public int getValue() {
+            return value;
+        }
+
+        public Node getNext() {
+            return next;
+        }
 
         public Node(int value, Node next) {
             this.value = value;
@@ -28,6 +36,11 @@ public class MyLinkedList {
 
         public Node(int value) {
             this(value, null);
+        }
+
+        @Override
+        public String toString() {
+            return value+"";
         }
     }
 
@@ -38,13 +51,16 @@ public class MyLinkedList {
         if (head==null || tail==null){
             head=tail=node;
         }else {
-            link(value,tail);
+            link(node,tail);
         }
 
     }
 
-    private void link(int value,Node prev){
-        Node node=new Node(value);
+    public Node getHead(){
+        return head;
+    }
+
+    private void link(Node node,Node prev){
         prev.next=node;
         tail=node;
     }
@@ -57,6 +73,10 @@ public class MyLinkedList {
 
         Node next;
 
+        public Itr() {
+            this.next = head;
+        }
+
         @Override
         public boolean hasNext() {
             return next != null;
@@ -64,7 +84,12 @@ public class MyLinkedList {
 
         @Override
         public Node next() {
-            return next;
+            Node n=next;
+            if (n==null){
+                throw new IllegalArgumentException("已经没有啦");
+            }
+            next=n.next;
+            return n;
         }
     }
 }
