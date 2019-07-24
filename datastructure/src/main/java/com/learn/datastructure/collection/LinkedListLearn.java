@@ -16,8 +16,8 @@ public class LinkedListLearn {
 
     public static void main(String[] args) {
 
-        for (int i=0;i<999999;i++) {
-            list.add(Student.random());
+        for (int i=0;i<999;i++) {
+            list.add(Student.random(i));
             if (i%5==0){
                 try {
                     Thread.sleep(80);
@@ -34,8 +34,13 @@ public class LinkedListLearn {
         for (Student s : list) {
             System.err.println(s);
         }
+    }
 
-        System.err.println(list);
+    private static void reversePrint() {
+
+        for (Student s : list) {
+            System.err.println(s);
+        }
     }
 
 
@@ -55,9 +60,13 @@ public class LinkedListLearn {
         public static Student random(){
             Random random=new Random();
             int age=random.nextInt(20);
-            String name="Name"+random.nextInt(Integer.MAX_VALUE);
+            return random(age);
+        }
 
-            return new Student(age,name);
+        public static Student random(int init){
+            String name="Name"+init;
+
+            return new Student(init,name);
         }
 
         @Override

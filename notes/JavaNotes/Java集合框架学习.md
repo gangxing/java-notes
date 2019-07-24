@@ -220,6 +220,24 @@ final Node<K,V> nextNode() {
 
 至此，<code>Map</code>之遍历的实现方式就清晰了。除了上面<code>entrySet</code>这个变量在何时赋值的不理解外。
 
+2019-07-18，找了半天终于找到了一个[靠谱的解释](https://stackoverflow.com/questions/41714233/how-and-when-hashmap-initialize-entryset-and-add-value-into-it)
+
+It is your debugger that fools you. The debugger view calls `toString()` which in fact calls `entrySet()` (see `AbstractMap.toString()`). That is why the `entrySet` was already initialized, when you looked at it.
+
+If you look in there via reflection utils, e.g. with the following code:
+
+```java
+HashMap<String, String> map = new HashMap<>();
+
+Field entrySetField = HashMap.class.getDeclaredField("entrySet");
+entrySetField.setAccessible(true);
+Object entrySet = entrySetField.get(map);
+System.out.println("entrySet = " + entrySet);
+System.out.println("map.toString() = " + map.toString());
+entrySet = entrySetField.get(map);
+System.out.println("entrySet = " + entrySet);
+```
+
 常见的问题
 
 为什么遍历Map时，优先使用<code>entrySet</code>,因为这种遍历方式是最直接的，符合Map内部的存储结构的
@@ -775,14 +793,6 @@ ps花了一天的时间，终于把红黑树的插入实现了，
 
 下一步实现删除操作，推导树的高度
 
-
-
-
-
-
-
-
-
 **删除操作**
 
 
@@ -796,6 +806,43 @@ ps花了一天的时间，终于把红黑树的插入实现了，
 **迭代**
 
 同二叉搜索树的迭代
+
+
+
+**高度计算**
+
+维基百科
+
+包含*n*个内部节点的红黑树的高度是O(log$$n$$)。
+
+**定义**：
+
+- $$h(v)$$表示以节点 $$v$$为根的子树的高度。
+-  $$bh(v)$$表示从$$ v$$到子树中任何叶子的黑色节点的数目（如果$$v$$是黑色则不计数它，也叫做黑色高度）。
+
+**引理**：以节点{\displaystyle v}![v](https://wikimedia.org/api/rest_v1/media/math/render/svg/e07b00e7fc0847fbd16391c778d65bc25c452597)为根的子树有至少{\displaystyle 2^{bh(v)}-1}![2^{{bh(v)}}-1](https://wikimedia.org/api/rest_v1/media/math/render/svg/bd20e4a4bb09ff8a0b1f669e13d80a767fd380dc)个内部节点。
+
+引理的证明（通过归纳高度）：
+
+基础： $$h(v)=0$$
+
+如果 $$v$$的高度是零则它必定是NIL，因此 $$bh(v)=0$$。所以：
+
+$$2^{bh(v)}-1=2^{0}-1=1-1=0$$
+
+归纳假设：$$h(v)=k$$的$$ v$$有$$ 2^{bh(v)-1}-1$$个内部节点暗示了$$h(v) = k+1$$的 $$v'$$有 $$2^{bh(v')}-1$$个内部节点。
+
+因为$$v'$$有$$h( v')> 0$$所以它是个内部节点。同样的它有黑色高度要么是$$bh( v')$$要么是$$bh(v')-1$$（依据 $$v'$$是红色还是黑色）的两个儿子。通过归纳假设每个儿子都有至少 $$2^{bh(v')-1}-1$$个内部接点，所以$$v'$$有：
+
+$$2^{bh(v')-1}-1+2^{bh(v')-1}-1+1=2^{bh(v')}-1$$
+
+个内部节点。
+
+使用这个引理我们现在可以展示出树的高度是对数性的。因为在从根到叶子的任何路径上至少有一半的节点是黑色（根据红黑树性质4），根的黑色高度至少是$$\frac{h(root)}{2}$$。通过引理我们得到：
+
+![n\geqslant 2^{{{\frac  {h(root)}{2}}}}-1\leftrightarrow \;\log {(n+1)}\geqslant {\frac  {h(root)}{2}}\leftrightarrow \;h(root)\leqslant 2\log {(n+1)}](https://wikimedia.org/api/rest_v1/media/math/render/svg/16f0c429691a200154c7dcd7b81ae57266f01440)
+
+因此根的高度是$${\text{O}}(\log n)$$
 
 
 
