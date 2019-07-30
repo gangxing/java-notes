@@ -64,6 +64,9 @@ public class Main {
     }
 
     private static void testBitOperation(){
+        int i=1;
+        i<<=4;
+        System.err.println(i);
         System.err.println(2<<4);
         System.err.println(1<<5);
     }

@@ -1,8 +1,6 @@
 package com.learn.datastructure.collection;
 
 import java.util.ArrayDeque;
-import java.util.Optional;
-import java.util.stream.Stream;
 
 /**
  * @ClassName ArrayDequeLearn
@@ -13,7 +11,7 @@ import java.util.stream.Stream;
 public class ArrayDequeLearn {
 
     public static void main(String[] args) {
-        ArrayDeque<Integer> stack=new ArrayDeque<>(3);
+        ArrayDeque<Integer> stack=new ArrayDeque<>(8);
 
         for (int i=10;i>0;i--) {
             stack.push(i);

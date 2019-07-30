@@ -11,6 +11,12 @@ import java.util.LinkedHashMap;
 public class LinkedHashMapLearn {
 
     public static void main(String[] args) {
-        LinkedHashMap<Integer,String> map=new LinkedHashMap<>();
+//        LinkedHashMap<Integer, String> map = new LinkedHashMap<>(3, 0.75f, true);
+        LinkedHashMap<Integer, String> map = new LinkedHashMap<>(3);
+        map.put(1,"Value1");
+
+        String value=map.get(2);
+        System.err.println(value);
+
     }
 }
