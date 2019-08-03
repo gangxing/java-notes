@@ -1,8 +1,6 @@
-Self-balancing Binary Search Tree
-
 **平衡二叉树**
 
-Self-balancing binary search tree
+Self-balancing Binary Search Tree
 
 何为平衡，通俗来讲，任何一个节点的左右子树的节点数尽肯能相等。更准确的描述：
 

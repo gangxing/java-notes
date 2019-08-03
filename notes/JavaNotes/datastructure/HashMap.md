@@ -350,6 +350,8 @@ hash -key的hash值 <code>HashMap</code>中：hash= key.hashCode() ^( key.hashCo
 
 基于jdk8亲测并不会出现并发导致的死循环问题，40个线程put,40个线程get。。。都能正常执行完成，至于数据是否准确，还无从得知。难道是JDK8做了什么优化？？？
 
+
+
 第一种方案，
 
 

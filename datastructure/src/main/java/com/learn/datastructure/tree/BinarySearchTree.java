@@ -39,11 +39,11 @@ public class BinarySearchTree<V> implements BinaryTree<V> {
             root = node;
             return;
         }
-        //因为没有重复的节点 所以遇到相等的节点则负载value
-        //判断key跟root节点是否相等
-        if (key == node.key) {
-            return;
-        }
+//        //因为没有重复的节点 所以遇到相等的节点则负载value
+//        //判断key跟root节点是否相等
+//        if (key == node.key) {
+//            return;
+//        }
 
         Node<V> parent;
         while (true) {
