@@ -16,7 +16,7 @@ AVL 的查找能达到二分查找法的效果，这是在新增和删除节点�
 
 以蓝色方框中三个节点为单元，红色折线上节点按照箭头方向向前移一位。打个不恰当的比喻，类似一串珠子，固定三角排列，在右边往下拉了一下。左旋是反向操作，见下图
 
-![](https://cdn.sinaimg.cn.52ecy.cn/large/005BYqpgly1g5mmkey11cj30b6048glq.jpg)
+![](https://cdn.sinaimg.cn.52ecy.cn/large/005BYqpgly1g5mnf8v8azj30b6048glq.jpg)
 
 这里的旋转有点不好理解，叫左拉和右拉就好理解啦，哈哈哈哈。
 

@@ -9,7 +9,7 @@ package com.learn.datastructure.sort;
 public interface Sort {
 
     /**
-     * 排序
+     * 升序排序
      *
      * @param arr
      */

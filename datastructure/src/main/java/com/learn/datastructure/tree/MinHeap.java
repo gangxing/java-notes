@@ -16,8 +16,12 @@ public class MinHeap {
     private int size;
 
     public MinHeap() {
-        this.queue = new Integer[16];
-        this.size = 0;
+        this(16);
+    }
+
+    public MinHeap(int capacity){
+        this.queue=new Integer[capacity];
+        this.size=0;
     }
 
     public void add(int value) {
@@ -45,6 +49,8 @@ public class MinHeap {
                 queue[parent] = value;
                 //继续往上找
                 k = parent;
+            }else {
+                break;
             }
 
         }
@@ -76,6 +82,11 @@ public class MinHeap {
         }
     }
 
+    /**
+     *
+     * @param v value
+     * @return true - exists ;false -not exists
+     */
     public boolean remove(int v) {
         int p = indexOf(v);
         if (p == -1) {
@@ -94,14 +105,20 @@ public class MinHeap {
         return -1;
     }
 
-    private void removeAt(int i) {
+    /**
+     *
+     * @param i index
+     * @return value
+     */
+    public int removeAt(int i) {
 
         int s = --size;//先得到末尾元素下标，同时将size减1
 
+        int value=queue[i];
         int v = queue[s];
         queue[s] = null;
         if (s == i) {//删除的刚好是末尾这个元素
-            return;
+            return value;
         }
 
         //将最后一个元素放置在待删除的位置
@@ -110,13 +127,8 @@ public class MinHeap {
         //下调操作
         siftDown(i);
 
-    }
+        return value;
 
-    private Integer tryGet(int i) {
-        if (i < 0 || i >= queue.length) {
-            return null;
-        }
-        return queue[i];
     }
 
 
