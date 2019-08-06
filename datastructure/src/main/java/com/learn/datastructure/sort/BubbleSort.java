@@ -9,21 +9,31 @@ package com.learn.datastructure.sort;
 public class BubbleSort implements Sort {
 
 
+    /**
+     * 时间复杂度O(N^2)
+     * 空间复杂度O(1)
+     *
+     * @param arr
+     */
     @Override
     public void sort(int[] arr) {
-        if (arr != null && arr.length > 1) {
-            int tmp;
-            for (int i = 0; i < arr.length - 1; i++) {
-                for (int j = 0; j < arr.length - 1 - i; j++) {
-                    if (arr[j] > arr[j + 1]) {
-                        tmp = arr[j];
-                        arr[j] = arr[j + 1];
-                        arr[j + 1] = tmp;
-                    }
+        for (int i = 0; i < arr.length; i++) {
+            for (int j = 0; j < arr.length - 1 - i; j++) {
+                if (arr[j] > arr[j + 1]) {
+                    swap(arr, j, j + 1);
                 }
-
             }
         }
+
+
+    }
+
+    public static void main(String[] args) {
+        int[] arr = {5, 18, 90, 73, 58};
+        Sort sort = new BubbleSort();
+        sort.sort(arr);
+        sort.print(arr);
+
     }
 
 

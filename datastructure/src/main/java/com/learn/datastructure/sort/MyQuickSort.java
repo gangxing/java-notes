@@ -81,12 +81,7 @@ public class MyQuickSort implements Sort {
 
     }
 
-    private void swap(int[] arr, int left, int right) {
-        int temp = arr[left];
-        arr[left] = arr[right];
-        arr[right] = temp;
-        print(arr);
-    }
+
 
 
     public static void main(String[] args) {
@@ -100,7 +95,5 @@ public class MyQuickSort implements Sort {
 //        sort.print(arr);
     }
 
-    private void print(int[] arr) {
-        System.err.println(Arrays.toString(arr));
-    }
+
 }

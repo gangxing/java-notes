@@ -63,12 +63,7 @@ public class HeapSortBak implements Sort {
         return 2 * i + 1;
     }
 
-    // 交换元素位置
-    private void swap(int[] arr, int index1, int index2) {
-        int tmp = arr[index1];
-        arr[index1] = arr[index2];
-        arr[index2] = tmp;
-    }
+
 }
 
 
