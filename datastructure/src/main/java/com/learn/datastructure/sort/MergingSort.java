@@ -70,6 +70,31 @@ public class MergingSort implements Sort {
 
     //自下而上 两两合并 直至最后合并的序列数量为1
     private void sortMerge(int[] arr) {
+        int[] orderedArr = new int[arr.length];
+        //i 每组数量
+        for (int i = 2; i < arr.length * 2; i *= 2) {
+            //j 组数
+            for (int j = 0; j < (arr.length + i - 1) / i; j++) {
+                int left = i * j;
+                //mid 是右半部分的第一个元素下标
+                int mid = left + i / 2 >= arr.length ? (arr.length - 1) : (left + i / 2);
+                int right = i * (j + 1) - 1 >= arr.length ? (arr.length - 1) : (i * (j + 1) - 1);
+                int start = /*left*/0, l = left, m = mid;
+                //因为mid是有半部分的第一个元素下标，所以等号在右半部分
+                while (l < mid && m <= right) {
+                    if (arr[l] < arr[m]) {
+                        orderedArr[start++] = arr[l++];
+                    } else {
+                        orderedArr[start++] = arr[m++];
+                    }
+                }
+                while (l < mid)
+                    orderedArr[start++] = arr[l++];
+                while (m <= right)
+                    orderedArr[start++] = arr[m++];
+                System.arraycopy(orderedArr, /*left*/0, arr, left, right - left + 1);
+            }
+        }
 
 
     }
@@ -81,7 +106,7 @@ public class MergingSort implements Sort {
         MergingSort sort = new MergingSort();
         int[] arr1 = {5, 18, 90};
         int[] arr2 = {58, 3, 73, 21, 76, 77, 0};
-        sort.sort(arr2);
+        sort.sortMerge(arr2);
         sort.print(arr2);
 
     }
