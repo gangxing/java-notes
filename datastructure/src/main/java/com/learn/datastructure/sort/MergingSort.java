@@ -26,15 +26,11 @@ public class MergingSort implements Sort {
         //实现好难啊 关键在于 怎么递归每一轮
         int[] result = new int[arr.length];
         mergeRecursive(arr, result, 0, arr.length - 1);
-
-
     }
-
 
 
     //递归
     private void mergeRecursive(int[] arr, int[] result, int start, int end) {
-
         if (start >= end) {
             return;
         }
@@ -66,7 +62,6 @@ public class MergingSort implements Sort {
             System.arraycopy(arr, start2, result, k, end + 1 - start2);
         }
 
-
         //将合并好的拷贝到原数组中
         System.arraycopy(result, start, arr, start, end + 1 - start);
 
@@ -74,7 +69,8 @@ public class MergingSort implements Sort {
 
 
     //自下而上 两两合并 直至最后合并的序列数量为1
-    private void sortMerge(int[] arr){
+    private void sortMerge(int[] arr) {
+
 
     }
 
