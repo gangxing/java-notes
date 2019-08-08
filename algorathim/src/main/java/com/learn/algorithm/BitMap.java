@@ -12,7 +12,7 @@ import java.util.Random;
 public class BitMap {
     /**
      * 实现redis setBit getBit 命令 并统计1的个数
-     * 支持 2^30位 即128M
+     * 支持 2^31位 即256M
      */
 
     private byte[] bytes;
@@ -132,7 +132,7 @@ public class BitMap {
             chars[i << 1] = DIGITS[b >>> 4 & 0xF];
             chars[(i << 1) + 1] = DIGITS[b & 0xF];
         }
-        return new String(chars);
+        return new String(chars) + "\n" + toBinaryString(bytes, 0, maxByteIndex);
     }
 
     private final static char[] DIGITS = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
@@ -147,18 +147,18 @@ public class BitMap {
 //        System.err.println(14 ^ 1);
 //        countOne();
         BitMap bitMap = new BitMap(100);
-        bitMap.setBit(9, 1);
-        System.err.println(bitMap);
-        assert bitMap.getBit(9) == 1;
-        assert bitMap.getBit(7) == 0;
-        bitMap.setBit(8, 1);
-        assert bitMap.getBit(8) == 1;
-        bitMap.setBit(7, 1);
-        bitMap.setBit(8, 0);
-        bitMap.setBit(7, 0);
-        bitMap.setBit(9, 0);
-        bitMap.setBit(99, 1);
-        bitMap.setBit(104, 1);
+//        bitMap.setBit(9, 1);
+//        System.err.println(bitMap);
+//        assert bitMap.getBit(9) == 1;
+//        assert bitMap.getBit(7) == 0;
+//        bitMap.setBit(8, 1);
+//        assert bitMap.getBit(8) == 1;
+//        bitMap.setBit(7, 1);
+//        bitMap.setBit(8, 0);
+//        bitMap.setBit(7, 0);
+//        bitMap.setBit(9, 0);
+//        bitMap.setBit(99, 1);
+//        bitMap.setBit(104, 1);
 //        System.err.println(bitMap);
 //        String s = "Hello World";
 //        byte[] bytes = s.getBytes();
@@ -170,18 +170,19 @@ public class BitMap {
 //        System.err.println(new String(bytes));
 //        System.err.println(toBinaryString(bytes));
 //
-        bitMap.setBit(1 << 2, 1);
-        System.err.println(bitMap.getBit(1 << 2));
-        System.err.println(bitMap);
-//        for (int i = 0; i < 1000; i++) {
-//            bitMap.setBit(i, 1);
-//            assert bitMap.bitCount() == i + 1;
-//            System.err.println(bitMap);
-//        }
+//        bitMap.setBit(1 << 2, 1);
+//        System.err.println(bitMap.getBit(1 << 2));
+//        System.err.println(bitMap);
+        System.err.println(Integer.MAX_VALUE);
+        for (int i = 0; i < 1000; i++) {
+            bitMap.setBit(i, 1);
+            assert bitMap.bitCount() == i + 1;
+            System.err.println(bitMap);
+        }
+
 //
-//
-//        byte[] bytes = new byte[]{10, 0, -128, 89};
-//        System.err.println(bitMap.toBinaryString(bytes));
+        byte[] bytes = new byte[]{10, 0, -128, 89};
+        System.err.println(bitMap.toBinaryString(bytes, 0, 3));
 //        System.err.println(Integer.toHexString(Integer.MAX_VALUE));
 //
 //        byte b = -128;
@@ -193,21 +194,30 @@ public class BitMap {
 
     }
 
-    private String toBinaryString(byte[] bytes) {
-        StringBuilder sb = new StringBuilder();
-        for (byte b : bytes) {
-            sb.append(" ").append(toBinaryString(b));
+    private String toBinaryString(byte[] bytes, int start, int end) {
+        int len = end - start + 1;
+        char[] chars = new char[len * 9];
+        int ci = 0;
+        for (int i = start; i <= end; i++) {
+            byte b = bytes[i];
+            char[] oneChars = toBinaryString(b);
+            for (char c : oneChars) {
+                chars[ci++] = c;
+            }
+            chars[ci++] = ' ';
+
         }
-        return sb.toString();
+        return new String(chars);
     }
 
-    private String toBinaryString(byte b) {
+    private char[] toBinaryString(byte b) {
         char[] chars = new char[8];
         for (int i = chars.length - 1; i >= 0; i--) {
             int v = b >>> chars.length - 1 - i & 1;
             chars[i] = (char) ('0' + v);
         }
-        return new String(chars);
+        return chars;
+//        return new String(chars);
     }
 
 
