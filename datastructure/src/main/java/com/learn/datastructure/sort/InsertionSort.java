@@ -21,12 +21,6 @@ public class InsertionSort implements Sort {
 
     //只对部分进行直接排序
     public void sort(int[] arr, int position, int length) {
-        if (arr == null || arr.length <= 1) {
-            return;
-        }
-        if (position < 0 || length < 0 || position + length > arr.length) {
-            throw new IllegalArgumentException("参数不合法");
-        }
         int index = position + 1;
         while (index < position + length) {
             int e = arr[index];
