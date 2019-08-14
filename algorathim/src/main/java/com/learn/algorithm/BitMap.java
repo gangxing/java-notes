@@ -23,6 +23,8 @@ public class BitMap {
      */
     private int capacity;
 
+    private int maxCapacity = Integer.MAX_VALUE - 7;
+
     /**
      * 最大offset所在byte的下标
      */
@@ -32,6 +34,9 @@ public class BitMap {
     public BitMap(int capacity) {
         //类似hashMap 先确定真正的capacity 是8的倍数 即确定数组的长度
         //先简单一点
+        if (capacity >= maxCapacity) {
+            capacity = maxCapacity;
+        }
         int len = (capacity + 7) / 8;
         bytes = new byte[len];
         this.capacity = len * 8;
@@ -43,11 +48,17 @@ public class BitMap {
      * @param value  bit值 0或者1
      */
     public void setBit(int offset, int value) {
+        if (value != 0 && value != 1) {
+            throw new IllegalArgumentException("value must be 0 or 1");
+        }
+
         if (offset < 0) {
             throw new IllegalArgumentException("offset out of range");
         }
         if (offset >= capacity) {
-//
+            if (offset >= maxCapacity - 1) {
+                throw new IllegalArgumentException("offset exceed " + maxCapacity);
+            }
             //扩容
             int len = (int) ((offset + 8L) / 8);
             byte[] newBytes = new byte[len];
@@ -56,9 +67,7 @@ public class BitMap {
             capacity = len * 8;
         }
 
-        if (value != 0 && value != 1) {
-            throw new IllegalArgumentException("value must be 0 or 1");
-        }
+
         //确定offset所在的byte的下标
         int byteIndex = (offset / 8);
         byte b = bytes[byteIndex];
@@ -147,7 +156,7 @@ public class BitMap {
 //        System.err.println(14 ^ 1);
 //        countOne();
         BitMap bitMap = new BitMap(100);
-//        bitMap.setBit(9, 1);
+//        bitMap.setBit(9, 1);268435455
 //        System.err.println(bitMap);
 //        assert bitMap.getBit(9) == 1;
 //        assert bitMap.getBit(7) == 0;

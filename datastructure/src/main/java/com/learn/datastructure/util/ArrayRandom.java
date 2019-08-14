@@ -11,16 +11,16 @@ import java.util.Random;
  */
 public class ArrayRandom {
 
-    public static int[] random(int length,int bound){
-        Random random=new Random();
-        int[] arr=new int[length];
-        for (int i=0;i<length;i++){
-            arr[i]=random.nextInt(bound);
+    public static int[] random(int length, int min, int max) {
+        Random random = new Random();
+        int[] arr = new int[length];
+        for (int i = 0; i < length; i++) {
+            arr[i] = min + random.nextInt(max - min);
         }
         return arr;
     }
 
     public static void main(String[] args) {
-        System.err.println(Arrays.toString(random(10000000,100)));
+        System.err.println(Arrays.toString(random(10000000, 100,1000)));
     }
 }

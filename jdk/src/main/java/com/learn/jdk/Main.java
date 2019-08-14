@@ -16,7 +16,10 @@ public class Main {
 //        testLoop();
 //        testEquals();
 //        testCeil();
-        testBitOperation();
+//        testBitOperation();
+//        testOOM();
+
+        System.err.println((int)'a');
     }
 
     private static int testHashCode(){
@@ -69,5 +72,10 @@ public class Main {
         System.err.println(i);
         System.err.println(2<<4);
         System.err.println(1<<5);
+    }
+
+    private static void testOOM(){
+        System.err.println(-1>>>3);
+        long[] arr=new long[(-1>>>4)];//256M
     }
 }

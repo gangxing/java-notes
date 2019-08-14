@@ -13,9 +13,8 @@ public class ShellSort implements Sort {
      * 将整个待排序序列按照2的倍数均分成段，对每段进行直接插入排序，直至段的长度为1
      * 跟直接插入排序相比，希尔排序有较大的改进
      *
-     * 这一点跟归并排序的迭代方式类似，可以分为递归和迭代两种方式实现
-     * 后者是将两个段合并起来 需要借助额外的存储空间，空间复杂度O(N)
-     * TODO 前者应该不需要额外存储空间 但是要移动 所以时间复杂度比后者更高？
+     * 时间复杂度 O(n*log(n)^2)
+     * 最好的比较排序
      *
      */
     @Override
@@ -32,13 +31,6 @@ public class ShellSort implements Sort {
 
         }
     }
-
-
-    /**
-     * java 值传递，引用传递
-     * @see <link>https://juejin.im/post/5bce68226fb9a05ce46a0476</link>
-     *
-     */
 
 
 }

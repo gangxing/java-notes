@@ -17,8 +17,12 @@ public interface Sort {
      */
     void sort(int[] arr);
 
+    default void print(String prefix, int[] arr) {
+        System.err.println(prefix + " " + Arrays.toString(arr));
+    }
+
     default void print(int[] arr) {
-        System.err.println(Arrays.toString(arr));
+        print("", arr);
     }
 
     default void swap(int[] arr, int i, int j) {

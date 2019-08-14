@@ -18,7 +18,7 @@ public class Main {
          * BubbleSort
          */
         Sort sort = new InsertionSort();
-        int[] arr = ArrayRandom.random(5,100);
+        int[] arr = ArrayRandom.random(5,-10,100);
         System.out.println(Arrays.toString(arr));
         long start=System.currentTimeMillis();
         sort.sort(arr);
