@@ -16,5 +16,17 @@ Sort
 
 
 
+这个人的[博客](https://juejin.im/post/5c69fa6cf265da2dc006475c)写得很好，是我参照的目标
+
+
+
 学完八大排序后，再看`Arrays`里对各种排序方法的花式调用。
+
+`Arrays`
+
+`TimSort`
+
+`DualPivotQuicksort`
+
+`ArraysParallelSortHelpers`
 

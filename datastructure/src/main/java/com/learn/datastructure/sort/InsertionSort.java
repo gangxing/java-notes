@@ -35,10 +35,17 @@ public class InsertionSort implements Sort {
 //            }
 
             //往前遍历
-            for (int i = index - 1; i >= position; i--) {
-                if (e <arr[i]) {
-                    swap(arr, i,i+1);
-                }
+//            for (int i = index - 1; i >= position; i--) {
+//                if (e <arr[i]) {
+//                    swap(arr, i,i+1);
+//                }
+//            }
+
+            //这里改成while 遇到合适的位置就不再往前遍历了
+            int i=index-1;
+            while (i>=position && arr[i]>arr[i+1]){
+                swap(arr, i,i+1);
+                i--;
             }
         }
     }

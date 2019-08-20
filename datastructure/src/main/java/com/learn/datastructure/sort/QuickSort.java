@@ -22,7 +22,7 @@ public class QuickSort implements Sort {
         if (from >= to) {
             return;
         }
-        //选定一个基数 从两端想中间遍历 将左边比基数大和元素和右边比基数小的元素对调 直至两边的游标碰头
+        //选定一个基数 从两端向中间遍历 将左边比基数大和元素和右边比基数小的元素对调 直至两边的游标碰头
         int left = from + 1, right = to;
         int base = arr[from];
         while (true) {
@@ -75,8 +75,6 @@ public class QuickSort implements Sort {
 
         //右边
         doSort(arr, Math.min(to, right + 1), to);
-
-
     }
 
 

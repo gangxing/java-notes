@@ -5,6 +5,7 @@ import java.util.Arrays;
 /**
  * @ClassName Sorter
  * @Description 实现常用的八种排序算法 并计算时间复杂度 空间复杂度
+ * 在计算机科学中log(N)如果没有特别说明，都是指数学意义上的log2(N)=lgN/lg2
  * @Author xianjun@ixiaopu.com
  * @Date 21/05/2018 21:59
  */
