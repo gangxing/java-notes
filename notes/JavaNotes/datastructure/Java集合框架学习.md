@@ -1,6 +1,7 @@
 ##                                     Java集合框架学习
 
-<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
+
+
 **目标**
 
 1.了解JCF(Java Collections Framework)提供的容器、API及其各自的适用场景

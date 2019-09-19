@@ -346,13 +346,23 @@ hash -key的hash值 <code>HashMap</code>中：hash= key.hashCode() ^( key.hashCo
 
 首先得找到症结所在，为什么`HashMap`不适用于多线程环境，具体是哪个操作不支持。
 
+
+
 [这篇文章](https://my.oschina.net/tantexian/blog/654260)讲得还不错，但是粗略地看了一遍，还是看不懂
+
+https://blog.csdn.net/swpu_ocean/article/details/88917958
 
 基于jdk8亲测并不会出现并发导致的死循环问题，40个线程put,40个线程get。。。都能正常执行完成，至于数据是否准确，还无从得知。难道是JDK8做了什么优化？？？
 
 
 
 第一种方案，
+
+
+
+`ConcurrentHashMap`的key为什么不能为null
+
+
 
 
 

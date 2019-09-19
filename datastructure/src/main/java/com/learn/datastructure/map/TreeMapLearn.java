@@ -10,10 +10,10 @@ import java.util.TreeMap;
  */
 public class TreeMapLearn {
     public static void main(String[] args) {
-        TreeMap<Integer,String> treeMap=new TreeMap<>();
+        TreeMap<Object,String> treeMap=new TreeMap<>();
 
-        treeMap.put(40,"value40");
-        treeMap.put(50,"value50");
+        treeMap.put(new Object(),"value40");
+        treeMap.put(new Object(),"value50");
         treeMap.put(30,"value30");
         treeMap.put(20,"value20");
         treeMap.values();
