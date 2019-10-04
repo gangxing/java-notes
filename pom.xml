@@ -30,6 +30,7 @@
         <module>algorathim</module>
         <module>jdk</module>
         <module>web-demo</module>
+        <module>jdbc-demo</module>
     </modules>
 
     <!--<dependencyManagement>-->
