@@ -29,6 +29,7 @@
         <module>jvm</module>
         <module>algorathim</module>
         <module>jdk</module>
+        <module>web-demo</module>
     </modules>
 
     <!--<dependencyManagement>-->
