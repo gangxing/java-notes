@@ -15,7 +15,49 @@ Connection
 对MYSQL来讲，JDBC的实现是mysql-connector-java.当然，msyql对其他语言的实现可能叫mysql-connector-python xxxx
 
 先从使用角度来讲，实现了插入数据，见方法insert,期间遇到一个编码问题，没设置编码为utf-8,中文插入到数据库是问号
-出现Driver Connection Statement几个概念
+[JDBC详解](https://blog.csdn.net/shuaicihai/article/details/53416045)
+出现DriverManager Connection Statement几个概念
+DriverManager
+JDK提供的不同数据库的驱动管理类，核心功能初始化具体驱动后，提供Connection对象
+实现逻辑
+xxx
+用到了SPI 
+
+Connection
+JDK提供的连接数据库的对象，每一次SQL执行，是在一个Connection环境下
+
+Statement
+JDK提供，封装SQL并执行
+ps 
+PreparedStatement 是Statement的子接口，可以提供动态SQL，动态的只能是字段值，不能是表名、字段名或操作符等会影响SQL逻辑的字符
+
+FIXME：
+Mybatis中是怎么利用$符号实现动态的
+
+ResultSet
+JDK提供的用于封装查询结果对象
+
+通过DriverManager获取Connection,通过Connection获取Statement,Statement执行SQL语句
+
+FIXME
+怎么体现事务
+[JDBC事务使用](https://www.iteye.com/blog/yangzg216-1186085)
+默认是自动提交的，更新SQL执行后，立即提交，如果想切换到手动提交模式，则
+connection.setAutoCommit(false).
+手动提交是为了可以控制回滚，如果某一条SQL执行失败后，则回滚特定的SQL，
+具体回滚哪些SQL，是根据设置的安全点来界定的，
+Savepoint savepoint=connection.setSavepoint()
+connection.rollback(savepoint)
+如果未设置安全点，则当前connection下所以已经执行的SQL都会回滚
+测试之
+
+
+
+
+
+
+
+
 
 
 
