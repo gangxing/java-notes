@@ -49,7 +49,16 @@ connection.setAutoCommit(false).
 Savepoint savepoint=connection.setSavepoint()
 connection.rollback(savepoint)
 如果未设置安全点，则当前connection下所以已经执行的SQL都会回滚
-测试之
+测试之 okay
+看得出来，使用JDBC实现了数据的增删改查功能，但是
+1.很繁琐，特别是对于Connection对象的获取和关闭，这是与业务无关的，统一的逻辑
+2.Connection是一个很重的对象，频繁获取关闭会无意义的消耗系统资源，并且降低执行效率，
+还有无限制创建Connection可能会导致系统资源耗尽
+上面两个问题的解决方案
+1.利用AOP(Aspect Oriented Programming，基于动态代理技术实现)，可以统一处理连接创建、销毁和事务管理、异常处理
+2.池化思想，将Connection对象统一管理起来 Druid
+
+
 
 
 
