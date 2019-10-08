@@ -31,6 +31,7 @@
         <module>jdk</module>
         <module>web-demo</module>
         <module>jdbc-demo</module>
+        <module>druid-demo</module>
     </modules>
 
     <!--<dependencyManagement>-->

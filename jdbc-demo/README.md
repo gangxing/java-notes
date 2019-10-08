@@ -23,6 +23,8 @@ JDK提供的不同数据库的驱动管理类，核心功能初始化具体驱�
 xxx
 用到了SPI 
 
+[DriverManager源码详解](http://objcoding.com/2017/07/03/JDBC/)
+
 Connection
 JDK提供的连接数据库的对象，每一次SQL执行，是在一个Connection环境下
 
