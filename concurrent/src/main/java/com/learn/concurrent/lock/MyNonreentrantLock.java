@@ -51,6 +51,23 @@ public class MyNonreentrantLock implements Lock, java.io.Serializable {
             }
             return false;
         }
+
+        protected boolean tryAcquireNonException(int arg) {
+            int c = getState();
+            //如果已经被持有了，立即返回false
+            if (c != 0) {
+                //有可能是自己获取的,这时如果不做额外处理的话，会阻塞在这里，然而第一次获取的永远二释放不了了
+                //整个逻辑就会无限阻塞
+                return false;
+            }
+            //尝试原子更新state为1
+            if (compareAndSetState(0, arg)) {
+                setExclusiveOwnerThread(Thread.currentThread());
+                return true;
+            }
+            return false;
+        }
+
     }
 
     public MyNonreentrantLock() {
@@ -69,7 +86,7 @@ public class MyNonreentrantLock implements Lock, java.io.Serializable {
 
     @Override
     public boolean tryLock() {
-        return false;
+        return sync.tryAcquireNonException(1);
     }
 
     @Override

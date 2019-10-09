@@ -66,21 +66,27 @@ public class MyNonreentrantLockTest {
         @Override
         public void run() {
 //            print("尝试获取锁 count=" + count);
-            lock.lock();
-            try {
-//                print("获得锁，执行中...");
-                lock.lock();
+            if (lock.tryLock()) {
+                print("第一次获取到锁");
                 try {
-                    count++;
-                }finally {
-                    lock.unlock();
-                }
+//                print("获得锁，执行中...");
+                    if (lock.tryLock()) {
+                        print("第二次获取到锁");
+                        try {
+                            count++;
+                        } finally {
+                            lock.unlock();
+                        }
+                    }else {
+                        print("第二次未获取到锁");
+                    }
 //                    sleep();
 
-            } finally {
-                latch.countDown();
-                lock.unlock();
+                } finally {
+                    latch.countDown();
+                    lock.unlock();
 //                print("执行完毕，释放锁 count=" + count);
+                }
             }
         }
     }
