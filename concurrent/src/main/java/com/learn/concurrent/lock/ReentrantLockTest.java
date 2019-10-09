@@ -1,6 +1,10 @@
 package com.learn.concurrent.lock;
 
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -39,6 +43,8 @@ public class ReentrantLockTest {
      *
      * 为什么volatile不能保证原子性
      * volatile 既然保证了可见性 所以任何线程在修改的时候 读到的已经是最新的值 为什么就不能保证原子性了呢
+     * 原子性是指CPU执行这一套指令的过程中，不会中断（线程切换，线程切换利用了系统的软中断，上层怎么能控制CPU层的中断时机呢？？？）
+     *
      *
      * 不要将volatile用在getAndOperate场合，仅仅set或者get的场景是适合volatile的
      * https://www.cnblogs.com/Mainz/p/3556430.html
@@ -57,11 +63,14 @@ public class ReentrantLockTest {
      * 避免死锁的出现呢 妈的智障）lockInterruptibly
      * 可限时 tryLock
      * 公平锁 (默认是非公平锁) 但是可以指定为公平锁
+     * 通常情况下 公平锁的性能（吞吐量要低于非公平锁），因为维护了获取者线程间的顺序
+     *
      *
      *
      */
 
     private static int count = 0;
+
 
     public static void main(String[] args) {
         CountDownLatch latch = new CountDownLatch(2000);
@@ -71,8 +80,11 @@ public class ReentrantLockTest {
             new Thread(new Worker(latch, lock)).start();
             latch.countDown();
         }
-
     }
+
+
+
+
 
     private static class Worker implements Runnable {
 
