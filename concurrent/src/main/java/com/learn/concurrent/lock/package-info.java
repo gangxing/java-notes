@@ -51,7 +51,7 @@ package com.learn.concurrent.lock;
  * 这时应该讲当前线程加入到队列中去？大概是要加到队列中去 妈的好复杂
  * 有一个核心概念 Node SHARE  EXCLUDE
  *
- *
+ * 对于lock的初步研究见<code>ReentrantLockSample</code>
  *
  *
  * 锁的思路
@@ -59,6 +59,8 @@ package com.learn.concurrent.lock;
  * 关键逻辑
  *
  * 怎么使用 定义子类实现它的时候需要注意什么
+ *
+ * 实现一个非重入锁
  *
  *
  *

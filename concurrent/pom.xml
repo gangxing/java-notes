@@ -12,4 +12,8 @@
     <artifactId>concurrent</artifactId>
 
 
+    <dependencies>
+
+    </dependencies>
+
 </project>

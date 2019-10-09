@@ -1,6 +1,8 @@
 package com.learn.concurrent;
 
-import sun.misc.Unsafe;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * @ClassName MyAtomicInteger
@@ -10,6 +12,18 @@ import sun.misc.Unsafe;
  */
 public class MyAtomicInteger {
     private volatile int value;
+
+    private static final long valueOffset;
+
+    static {
+        try {
+            valueOffset = UnsafeAccess.UNSAFE.objectFieldOffset
+                    (MyAtomicInteger.class.getDeclaredField("value"));
+        } catch (Exception ex) {
+            throw new Error(ex);
+        }
+    }
+
 
     /**
      * 为什么这样不能实现线程安全？？？？
@@ -32,10 +46,25 @@ public class MyAtomicInteger {
 
 
     public int getAndIncrement() {
+
+        //这是AtomicInteger中的实现方式 其内部实现方式跟下面一致
+//        return UnsafeAccess.UNSAFE.getAndAddInt(this,valueOffset,1);
+        //自旋 + CAS
         for (; ; ) {
             int cur = getValue();
             int next = cur + 1;
-            if (compareAndSet(next)) {
+            if (UnsafeAccess.UNSAFE.compareAndSwapInt(this, valueOffset, cur, next)) {
+                return cur;
+            }
+        }
+    }
+
+    public int incrementAndGet() {
+        //自旋 + CAS
+        for (; ; ) {
+            int cur = getValue();
+            int next = cur + 1;
+            if (UnsafeAccess.UNSAFE.compareAndSwapInt(this, valueOffset, cur, next)) {
                 return next;
             }
         }
@@ -58,13 +87,13 @@ public class MyAtomicInteger {
      * 可能会导致一直循环。。。。耗费CPU资源
      *
      */
-    private synchronized boolean compareAndSet(int next) {
-//        unsafe.compareAndSwapInt()
-//        boolean equals = getValue() + 1 == next;
-//        if (equals) {
-//            setValue(next);
-//        }
-//        return equals;
-        throw new IllegalArgumentException("还未实现");
+
+
+    public static void main(String[] args) {
+
     }
+
+
+
+
 }

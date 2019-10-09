@@ -15,7 +15,7 @@ public class ReentrantLockSample {
 
     private ReentrantLock lock = new ReentrantLock();
 
-    private ExecutorService pool = Executors.newFixedThreadPool(2, new ThreadFactory() {
+    private ExecutorService pool = Executors.newFixedThreadPool(3, new ThreadFactory() {
         AtomicInteger num = new AtomicInteger(0);
 
         @Override
@@ -43,6 +43,7 @@ public class ReentrantLockSample {
             /*
              * TODO 新的问题来了
              * 线程池中的线程是怎么保活的？？在等待什么？？？所以才没有结束？
+             * 果然是，线城池内部，每个线程从阻塞队列中获取任务，如果队列为空，则被阻塞（典型的生产者消费者模式）
              *
              */
 //            new Thread(app.new MyRun()).start();
