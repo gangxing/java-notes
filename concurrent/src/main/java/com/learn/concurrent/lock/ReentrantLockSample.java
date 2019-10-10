@@ -13,7 +13,8 @@ import java.util.concurrent.locks.ReentrantLock;
  */
 public class ReentrantLockSample {
 
-    private ReentrantLock lock = new ReentrantLock();
+    //公平 & 非公平锁
+    private ReentrantLock lock = new ReentrantLock(true);
 
     private ExecutorService pool = Executors.newFixedThreadPool(3, new ThreadFactory() {
         AtomicInteger num = new AtomicInteger(0);
