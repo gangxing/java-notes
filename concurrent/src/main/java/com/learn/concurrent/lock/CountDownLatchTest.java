@@ -23,19 +23,27 @@ public class CountDownLatchTest {
      * await 还可以被多个线程使用 当countDown计数变为0时 所有线程被唤醒
      */
     public static void main(String[] args) {
-        CountDownLatch latch = new CountDownLatch(3);
-        for (int i=0;i<3;i++){
-            new Thread(new Master(latch)).start();
+        int count=3;
+        MyCountDownLatch latch = new MyCountDownLatch(count);
+        for (int i=0;i<count;i++){
+//            new Thread(new Master(latch)).start();
             new Thread(new Worker(latch)).start();
         }
         String mainName = Thread.currentThread().getName();
         System.err.println(mainName + "开始执行");
-//        new Thread(new Worker(latch)).start();
-//        try {
-//            latch.await();
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
+        new Thread(new Worker(latch)).start();
+        try {
+            /*
+             * 实现思路
+             * await 应该相当于获取锁，只不过这个判断条件是state>0 则加到队列中被阻塞
+             * 每一次countDown都会将state减1，当state减为0，唤醒队列中所有线程unpark
+             * await()方法结束
+             *
+             */
+            latch.await();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
         System.err.println(mainName + "执行完毕");
     }
@@ -54,7 +62,6 @@ public class CountDownLatchTest {
             String name = "Master" + Thread.currentThread().getName();
             System.err.println(name + "开始执行");
             try {
-
                 latch.await();
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -66,9 +73,9 @@ public class CountDownLatchTest {
 
     private static class Worker implements Runnable {
 
-        private CountDownLatch latch;
+        private MyCountDownLatch latch;
 
-        Worker(CountDownLatch latch) {
+        Worker(MyCountDownLatch latch) {
             this.latch = latch;
         }
 
@@ -81,10 +88,12 @@ public class CountDownLatchTest {
                 Thread.sleep(random.nextInt(20000));
             } catch (InterruptedException e) {
                 e.printStackTrace();
+            }finally {
+                System.err.println(name + "执行完毕");
+                latch.countDown();
             }
 
-            System.err.println(name + "执行完毕");
-            latch.countDown();
+
         }
     }
 }

@@ -71,6 +71,20 @@ package com.learn.concurrent.lock;
  * 一套是互斥的：tryAcquire  tryRelease
  * 一套是共享的：tryAcquireShared tryReleaseShared
  * 所以在具体实现锁的时候，根据需求，选择其中一套来实现
+ * 对于共享锁，我猜测就跟可重入锁类似，每获取一次，将state加1。每释放一次，将state减1。
+ * 当state等于0时，表示这把锁没有被任何线程持有。这样有点违背常规意义上锁的语义，那有何意义呢。
+ * 其实并没有，常规意义上的锁，是为了保证线程绝对的串行执行，也就是同一时刻只允许有一个线程持有这把锁。
+ * 但有没有同一时刻允许多于1个小于N个线程执行的场景呢？我的理解是有的，比如场景的servlet请求，为了控制
+ * 服务的负荷，需要限制请求的并发量。同一时刻最多只处理N个请求。这就是信号量Semaphore刚好就提供这个功能
+ * 内部应该就是采用共享模式的锁，看了下源码，其实现基本就是上面猜测的逻辑。
+ * 同类，CountDownLatch CyclicBarrier应该也是类似的实现。
+ * CountDownLatch
+ * await语义实现：尝试获取锁，如果state（代表还剩余的计数）大于0，将主线程加入队列阻塞
+ * countDown语义实现：将state减1，当减为0时，唤醒队列中所有被阻塞的线程
+ *
+ * CyclicBarrier
+ *
+ *
  *
  *
  *
