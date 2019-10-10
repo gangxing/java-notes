@@ -7,9 +7,9 @@ import java.util.logging.Logger;
  * @Author xgangzai
  * @Date 2019/10/9 22:11
  */
-public class ThreadStatusLearn {
+public class ThreadStateLearn {
 
-    static Logger logger= Logger.getLogger(ThreadStatusLearn.class.getName());
+    static Logger logger= Logger.getLogger(ThreadStateLearn.class.getName());
 
 
     /**

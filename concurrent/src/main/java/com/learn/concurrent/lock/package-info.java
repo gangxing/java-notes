@@ -67,6 +67,10 @@ package com.learn.concurrent.lock;
  *  前面一次的获取再也没机会释放了。所以可以抛出异常或者中断。也可以重新实现tryLock，都是立即返回，不会抛出异常
  *
  * 2.是否共享 共享锁；互斥锁
+ * AQS原生提供了两套获取锁和释放锁API，
+ * 一套是互斥的：tryAcquire  tryRelease
+ * 一套是共享的：tryAcquireShared tryReleaseShared
+ * 所以在具体实现锁的时候，根据需求，选择其中一套来实现
  *
  *
  *
