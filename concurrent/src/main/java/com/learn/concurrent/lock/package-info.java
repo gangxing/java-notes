@@ -83,6 +83,12 @@ package com.learn.concurrent.lock;
  * countDown语义实现：将state减1，当减为0时，唤醒队列中所有被阻塞的线程
  *
  * CyclicBarrier
+ * state同样做计数 await()语义实现类似于获取锁和释放锁二合一操作，
+ * 每调一次await(),state减1，如果state大于0，说明还有线程没到，则将当前线程加入队列挂起。
+ * 当最后一个线程达到屏障点。将state减1 变成0，则唤醒线程中所有队列
+ *
+ * 上面研究了这么多 Node的两种模式又是什么鬼？？？？
+ *
  *
  *
  *

@@ -60,9 +60,9 @@ public class CyclicBarrierTest {
 
     public static void main(String[] args) {
 
-        int n = 10;
-        CyclicBarrier barrier = new CyclicBarrier(n, new Drive());
-        for (int i = 0; i < 3*n; i++) {
+        int n = 30;
+        MyCyclicBarrier barrier = new MyCyclicBarrier(n);
+        for (int i = 0; i < n; i++) {
             new Thread(new Boarding(barrier)).start();
         }
 
@@ -74,9 +74,9 @@ public class CyclicBarrierTest {
 
     private static class Boarding implements Runnable {
 
-        private CyclicBarrier barrier;
+        private MyCyclicBarrier barrier;
 
-        Boarding(CyclicBarrier barrier) {
+        Boarding(MyCyclicBarrier barrier) {
             this.barrier = barrier;
         }
 
@@ -84,16 +84,10 @@ public class CyclicBarrierTest {
         public void run() {
             try {
                 System.err.println(tName() + "boarding...");
-                int random = new Random().nextInt(100);
-                trySleep();
+                doBiz();
 
                 System.err.println(tName() + "boarded,waiting others...");
 
-                if (random % 2 == 0) {
-//                    throw new RuntimeException("故意抛出异常");//抛出运行时异常 其他到达屏障点的线程会一直等待。。。
-//                    throw new InterruptedException("故意抛出异常");//抛出中断时异常 其他到达屏障点的线程会一直等待。。。
-                }
-//                barrier.await(1, TimeUnit.MINUTES);//公共屏障点
                 barrier.await();
                 System.err.println(tName() + "all boarded");
                 System.err.println(tName() + "正常执行完逻辑");
@@ -112,13 +106,17 @@ public class CyclicBarrierTest {
 
         }
 
+        private void doBiz(){
+            trySleep();
+        }
+
         private String tName() {
             return Thread.currentThread().getName();
         }
 
         private void trySleep() {
             try {
-                Thread.sleep(new Random().nextInt(3000));
+                Thread.sleep(new Random().nextInt(5000));
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
