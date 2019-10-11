@@ -26,7 +26,6 @@
         <module>designpattern</module>
         <module>spring</module>
         <module>mq</module>
-        <module>jvm</module>
         <module>algorathim</module>
         <module>jdk</module>
         <module>web-demo</module>

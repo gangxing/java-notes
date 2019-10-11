@@ -1,5 +1,6 @@
 package com.learn.concurrent.threadpool;
 
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,8 +14,9 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @Author xianjun@ixiaopu.com
  * @Date 05/11/2018 09:57
  */
+@Slf4j
 public class ThreadPoolExecutorLearn {
-    static Logger logger = LoggerFactory.getLogger(ThreadPoolExecutorLearn.class);
+//    static Logger logger = LoggerFactory.getLogger(ThreadPoolExecutorLearn.class);
 
     public static void main(String[] args) {
         ExecutorService pool = initPool();
@@ -26,10 +28,10 @@ public class ThreadPoolExecutorLearn {
             try {
                 TimeUnit.MILLISECONDS.sleep(random.nextInt(100));
             } catch (InterruptedException e) {
-                logger.error("I'm interrupted", e);
+                log.error("I'm interrupted", e);
             }
 
-            logger.info(task+" has been created");
+            log.info(task+" has been created");
             pool.execute(task);
         }
 
@@ -51,7 +53,7 @@ public class ThreadPoolExecutorLearn {
             }
         };
         RejectedExecutionHandler handler = (r, executor) -> {
-            logger.error("Task " + r + " has been rejected by pool " + executor);
+            log.error("Task " + r + " has been rejected by pool " + executor);
             //do nothing
         };
         //最原始的构造器
@@ -73,9 +75,9 @@ public class ThreadPoolExecutorLearn {
 
         @Override
         public void run() {
-            logger.info(this + " is running");
+            log.info(this + " is running");
             doBiz();
-            logger.info(this + " done");
+            log.info(this + " done");
         }
 
         private void doBiz() {
@@ -83,7 +85,7 @@ public class ThreadPoolExecutorLearn {
             try {
                 TimeUnit.MILLISECONDS.sleep(random.nextInt(2000));
             } catch (InterruptedException e) {
-                logger.error("I'm interrupted", e);
+                log.error("I'm interrupted", e);
             }
         }
 
