@@ -24,7 +24,7 @@ public class ThreadPoolExecutorLearn {
         ExecutorService pool = initPool();
 
         for (int i = 0; i < 1000; i++) {
-            MyTask task = new MyTask(String.valueOf(i));
+            Task task = new Task(String.valueOf(i));
             //mock long time
             Random random = new Random();
             try {
@@ -71,33 +71,4 @@ public class ThreadPoolExecutorLearn {
     }
 
 
-    private static class MyTask implements Runnable {
-
-        private String name;
-
-        public MyTask(String name) {
-            this.name = name;
-        }
-
-        @Override
-        public void run() {
-            log.info(this + " is running");
-//            doBiz();
-            log.info(this + " done");
-        }
-
-        private void doBiz() {
-            Random random = new Random();
-            try {
-                TimeUnit.MILLISECONDS.sleep(random.nextInt(2000));
-            } catch (InterruptedException e) {
-                log.error("I'm interrupted", e);
-            }
-        }
-
-        @Override
-        public String toString() {
-            return "MyTask-" + name;
-        }
-    }
 }
