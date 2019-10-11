@@ -1,8 +1,6 @@
 package com.learn.concurrent.threadpool;
 
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.Random;
 import java.util.concurrent.*;
@@ -16,22 +14,26 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 @Slf4j
 public class ThreadPoolExecutorLearn {
-//    static Logger logger = LoggerFactory.getLogger(ThreadPoolExecutorLearn.class);
 
     public static void main(String[] args) {
+       launch();
+
+    }
+
+    public static void launch() {
         ExecutorService pool = initPool();
 
-        for (int i = 0; i < 100; i++) {
-            MyTask task=new MyTask(String.valueOf(i));
+        for (int i = 0; i < 1000; i++) {
+            MyTask task = new MyTask(String.valueOf(i));
             //mock long time
             Random random = new Random();
             try {
-                TimeUnit.MILLISECONDS.sleep(random.nextInt(100));
+                TimeUnit.MILLISECONDS.sleep(random.nextInt(1000));
             } catch (InterruptedException e) {
                 log.error("I'm interrupted", e);
             }
 
-            log.info(task+" has been created");
+            log.info(task + " has been created");
             pool.execute(task);
         }
 
@@ -49,7 +51,9 @@ public class ThreadPoolExecutorLearn {
 
             @Override
             public Thread newThread(Runnable r) {
-                return new Thread(r,"Work-Thread-" + num.getAndIncrement());
+                //这个r并不是用户提交的r,而是Worker(它的任务就是不断地从队列中取任务，然后执行任务的run方法)
+                //如果Worker直接用用户提交的任务，那执行完，这个线程就得死掉，没办法再次取得任务了
+                return new Thread(r, "Work-Thread-" + num.getAndIncrement());
             }
         };
         RejectedExecutionHandler handler = (r, executor) -> {
@@ -57,7 +61,9 @@ public class ThreadPoolExecutorLearn {
             //do nothing
         };
         //最原始的构造器
-        return new ThreadPoolExecutor(corePoolSize, maximumPoolSize, keepAliveTime, unit, workQueue, threadFactory, handler);
+        ThreadPoolExecutor executor= new ThreadPoolExecutor(corePoolSize, maximumPoolSize, keepAliveTime, unit, workQueue, threadFactory, handler);
+        executor.allowCoreThreadTimeOut(false);//default
+        return executor;
     }
 
     private static ExecutorService initPool1() {
@@ -76,7 +82,7 @@ public class ThreadPoolExecutorLearn {
         @Override
         public void run() {
             log.info(this + " is running");
-            doBiz();
+//            doBiz();
             log.info(this + " done");
         }
 
