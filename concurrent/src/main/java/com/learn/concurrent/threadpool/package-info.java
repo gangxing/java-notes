@@ -8,6 +8,7 @@ package com.learn.concurrent.threadpool;
 
 
 /**
+ * 线程池采用的生产者消费者模式，FIXME 为什么不用常见的对象池模式，borrow return
  *
  * 一、线程池关键属性 coreSize idleSize e.g.
  * ThreadPoolExecutor
@@ -37,7 +38,7 @@ package com.learn.concurrent.threadpool;
  *
  * 3.
  *
- * 问题：队列的大小和线程池数量大小什么关系
+ * 问题：队列的大小和线程池数量大小什么关系 没什么关系
  *
  * 2.runWorker
  *
@@ -111,12 +112,6 @@ package com.learn.concurrent.threadpool;
  * 1.BlockingQueue是线程安全的 因为内部用了锁或其他并发控制
  * 2.BlockingQueue不允许插入null值 否则会抛空指针
  * 3.如果不指定队列的容量 默认是Integer.MAX_VALUE
- *
- *
- *
- * AQS详解
- * @see lock/package-info.java
- *
  *
  *
  *

@@ -152,8 +152,6 @@ public class ThreadInterruptLearn {
             }
 
             log.info("finally, run to the end ");
-
-
         }
     }
 

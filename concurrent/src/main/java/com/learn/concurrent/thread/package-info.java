@@ -11,7 +11,7 @@ package com.learn.concurrent.thread;
  * 线程的5个状态 状态切换的方式（线程的方法、Object方法）
  * https://www.cnblogs.com/hongdada/p/6482966.html
  * NEW
- * RUNNING
+ * RUNNABLE(可运行的，至于有没有真正在运行，要看当前时刻有没有获得CPU时间片)
  * BLOCKED
  * WAITING
  * TIMED_WAITING
@@ -63,5 +63,6 @@ package com.learn.concurrent.thread;
  * 但是在JDK中 这个方法并不会直接终止一个正在运行的线程
  * 使用 得到要停止的线程实例 调用其targetThread.interrupt()
  *
+ * TODO 线程状态的流转
  *
  */
