@@ -32,7 +32,7 @@ public class ForkJoinPoolLearn {
             }
 
             log.info(task + " has been created");
-            pool.invoke(task);
+//            pool.invoke(task);
         }
     }
 
