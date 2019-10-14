@@ -19,6 +19,10 @@ public class Main {
 
     /*
      * 测试当线程小于corePoolSize时 新提交的任务 是否还会加入queue中
+     * 非核心线程是对任务队列的一种支持，当核心线程还未满的时候，直接创建一个
+     * 当核心线程满了，尝试加入到队列
+     * 当队列也满了之后，如果还有非核心线程可创建的话，才会创建一个新线程。
+     * 队列和非核心线程都满了，当然就拒绝接收任务了
      */
     private static void testFirstTask() {
         pool.execute(new Printer());

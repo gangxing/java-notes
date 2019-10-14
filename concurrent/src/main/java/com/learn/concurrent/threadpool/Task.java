@@ -8,9 +8,9 @@ import lombok.extern.slf4j.Slf4j;
  * @Date 2019/10/11 19:29
  */
 @Slf4j
-public class Task implements Runnable {
+class Task implements Runnable {
 
-    private String name ;
+    private String name;
 
     public Task(String name) {
         this.name = name;
@@ -26,6 +26,11 @@ public class Task implements Runnable {
     @Override
     public String toString() {
         return "Task-" +
-                name ;
+                name;
+    }
+
+    public static void main(String[] args) {
+        Task task=new Task("hahah");
+        log.info("task is {}",task);
     }
 }

@@ -11,7 +11,7 @@ import java.util.concurrent.*;
  * @Date 2019/10/12 18:30
  */
 @Slf4j
-public class FutureLearn {
+public class FutureTaskLearn {
 
     public static void main(String[] args) {
         ExecutorService pool = Executors.newFixedThreadPool(5);
@@ -43,7 +43,6 @@ public class FutureLearn {
 
         //后面的get会抛出CancellationException
 //        future.cancel(true);
-        future.isDone()
 
 
         Thread getResultThread = new Thread(new GetResult(future), "Get Result Thread");
