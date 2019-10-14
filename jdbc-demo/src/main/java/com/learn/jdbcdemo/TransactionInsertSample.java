@@ -26,9 +26,9 @@ public class TransactionInsertSample {
             connection.setAutoCommit(false);
             statement = connection.createStatement();
             insert(sql1, statement);
-            insert(sql2, statement);
-            //执行完之后，统一提交
-            connection.commit();
+//            insert(sql2, statement);
+            //执行完之后，统一提交 如果不提交 不会落入磁盘
+//            connection.commit();
         } catch (SQLException e) {
             if (connection != null) {
                 try {

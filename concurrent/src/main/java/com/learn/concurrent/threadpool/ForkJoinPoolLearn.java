@@ -24,6 +24,8 @@ import java.util.concurrent.RecursiveTask;
  * ForkJoinPool接收ForkJoinTask，它有fork和join两个操作，其中fork就是分解任务，join就是合并计算结果
  * 举个例子，给定一个起始数字和一个截止数字，计算从起始数字到截止数字的和，比如[1,3]=1+2+3=6。为了体现"加"操作很耗时
  * 随机睡一会儿，然后看看效果
+ * 类似还有归并排序，天然就是先分解 再合并
+ * 另外 java8新增的各种并行计算 都是这个套路
  * fork join 跟 map reduce 有点相似
  * 那么 在实际项目中，有没有适用场景呢？？？
  * 比如项目中每天有各种统计？分页查数据 ->遍历汇总 ->插入汇总表
@@ -31,6 +33,7 @@ import java.util.concurrent.RecursiveTask;
  *
  *
  * 了解了使用姿势后，大概看看ForkJoinPool的实现方案
+ * 有个核心的思想 work steal
  */
 @Slf4j
 public class ForkJoinPoolLearn {
@@ -40,6 +43,7 @@ public class ForkJoinPoolLearn {
 
     public static void main(String[] args)throws Exception {
         ForkJoinPoolLearn app = new ForkJoinPoolLearn();
+//        ForkJoinPool.commonPool()
         ForkJoinPool pool = new ForkJoinPool();
 
         int start = 1;
