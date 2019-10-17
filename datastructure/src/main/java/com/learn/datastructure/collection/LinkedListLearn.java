@@ -1,6 +1,5 @@
 package com.learn.datastructure.collection;
 
-import java.util.Date;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Random;
@@ -10,6 +9,20 @@ import java.util.Random;
  * @Description
  * @Author xgangzai@gmail.com
  * @Date 2019/7/9 09:34
+ */
+
+/**
+ * TODO 两个常见问题题
+ * 1.判断链表是否成环了，以及环链入口节点
+ * 思路：快慢两个哨兵
+ *
+ * 2.快速翻转链表
+ *
+ * https://juejin.im/post/5aa299c1518825557b4c5806
+ *
+ * 原来就一个链表还可以问这么多 真实服了
+ *
+ *
  */
 public class LinkedListLearn {
 
