@@ -1,25 +1,35 @@
 package com.learn.datastructure.tree;
 
+import com.alibaba.fastjson.JSON;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
+
 import java.io.Serializable;
-import java.util.ArrayDeque;
-import java.util.Iterator;
-import java.util.NoSuchElementException;
+import java.util.*;
 
 /**
  * @ClassName BinarySearchTree
- * @Description <href>https://juejin.im/post/5ad56de7f265da2391489be3</href>
+ * @Description 实现自定义序列化和反序列化
+ * 根据定义，没有重复的key 所以直接存数据 不保留节点间的关系
+ * 反序列化时，重新构造一棵树，一次加入每个节点
+ * 序列化 反序列化一般来讲都是框架，不跟具体的对象类型绑定，所以在反序列化时基本是通过反射来构造
+ * 实例，这个等后面专门找一个序列化和反序列框架来学习 比如fastjson 主要学习它是怎么处理对象之间的引用的
  * @Author xgangzai@gmail.com
  * @Date 2019/7/11 01:02
  */
-public class BinarySearchTree<V> implements BinaryTree<V>, Serializable {
+@Slf4j
+@Getter
+@Setter
+public class SeriableBinarySearchTree implements Serializable{
 
-    private Node<V> root;
+    private Node root;
 
-    public BinarySearchTree(Node<V> root) {
+    public SeriableBinarySearchTree(Node root) {
         this.root = root;
     }
 
-    public BinarySearchTree() {
+    public SeriableBinarySearchTree() {
         this(null);
     }
 
@@ -31,12 +41,11 @@ public class BinarySearchTree<V> implements BinaryTree<V>, Serializable {
      * @param value
      * @return 如果插入的节点为空节点，则返回null
      */
-    @Override
-    public void add(int key, V value) {
-        Node<V> node = root;
+    public void add(int key, String value) {
+        Node node = root;
 
         if (node == null) {
-            node = new Node<>(key, value);
+            node = new Node(key, value);
             root = node;
             return;
         }
@@ -46,7 +55,7 @@ public class BinarySearchTree<V> implements BinaryTree<V>, Serializable {
 //            return;
 //        }
 
-        Node<V> parent;
+        Node parent;
         while (true) {
             parent = node;
             if (key == node.key) {
@@ -58,7 +67,7 @@ public class BinarySearchTree<V> implements BinaryTree<V>, Serializable {
                 node = parent.right;
             }
             if (node == null) {
-                node = new Node<>(key, value);
+                node = new Node(key, value);
                 if (key < parent.key) {
                     parent.left = node;
                 } else {
@@ -72,24 +81,16 @@ public class BinarySearchTree<V> implements BinaryTree<V>, Serializable {
     }
 
 
-
-
-
-
-
-
-
     //删除
     //花了一个下午才写完这个逻辑 还不知道有没有bug 嗨，至少从打印结果来看 是没有预期的 TODO 逻辑还可以优化 提高复用程度
-    @Override
     public void remove(int key) {
-        Node<V> node = root;
+        Node node = root;
 
         if (node == null) {
             return;
         }
 
-        Node<V> parent = null;
+        Node parent = null;
         while (node != null) {
             if (key == node.key) {
                 break;
@@ -107,7 +108,7 @@ public class BinarySearchTree<V> implements BinaryTree<V>, Serializable {
             return;
         }
 
-        Node<V> newNode = null;
+        Node newNode = null;
         //待删除的节点是叶子节点
         if (node.left == null && node.right == null) {
             if (parent != null) {
@@ -129,7 +130,7 @@ public class BinarySearchTree<V> implements BinaryTree<V>, Serializable {
             //左右节点都存在 用后继节点替代
         } else {
             newNode = node.right;
-            Node<V> newNodeParent = null;
+            Node newNodeParent = null;
             while (true) {
                 if (newNode.left == null) {
                     break;
@@ -154,7 +155,7 @@ public class BinarySearchTree<V> implements BinaryTree<V>, Serializable {
         }
     }
 
-    private void replace(Node<V> parent, Node<V> node, Node<V> newNode) {
+    private void replace(Node parent, Node node, Node newNode) {
         if (parent != null) {
             if (parent.left == node) {
                 parent.left = newNode;
@@ -164,7 +165,6 @@ public class BinarySearchTree<V> implements BinaryTree<V>, Serializable {
         }
     }
 
-    @Override
     public Iterator<Integer> iterator() {
         return new TreeIterator();
     }
@@ -175,15 +175,13 @@ public class BinarySearchTree<V> implements BinaryTree<V>, Serializable {
      */
     class TreeIterator implements Iterator<Integer> {
 
-//        Node<V> next;
-
-        ArrayDeque<Node<V>> stack;
+        ArrayDeque<Node> stack;
 
 
         public TreeIterator() {
             stack = new ArrayDeque<>();
             //从根节点开始，所有左节点组成的路径一次压入栈
-            Node<V> parent = root;
+            Node parent = root;
             pushAll(parent);
         }
 
@@ -194,7 +192,7 @@ public class BinarySearchTree<V> implements BinaryTree<V>, Serializable {
 
         @Override
         public Integer next() {
-            Node<V> cur = stack.poll();
+            Node cur = stack.poll();
             //以cur为根节点，找出下一个
             if (cur == null) {
                 throw new NoSuchElementException("已经没有啦，为什么还要来取");
@@ -206,7 +204,7 @@ public class BinarySearchTree<V> implements BinaryTree<V>, Serializable {
             return cur.key;
         }
 
-        private void pushAll(Node<V> parent) {
+        private void pushAll(Node parent) {
             while (parent != null) {
                 stack.push(parent);
                 parent = parent.left;
@@ -215,15 +213,13 @@ public class BinarySearchTree<V> implements BinaryTree<V>, Serializable {
     }
 
 
-    @Override
-    public V search(int key) {
-        Node<V> node = compare(root, key);
+    public String search(int key) {
+        Node node = compare(root, key);
         return node == null ? null : node.value;
     }
 
-    @Override
     public void print() {
-        Node<V> node = root;//永远从根节点开始
+        Node node = root;//永远从根节点开始
         if (node == null) {
             System.err.println("[]");
             return;
@@ -238,7 +234,7 @@ public class BinarySearchTree<V> implements BinaryTree<V>, Serializable {
      *
      * @param node
      */
-    private void printPreOrder(Node<V> node) {
+    private void printPreOrder(Node node) {
         doPrint(node);
 
         if (node.left != null) {
@@ -256,7 +252,7 @@ public class BinarySearchTree<V> implements BinaryTree<V>, Serializable {
      *
      * @param node
      */
-    private void printInOrder(Node<V> node) {
+    private void printInOrder(Node node) {
         if (node.left != null) {
             printInOrder(node.left);
         }
@@ -273,7 +269,7 @@ public class BinarySearchTree<V> implements BinaryTree<V>, Serializable {
      *
      * @param node
      */
-    private void printPostOrder(Node<V> node) {
+    private void printPostOrder(Node node) {
         if (node.left != null) {
             printPostOrder(node.left);
         }
@@ -285,12 +281,12 @@ public class BinarySearchTree<V> implements BinaryTree<V>, Serializable {
         doPrint(node);
     }
 
-    private void doPrint(Node<V> node) {
+    private void doPrint(Node node) {
         System.err.print(node.key + " ");
     }
 
 
-    Node<V> compare(Node<V> node, int key) {
+    Node compare(Node node, int key) {
         if (node != null) {
             if (key == node.key) {
                 return node;
@@ -305,25 +301,46 @@ public class BinarySearchTree<V> implements BinaryTree<V>, Serializable {
         return null;
     }
 
-    static class Node<V> {
+    @Getter
+    @Setter
+    static class Node implements Serializable {
         int key;
 
-        V value;
+        String value;
 
-        Node<V> left;
+        Node left;
 
-        Node<V> right;
+        Node right;
 
-        public Node(int key, V value, Node<V> left, Node<V> right) {
+        public Node(int key, String value, Node left, Node right) {
             this.key = key;
             this.value = value;
             this.left = left;
             this.right = right;
         }
 
-        public Node(int key, V value) {
+        public Node(int key, String value) {
             this.key = key;
             this.value = value;
+        }
+
+        public Node() {
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (!(o instanceof Node)) return false;
+            Node node = (Node) o;
+            return key == node.key &&
+                    Objects.equals(value, node.value) &&
+                    Objects.equals(left, node.left) &&
+                    Objects.equals(right, node.right);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(key, value, left, right);
         }
 
         @Override
@@ -333,6 +350,49 @@ public class BinarySearchTree<V> implements BinaryTree<V>, Serializable {
                     ", value=" + value +
                     '}';
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof SeriableBinarySearchTree)) return false;
+        SeriableBinarySearchTree tree = (SeriableBinarySearchTree) o;
+        return Objects.equals(root, tree.root);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(root);
+    }
+
+    public static void main(String[] args) {
+//        SeriableBinarySearchTree tree=build();
+//        SeriableBinarySearchTree tree1=build();
+
+//        System.err.println(tree.equals(tree1));
+        SeriableBinarySearchTree tree=new SeriableBinarySearchTree();
+        Random random=new Random();
+        for(int i=0;i<100;i++){
+            int key=random.nextInt(100000);
+            tree.add(key,"value-"+key);
+        }
+//        tree.printInOrder(tree.root);
+
+        String jsonString= JSON.toJSONString(tree);
+        System.out.println(jsonString);
+
+        SeriableBinarySearchTree tree1=JSON.parseObject(jsonString,SeriableBinarySearchTree.class);
+        System.err.println(tree.equals(tree1));
+
+    }
+
+    private static SeriableBinarySearchTree build(){
+        SeriableBinarySearchTree tree=new SeriableBinarySearchTree();
+        tree.add(100,"value-100");
+        tree.add(101,"value-101");
+        tree.add(102,"value-102");
+        tree.add(99,"value-99");
+        return tree;
     }
 
 }

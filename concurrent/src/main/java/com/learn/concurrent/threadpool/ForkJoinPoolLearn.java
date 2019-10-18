@@ -34,6 +34,8 @@ import java.util.concurrent.RecursiveTask;
  *
  * 了解了使用姿势后，大概看看ForkJoinPool的实现方案
  * 有个核心的思想 work steal
+ *
+ * TODO 归并排序 并行计算
  */
 @Slf4j
 public class ForkJoinPoolLearn {
