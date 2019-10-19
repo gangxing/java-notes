@@ -23,12 +23,12 @@ public class BTree {
     }
 
     //元素，key - value
-    private class Item {
+    private class Entry {
         int key;
 
         String value;
 
-        public Item(int key, String value) {
+        public Entry(int key, String value) {
             this.key = key;
             this.value = value;
         }
@@ -36,26 +36,59 @@ public class BTree {
 
     // 节点
     private class Node {
-        Item[] items;
+        int entryCount;
 
-        int count;
+        Entry[] entries;
 
-        Node parent;
+        //暂时先不用这个属性
+//        boolean leaf;
 
-        Node left;
+        Node[] childNodes;
 
-        Node right;
-
-        public Node(Item item) {
-            items = new Item[m];
-            items[0] = item;
-            count = 1;
+        public Node(Entry entry) {
+            entries = new Entry[m];
+            childNodes = new Node[m];
+            entries[0] = entry;
+            entryCount = 1;
         }
 
-        public void add(Item item) {
+        public void add(Entry entry) {
 
         }
     }
+
+    public String search(int key) {
+        Node node = this.root;
+        Entry entry= search(key, node);
+        return entry==null?null:entry.value;
+    }
+
+    private Entry search(int key, Node node) {
+        if (node == null) {
+            return null;
+        }
+        for (int i = 0; i < node.entryCount; i++) {
+            Entry entry = node.entries[i];
+            if (key == entry.key) {
+                return entry;
+            }
+            if (key < entry.key) {
+                //遍历当前key的左边节点
+                if (node.childNodes != null) {
+                    return search(key, node.childNodes[i]);
+                }
+                return null;
+            }
+
+        }
+        //找右边的节点
+        if (node.childNodes != null) {
+            return search(key, node.childNodes[node.entryCount]);
+        }
+
+        return null;
+    }
+
 
     @Override
     public String toString() {
