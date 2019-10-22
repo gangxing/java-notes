@@ -203,13 +203,13 @@ public class BTree {
                     postAdd(node);
 
                 }
-                return null;
+//                return null;
             }
 
         }
         //找右边的节点
         if (node.children != null) {
-            return search(key, node.children[node.entryCount]);
+//            return search(key, node.children[node.entryCount]);
         }
 
 

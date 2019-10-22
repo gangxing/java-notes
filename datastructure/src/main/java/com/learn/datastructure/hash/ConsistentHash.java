@@ -6,6 +6,7 @@ import java.util.*;
  * @ClassName ConsistentHash
  * @Description 一致性hash实现
  * @Author xianjun@ixiaopu.com
+ * https://juejin.im/post/5d0781c1f265da1b827a9ca2
  * @Date 26/11/2018 23:18
  */
 public class ConsistentHash implements Hash {
@@ -124,7 +125,7 @@ public class ConsistentHash implements Hash {
     //一致性HASHING 暂时就研究到这里
 
 
-    //问题 如果自己来实现轮询 、随机、一致性hash负载均衡 会吗？？？？
+    //问题 如果自己来实现轮询 、随机、权重随机一致性hash负载均衡 会吗？？？？
 
 
 
