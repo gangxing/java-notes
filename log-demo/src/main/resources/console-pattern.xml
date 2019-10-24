@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<configuration debug="true">
+
+
+    <appender name="consoleLog" class="ch.qos.logback.core.ConsoleAppender">
+        <!--Layout是old fashion,在过渡阶段，会自动转换成Encoder方式-->
+        <!--<layout class="ch.qos.logback.classic.PatternLayout">-->
+            <!--&lt;!&ndash;内置的变量有哪些呢&ndash;&gt;-->
+            <!--<pattern>%highlight(%d [%thread] [%level] %logger{36} %C#%M-%L - %msg%n)</pattern>-->
+        <!--</layout>-->
+
+        <!--这两种方式都一样-->
+        <encoder>
+            <pattern>%highlight(%d [%thread] [%level] %logger{36} %C#%M-%L - %msg%n)</pattern>
+        </encoder>
+    </appender>
+
+
+
+
+
+
+
+    <root level="trace">
+        <appender-ref ref="consoleLog"/>
+        <!--<appender-ref ref="fileInfoLog"/>-->
+        <!--<appender-ref ref="fileErrorLog"/>-->
+    </root>
+
+
+</configuration>

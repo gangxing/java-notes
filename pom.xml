@@ -36,6 +36,8 @@
         <module>spring-mvc-demo</module>
         <module>embed-tomcat-demo</module>
         <module>spring-embed-tomcat-demo</module>
+        <module>servlet-demo</module>
+        <module>log-demo</module>
     </modules>
 
     <!--<dependencyManagement>-->

@@ -26,3 +26,6 @@ out/
 data/
 
 files/
+
+#log
+*.log

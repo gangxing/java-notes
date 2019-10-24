@@ -18,11 +18,11 @@ public class DruidDatasourceSample {
         Properties props = System.getProperties();
         //数据库连接配置
         props.put("druid.name", "DruidDatasource");
-        props.put("druid.url", "jdbc:mysql://47.110.254.134:3306/demo?useUnicode=true&characterEncoding=utf8");
+        props.put("druid.url", "jdbc:mysql://47.110.254.134:3307/demo?useUnicode=true&characterEncoding=utf8");
         props.put("druid.username", "root");
         props.put("druid.password", "Zjcgdatabase2018k");
 
-        //连接池配置 TODO 内部全用props.getProperty 所以value一定要是字符串
+        //连接池配置  内部全用props.getProperty 所以value一定要是字符串
         //最大活跃数
         props.put("druid.maxActive", "10");
         //初始化连接数
@@ -38,12 +38,6 @@ public class DruidDatasourceSample {
         DruidDataSource dataSource = null;
         try {
             dataSource = new DruidDataSource();
-            //这个超时时间是获取connection的超时时间
-            /*
-             * TODO 此时pool最大链接数是10个，没问题，同时有10个是活跃的，也就是有可以用的连接 为什么不能再获取了。
-             * TODO 难道是用了的是个连接没有返回到池子中去？
-             *
-             */
             dataSource.setMaxWait(3000);
             for (int i = 0; i < Integer.MAX_VALUE; i++) {
                 new Thread(new InsertTask(dataSource)).start();
