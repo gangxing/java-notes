@@ -34,6 +34,8 @@
         <module>mybatis-druid-jdbc-demo</module>
         <module>spring-mybatis-druid-jdbc-demo</module>
         <module>spring-mvc-demo</module>
+        <module>embed-tomcat-demo</module>
+        <module>spring-embed-tomcat-demo</module>
     </modules>
 
     <!--<dependencyManagement>-->
