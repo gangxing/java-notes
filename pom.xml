@@ -31,6 +31,9 @@
         <module>web-demo</module>
         <module>jdbc-demo</module>
         <module>druid-demo</module>
+        <module>mybatis-druid-jdbc-demo</module>
+        <module>spring-mybatis-druid-jdbc-demo</module>
+        <module>spring-mvc-demo</module>
     </modules>
 
     <!--<dependencyManagement>-->

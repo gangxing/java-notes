@@ -10,7 +10,7 @@ import java.util.Arrays;
  * @Author xianjun@ixiaopu.com
  * @Date 21/05/2018 22:53
  */
-public class Main {
+public class SortTest {
 
     public static void main(String[] args) {
         /*
