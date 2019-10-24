@@ -2,6 +2,7 @@ package com.learn.druiddemo;
 
 import com.alibaba.druid.pool.DruidDataSource;
 import com.alibaba.druid.pool.DruidPooledConnection;
+import lombok.extern.slf4j.Slf4j;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -13,6 +14,7 @@ import java.util.Properties;
  * @Author xgangzai
  * @Date 2019/10/5 12:02
  */
+@Slf4j
 public class DruidDatasourceSample {
     public static void main(String[] args) {
         Properties props = System.getProperties();
@@ -91,17 +93,19 @@ public class DruidDatasourceSample {
                 String sql = "INSERT INTO student(`name`,`gender`,`birthday`,`height`,`created_at`) VALUES ('" + name + "',0,'2019-09-22',150,'2019-10-04 23:33:45')";
 
                 int affectRows = statement.executeUpdate(sql);
-                System.err.println("affectRows:" + affectRows);
+                log.info("affectRows:" + affectRows);
 
                 //用完的连接一定要返还到连接池，不然上面的getConnection将会无连接可取
                 //FIXME 所谓的get 和recycle在连接数组上的操作是什么？
+                //将connection从数组中取出，当前下标置空，recycle则是将当前connection添加到数组中去
                 /*
                  * 这里有个很重要的变量poolingCount 代表池子中剩余的链接个数(即数组中元素的个数),
                  * 取出连接. connection = connections[poolingCount-1]; connections[poolingCount-1] = null;
                  * 返还链接 connections[poolingCount] = connection
                  * FIXME 核心逻辑很清晰 但是取出和返还是并发条件下的 是怎么支持并发的
+                 * 利用Lock
                  *
-                 * FIXME
+                 *
                  */
                 connection.recycle();
             } catch (SQLException e) {

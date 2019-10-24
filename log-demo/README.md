@@ -42,7 +42,7 @@
 
 分析半天还是看别人的总结来得快
 https://www.cnblogs.com/warking/p/5710303.html
-还是有不懂的就直接看官网
+还有不懂的就直接看官网
 http://logback.qos.ch/documentation.html
 
 

@@ -36,6 +36,8 @@ druid.initialSize=4
 这个源代码好难梳理清楚啊 。。。。我的妈
 
 找了半天，感觉[这篇](https://www.jianshu.com/p/16a646a4eccd)还比较靠谱
+connection使用完毕之后，要归还到连接池去
+
 
 
 问题：
@@ -44,6 +46,10 @@ druid.initialSize=4
 
 
 2.责任链模式
+
+
+druid 暂时先看到这里，接下来逐步整合mybatis和spring
+一直有个问题，关于事物的处理，到底是谁在负责commit和rollback
 
 
 

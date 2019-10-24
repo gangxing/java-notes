@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<!--暂时不用xml配置方案，直接用javacode-->
+<configuration>
+    <environments default="development">
+        <environment id="development">
+            <transactionManager type="JDBC"/>
+            <dataSource type="POOLED">
+                <property name="driver" value="com.mysql.cj.jdbc.Driver"/>
+                <property name="url" value="jdbc:mysql://47.110.254.134:3307/demo?useUnicode=true"/>
+                <property name="username" value="root"/>
+                <property name="password" value="Zjcgdatabase2018k"/>
+            </dataSource>
+        </environment>
+    </environments>
+    <mappers>
+        <mapper resource="StudentMapper.xml"/>
+    </mappers>
+</configuration>
