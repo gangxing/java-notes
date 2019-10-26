@@ -2,9 +2,6 @@ package com.learn.mybatisjdbcdemo.mapper.impl;
 
 import com.learn.mybatisjdbcdemo.entity.StudentEntity;
 import com.learn.mybatisjdbcdemo.mapper.StudentMapper;
-import com.mysql.cj.protocol.Resultset;
-import org.apache.ibatis.session.ResultContext;
-import org.apache.ibatis.session.ResultHandler;
 import org.apache.ibatis.session.SqlSession;
 
 /**
@@ -23,11 +20,11 @@ public class StudentMapperImpl implements StudentMapper {
     @Override
     public StudentEntity selectById(Long id) {
 
-        return session.selectOne("StudentMapper.selectById",id);
+        return session.selectOne("StudentMapper.selectById", id);
     }
 
     @Override
     public int insert(StudentEntity studentEntity) {
-        return 0;
+        return session.insert("StudentMapper.insert", studentEntity);
     }
 }

@@ -24,7 +24,23 @@ public class StudentEntity {
 
     private Integer height;
 
+    private Long classId;
+
     private Date createdAt;
 
     private Date updatedAt;
+
+    @Override
+    public String toString() {
+        return "StudentEntity{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", gender=" + gender +
+                ", birthday=" + birthday +
+                ", height=" + height +
+                ", classId=" + classId +
+                ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt +
+                '}';
+    }
 }

@@ -14,7 +14,6 @@ CREATE TABLE `student` (
 DROP TABLE if EXISTS `class`;
 CREATE TABLE `class` (
   `id` BIGINT(20) NOT NULL AUTO_INCREMENT,
-  `name` VARCHAR(32) DEFAULT NULL  COMMENT '姓名',
   `grade` TINYINT(4) NOT NULL  COMMENT '年级',
   `num` TINYINT(4) NOT NULL  COMMENT '班级',
   `student_count` INT NOT NULL DEFAULT 0 COMMENT '学生人数',

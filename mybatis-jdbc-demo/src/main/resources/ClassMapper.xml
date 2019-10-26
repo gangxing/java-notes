@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- mapper标签要指定namespace属性，不然会报错，可看做包名-->
+<mapper namespace="ClassMapper">
+    <select id="selectById" parameterType="long" resultType="com.learn.mybatisjdbcdemo.entity.ClassEntity">
+        select * from class where id = #{id}
+    </select>
+
+    <insert id="insert" parameterType="com.learn.mybatisjdbcdemo.entity.ClassEntity">
+        insert into class(
+        grade,
+        num,
+        student_count,
+        created_at,
+        updated_at)
+        values(
+        #{grade},
+        #{num},
+        #{studentCount},
+        #{createdAt},
+        #{updatedAt}
+        )
+    </insert>
+
+</mapper>

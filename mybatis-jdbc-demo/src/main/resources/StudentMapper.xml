@@ -15,6 +15,7 @@
         gender,
         birthday,
         height,
+        class_id,
         created_at,
         updated_at)
         values(
@@ -22,6 +23,7 @@
         #{gender},
         #{birthday},
         #{height},
+        #{classId},
         #{createdAt},
         #{updatedAt}
         )
