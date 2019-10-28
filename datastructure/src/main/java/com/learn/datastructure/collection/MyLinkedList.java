@@ -12,7 +12,6 @@ public class MyLinkedList {
 
     private Node head;
 
-    private Node tail ;//要不要尾部引用 先要着 实现后再看JDK怎么实现的
 
     public class Node {
 
@@ -29,43 +28,101 @@ public class MyLinkedList {
             return next;
         }
 
-        public Node(int value, Node next) {
+        public Node(int value) {
             this.value = value;
-            this.next = next;
         }
 
-        public Node(int value) {
-            this(value, null);
-        }
 
         @Override
         public String toString() {
-            return value+"";
+            return String.valueOf(value);
         }
     }
 
 
     public void add(int value) {
+        Node node = new Node(value);
+        link(node);
+    }
 
-        Node node=new Node(value);
-        if (head==null || tail==null){
-            head=tail=node;
-        }else {
-            link(node,tail);
+    public void reverse() {
+        Node node = this.head;
+        reverse(null, node);
+    }
+
+
+    private void reverse(Node reversed, Node node) {
+        if (node == null) {
+            return;
         }
+
+        Node next = node.next;
+        node.next = reversed;
+        this.head = node;
+        reverse(node, next);
 
     }
 
-    public Node getHead(){
+    //先用快慢指针，定位到最后一个节点和中间节点
+    //类似于数组翻转，头尾交换，直至中间节点
+    public void reverse1() {
+        if (head == null || head.next == null) {
+            return;
+        }
+        Node prev = head;
+        Node cur = head.next;
+        Node temp = head.next.next;
+        head.next = null;
+
+        while (temp != null) {
+            temp=cur.next;
+            cur.next = prev;
+            prev = cur;
+            cur = temp;
+        }
+//        head.next=null;
+        head=prev;
+
+
+    }
+
+    public Node getHead() {
         return head;
     }
 
-    private void link(Node node,Node prev){
-        prev.next=node;
-        tail=node;
+    private Node lastNode() {
+        Node n = this.head;
+        if (n == null) {
+            return null;
+        }
+        while (n.next != null) {
+            n = n.next;
+        }
+        return n;
     }
 
-    public Iterator<Node> iterator(){
+    private void link(Node node) {
+        Node last = lastNode();
+        if (last == null) {
+            last = node;
+            this.head = last;
+        } else {
+            last.next = node;
+        }
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder("[");
+        Iterator<Node> itr = iterator();
+        while (itr.hasNext()) {
+            sb.append(itr.next()).append(",");
+        }
+        sb.append("]");
+        return sb.toString();
+    }
+
+    public Iterator<Node> iterator() {
         return new Itr();
     }
 
@@ -84,12 +141,27 @@ public class MyLinkedList {
 
         @Override
         public Node next() {
-            Node n=next;
-            if (n==null){
+            Node n = next;
+            if (n == null) {
                 throw new IllegalArgumentException("已经没有啦");
             }
-            next=n.next;
+            next = n.next;
             return n;
         }
+    }
+
+    public static void main(String[] args) {
+        MyLinkedList list = new MyLinkedList();
+        for (int i = 0; i < 9; i++) {
+            list.add(i);
+        }
+
+        System.err.println(list);
+
+        list.reverse1();
+
+        System.err.println(list);
+
+
     }
 }
