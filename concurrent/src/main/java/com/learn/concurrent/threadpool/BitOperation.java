@@ -213,8 +213,10 @@ public class BitOperation {
 //        }
         long l=1L;
         long ll=(l<<32)-1;
-        System.err.println(ll);
-        System.err.println(Long.toBinaryString(ll));
+//        System.err.println(ll);
+//        System.err.println(Long.toBinaryString(ll));
+        String ip="192.168.50.212";
+        System.err.println(encodeIp(ip));
     }
 
     static Random random = new Random();
