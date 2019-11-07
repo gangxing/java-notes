@@ -211,7 +211,10 @@ public class BitOperation {
 //            boolean isEven=isEven(i);
 //            System.err.println(i+(isEven?"是":"不是")+"偶数");
 //        }
-        System.err.println(int2BinaryStr(Integer.MAX_VALUE*2));
+        long l=1L;
+        long ll=(l<<32)-1;
+        System.err.println(ll);
+        System.err.println(Long.toBinaryString(ll));
     }
 
     static Random random = new Random();
