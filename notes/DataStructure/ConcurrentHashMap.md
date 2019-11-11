@@ -328,6 +328,8 @@ private final void addCount(long x, int check) {
 >
 > 每个线程只分配部分Node的搬运？那怎么计算当前线程需要搬运的Node范围呢？？？？
 
+
+
 其实现逻辑如下
 
 ```java

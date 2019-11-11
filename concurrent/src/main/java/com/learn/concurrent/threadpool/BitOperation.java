@@ -217,17 +217,20 @@ public class BitOperation {
 //        System.err.println(ll);
 //        System.err.println(Long.toBinaryString(ll));
 //        String ip="192.168.50.212";
-        System.err.println(Integer.toBinaryString(0x7fffffff));
-        BigDecimal f=new BigDecimal("0.001");
-        while (f.compareTo(new BigDecimal("0.1"))<0){
-            float ff=f.floatValue();
-            int nativeHash=Float.hashCode(ff);
-            int newHash=(nativeHash ^ (nativeHash >>> 16)) & 0x7fffffff;
-//            System.err.println(ff);
-//            System.err.println(Float.hashCode(ff));
-            System.err.println(newHash);
-            f=f.add(new BigDecimal("0.001"));
-        }
+        System.err.println(0xff51afd7ed558ccdL);
+        System.err.println(Long.toBinaryString(0xff51afd7ed558ccdL));
+        System.err.println(0xc4ceb9fe1a85ec53L);
+        System.err.println(Long.toBinaryString(0xc4ceb9fe1a85ec53L));
+//        BigDecimal f=new BigDecimal("0.001");
+//        while (f.compareTo(new BigDecimal("0.1"))<0){
+//            float ff=f.floatValue();
+//            int nativeHash=Float.hashCode(ff);
+//            int newHash=(nativeHash ^ (nativeHash >>> 16)) & 0x7fffffff;
+////            System.err.println(ff);
+////            System.err.println(Float.hashCode(ff));
+//            System.err.println(newHash);
+//            f=f.add(new BigDecimal("0.001"));
+//        }
 
     }
 
