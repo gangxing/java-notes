@@ -18,7 +18,8 @@ public class HashMapLearn {
 //        System.err.println("!~".hashCode());
 //        randomString(3);
 //        randomDuplicateHashCode();
-        testHashMap();
+//        testHashMap();
+        testHashAndMod();
     }
 
     private static void testHashMap() {
@@ -155,5 +156,15 @@ public class HashMapLearn {
         return (char) (hashCode - 31 * first);
     }
 
+
+    private static void testHashAndMod(){
+        int length=8;
+        for (int i=0;i<Integer.MAX_VALUE;i++){
+            boolean b=i%length==(i&(length-1));
+            if (!b) {
+                System.err.println(i+" 不等了");
+            }
+        }
+    }
 
 }

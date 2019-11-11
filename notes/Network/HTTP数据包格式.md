@@ -1,0 +1,125 @@
+前面了解数据链路层、网络层
+
+从传输层了解一次接口请求，数据包的收发流程。三次握手、传输数据、四次挥手，TCP传输控制协议
+
+利用到的工具tcpdump
+
+TCP Transmission Protocol相关概念
+
+* TCP数据包标志位
+
+  > SYN -建立连接请求
+  >
+  > ACK-确认
+  >
+  > PSH-发送数据
+  >
+  > FIN-断开连接
+  >
+  > RST-连接复位？？强制断开
+
+* ISN
+
+  > Initial Sequence Number
+
+* MSS
+
+  >Maximum Segment Size
+  >
+  >
+
+* WIN
+
+  > Window size
+
+* TTL？怎么定义的
+* 超时重传 超时时间是怎么定义的？
+
+
+
+图（待完善）
+
+![network-request-reponse-packets.png](https://i.loli.net/2019/11/07/xid5yZD4soPJLNw.png)
+
+
+
+![20](http://www.2cto.com/uploadfile/2012/0206/20120206084318646.gif)
+
+从理论到实际 对照起来 
+
+https://www.cnblogs.com/ggjucheng/archive/2012/01/14/2322659.html
+
+TCP头部固定20个字节，即20*8=160个bit位
+
+SYN包
+
+![SYN_PACKET.png](https://i.loli.net/2019/11/07/lDMBLGPsO8IpQJy.png)
+
+15:46:20.725877 IP 192.168.50.212.62675 > 47.110.254.134.8080: Flags [S], seq 3294475759, win 65535, options [mss 1460,nop,wscale 6,nop,nop,TS val 695058240 ecr 0,sackOK,eol], length 0
+	0x0000:  a063 913d 87f3 4c32 758b 136b 0800 4500  .c.=..L2u..k..E.
+	0x0010:  0040 0000 4000 4006 1947 c0a8 32d4 2f6e  .@..@.@..G..2./n
+	0x0020:  fe86 f4d3 1f90 c45d b5ef 0000 0000 b002  .......]........
+	0x0030:  ffff 9e2b 0000 0204 05b4 0103 0306 0101  ...+............
+	0x0040:  080a 296d bf40 0000 0000 0402 0000       ..)m.@........
+
+> 关于进制，一位16进制最大可以表示15，需要4个bit位来表示，所以四位16进制需要16个bit位表示（2个字节）
+>
+> 对于有符号数字来讲，第一位表示符号位 0000...0000表示0,1000...0000则表示-0。两个数学意义表示一样的，所以规定1000...0000表示-(111...1111+1),对于一个字节btye来说，则表示-128~127。
+
+0xfd43=62675 
+
+0x1f90=8080
+
+> 一直以为0xa063表示6275，怎么算都算不出来，后面转算思路求8080的16进制，得到0x1f90。这下终于对上了，
+>
+> 
+
+序号32bit，所以两个4位16进制,即0xc45db5ef,其10进制为3294475759，刚好跟上面吻合。
+
+确认序列号32bit, 这里没有所以是0x00000000
+
+标志位16bit 0xb002，其10进制45058,二进制1011000000000010,后6bit表示标识位，SYN位上为1，表示是SYN包，吻合。前4bit表示头部长度1101，其10进制为13，说明头部长度是13个字节？
+
+win 16bit, 0xffff ,其10进制65535，吻合
+
+> 但是前面还有一堆表示什么？说明抓到的不只是传输层的数据，还有更底层的网络层、数据链路层，甚至物理层？？？？一个一个来，先看网络层（ip头）的数据格式
+
+IP头部数据格式https://blog.csdn.net/ythunder/article/details/65664309
+
+![](https://img-blog.csdn.net/20170324223007286?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQveXRodW5kZXI=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
+
+
+
+0xa063其二进制1010 0110 0000 0011,从左到右，
+
+版本占4bit，则1010，其10进制表示10？什么版本是10
+
+按照IP头，则第7个和第8个4位16进制表示32位源地址IP，则0x08004500表示192.168.50.212？
+
+0x08004500的10进制是134235392,二进制
+
+还是看不出来，根据8位协议再看，ICMP为1，TCP为6，UDP为17
+
+看第5个4位16进制串，0x758b，其二进制1110 1011 000 1011,后八位10进制是11，跟6也对不上。。。。
+
+换个思路，看端口前面有多少个字节，有17*2=34个字节，这样也说明不了什么，再换个思路看看服务端返回的数据包，一下是3次握手的3个包
+
+![Hand-shake-packets.png](https://i.loli.net/2019/11/07/5jGSX8W1pFwiUbN.png)
+
+1-3和4-6这两组肯定代表两端的什么信息，96个bit位可以表示什么？IP?
+
+http://www.lowxp.com/g/article/detail/300
+
+再看IP头
+
+![](http://nmap.org/book/images/hdr/MJB-IP-Header-800x576.png)
+
+根据文章中说的0x4006的06表示TCP协议。也对不上啊，往前推，前面肯定还有更底层的头
+
+0x4500中的45表示Version（前四位就是4，刚好是就IPV4）,往前数刚好是第一个，这下感觉对上了，所以前面还有数据链路层头
+
+https://blog.csdn.net/luguifang2011/article/details/40658723
+
+![](https://img-blog.csdn.net/20131219111714593?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvYWxleGFuZGVyX3hmbA==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
+
+终于找到一个全的了，表示MAC，位数刚好也对，果然!真不容易啊，有了这个，以后看数据包内容就没什么问题了

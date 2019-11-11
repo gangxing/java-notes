@@ -1,0 +1,123 @@
+`ConcurrentHashMap`
+
+
+
+HashMap的常规操作已经梳理完毕，基于数组，能实现O(1)时间复杂度的操作，但是它是非线程安全的。为了保证多线程环境还能用`HashMap`类似的数据结构，或者说加上什么操作，可以保证这种数据结构适用于多线程环境下。
+
+首先得找到症结所在，为什么`HashMap`不适用于多线程环境，具体是哪个操作不支持。
+
+HashMap有size,table等共享的成员变量，在插入数据时，存在修改这些共享成员变量的操作，所以不是线程安全的。另外，对于put后立即get操作场景，假如线程1执行完put操作后，刚好让出CPU时间片（或者主动sleep）,这时刚好线程2也put了一个相同的key（value不同），然后线程1获得CPU时间片，这时读到的不再是自己put的值，这也是非线程安全的一种体现。
+
+为了解决并发问题，简单的解决办法就是将所有操作都串行化(每个操作都加锁)，见`Collections.synchronizedMap()`,类似的方案还有`HashTable`,加锁保证了并发操作下的正确性，但是效率也会大大降低。在保证正确性的前提下，有没有更高效的方案呢？我的理解，前面的方案之所以效率低下，是因为只有一把锁，所有线程都必须获得者同一把锁，但是基于HashMap的实现方案（数组+链表/红黑树），只对数组的每个元素（bin）加锁，这样对不同的bin的操作是可以支持并发的，但这只是基于数组长度固定的前提，但是数组是会扩容的，这个变更操作是面向整个数组，并且部分bin中的部分Node会被移动，所以这种方案也是不可行的。因此，并发操作的难点就落到了怎么支持高效并发地扩容。先看`ConcurrentHashMap` 是怎么做到的？其核心思想是
+
+1. 分段
+
+2. CAS
+
+3. synchronized
+
+   关于ConcurrentHashMap的剖析，见下面这篇文章
+
+   [https://yfzhou.coding.me/2018/12/24/%E5%89%91%E6%8C%87ConcurrentHashMap%E3%80%90%E5%9F%BA%E4%BA%8EJDK1-8%E3%80%91/](https://yfzhou.coding.me/2018/12/24/剑指ConcurrentHashMap[基于JDK1-8]/)
+
+   
+
+   ConcurrentHashMap在数据组织方面，和HashMap是一致的，底层都是采用数组+链表/红黑树，
+
+   增加了一些特殊Node，其hash为负数，具体值如下面所示
+
+   ```java
+   /*
+    * Encodings for Node hash fields. See above for explanation.
+    */
+   static final int MOVED     = -1; // hash for forwarding nodes
+   static final int TREEBIN   = -2; // hash for roots of trees
+   static final int RESERVED  = -3; // hash for transient reservations
+   static final int HASH_BITS = 0x7fffffff; // usable bits of normal node hash
+   ```
+
+
+
+源码注释说明，
+
+当插入一个Node到空bin时，采用CAS方案，对于其他的写操作（比如insert，update，delete）根据不同的bin获取各自的锁（哎，这一点思想不就是前面我自己设想的吗，啧啧啧！），但是这样当bin的数量（数组长度）很大时，会存在多个锁，很浪费空间，因此将每个bin的第一个元素作为锁。
+
+每个bin都有自己的锁这种方案的主要缺点是，并发操作同一个bin里不同的Node(链表/红黑树)是需要获取同一把锁的，因此效率会低下，但是从统计上来说，这不是一个问题，至于为什么，有一大堆分析，暂且不表。
+
+> 负数hash被用作特殊用途，所以用户的key 的hash就不能再有负数了，这点通过spread确保hash不为负数
+>
+> ```java
+> static final int spread(int h) {
+>     return (h ^ (h >>> 16)) & HASH_BITS;//HASH_BITS=0X7FFFFFFF
+> }
+> ```
+
+
+
+我的理解，一是缩小锁的范围，比如上面的每一个bin一个锁，另一方向，尽可能减少锁住的逻辑，能不用锁的地方，尽量不用锁。
+
+
+
+​	helpTransfer,在扩容的时候，其他线程可以加入进来，”帮忙“扩容，而不是傻傻地等待锁。这个。。。扩容还可以多个线程一起帮忙做？？？所谓的帮忙是什么意思？？？
+
+
+
+`ConcurrentHashMap`的key为什么不能为null
+
+除了HashMap中所需要的字段，还增加以下几个
+
+```java 
+//用在扩容时
+private transient volatile Node<K,V>[] nextTable;
+
+//key-value数量？？？
+private transient volatile long baseCount;
+
+/*
+ * 数据初始化或扩容控制
+ * 负数时表示数组正在被初始化或者扩容，具体地
+ * -1表示正在初始化
+ * -(1+正在扩容的线程数量)，比如，此时有3个线程都在扩容，则sizeCtl=-4
+ * 当为非负数时，表示下一步的数组长度，具体地
+ * 当数组为null时，表示初始化的长度，默认是0，如果不为null时，表示扩容后的数组长度
+ */
+
+private transient volatile int sizeCtl;
+
+/**
+ * 不求甚解
+ */
+private transient volatile int transferIndex;
+
+/**
+ * 不求甚解
+ */
+private transient volatile int cellsBusy;
+
+/**
+ * 不求甚解
+ */
+private transient volatile CounterCell[] counterCells;
+
+
+```
+
+
+
+
+
+一通操作，还是不求甚解，先根据put操作来看看流程
+
+插入元素，会有以下几种场景
+
+1. table未初始化
+2. 
+
+
+
+
+
+
+
+
+
