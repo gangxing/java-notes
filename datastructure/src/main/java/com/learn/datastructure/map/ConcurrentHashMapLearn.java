@@ -19,9 +19,12 @@ public class ConcurrentHashMapLearn {
 
     public static void main(String[] args) {
         ConcurrentHashMap<Integer,String> map=new ConcurrentHashMap<>();
-        map.put(1,"value1");
-        String value=map.get(1);
-        System.err.println(value);
+        for (int i=0;i<18;i++) {
+            map.put(i, "value"+i);
+            String value = map.get(i);
+            System.err.println(value);
+        }
+        map.size();
     }
     public static void main1(String[] args) {
 

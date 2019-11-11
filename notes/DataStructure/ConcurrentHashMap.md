@@ -108,9 +108,240 @@ private transient volatile CounterCell[] counterCells;
 
 一通操作，还是不求甚解，先根据put操作来看看流程
 
+1. 计算hash
+
+2. 判断table是否已初始化，如果没有，则初始化之
+
+3. 定位Node,如果Node为null，将当前key-value构建一个Node,利用CAS赋值，用CAS一般都需要自旋。
+
+4. 如果Node的hashCode == MOVED,说明正在扩容？则帮助扩容？？？怎么个帮助法？？
+
+5. 所谓帮助扩容，是尝试去扩容，那先看看扩容在干什么,辣么长。。。。。
+
+   ```java
+   private final void transfer(Node<K,V>[] tab, Node<K,V>[] nextTab) {
+       int n = tab.length, stride;
+       if ((stride = (NCPU > 1) ? (n >>> 3) / NCPU : n) < MIN_TRANSFER_STRIDE)
+           stride = MIN_TRANSFER_STRIDE; // subdivide range
+       if (nextTab == null) {            // initiating
+           try {
+               @SuppressWarnings("unchecked")
+               Node<K,V>[] nt = (Node<K,V>[])new Node<?,?>[n << 1];
+               nextTab = nt;
+           } catch (Throwable ex) {      // try to cope with OOME
+               sizeCtl = Integer.MAX_VALUE;
+               return;
+           }
+           nextTable = nextTab;
+           transferIndex = n;
+       }
+       int nextn = nextTab.length;
+       ForwardingNode<K,V> fwd = new ForwardingNode<K,V>(nextTab);
+       boolean advance = true;
+       boolean finishing = false; // to ensure sweep before committing nextTab
+       for (int i = 0, bound = 0;;) {
+           Node<K,V> f; int fh;
+           while (advance) {
+               int nextIndex, nextBound;
+               if (--i >= bound || finishing)
+                   advance = false;
+               else if ((nextIndex = transferIndex) <= 0) {
+                   i = -1;
+                   advance = false;
+               }
+               else if (U.compareAndSwapInt
+                        (this, TRANSFERINDEX, nextIndex,
+                         nextBound = (nextIndex > stride ?
+                                      nextIndex - stride : 0))) {
+                   bound = nextBound;
+                   i = nextIndex - 1;
+                   advance = false;
+               }
+           }
+           if (i < 0 || i >= n || i + n >= nextn) {
+               int sc;
+               if (finishing) {
+                   nextTable = null;
+                   table = nextTab;
+                   sizeCtl = (n << 1) - (n >>> 1);
+                   return;
+               }
+               if (U.compareAndSwapInt(this, SIZECTL, sc = sizeCtl, sc - 1)) {
+                   if ((sc - 2) != resizeStamp(n) << RESIZE_STAMP_SHIFT)
+                       return;
+                   finishing = advance = true;
+                   i = n; // recheck before commit
+               }
+           }
+           else if ((f = tabAt(tab, i)) == null)
+               advance = casTabAt(tab, i, null, fwd);
+           else if ((fh = f.hash) == MOVED)
+               advance = true; // already processed
+           else {
+               synchronized (f) {
+                   if (tabAt(tab, i) == f) {
+                       Node<K,V> ln, hn;
+                       if (fh >= 0) {
+                           int runBit = fh & n;
+                           Node<K,V> lastRun = f;
+                           for (Node<K,V> p = f.next; p != null; p = p.next) {
+                               int b = p.hash & n;
+                               if (b != runBit) {
+                                   runBit = b;
+                                   lastRun = p;
+                               }
+                           }
+                           if (runBit == 0) {
+                               ln = lastRun;
+                               hn = null;
+                           }
+                           else {
+                               hn = lastRun;
+                               ln = null;
+                           }
+                           for (Node<K,V> p = f; p != lastRun; p = p.next) {
+                               int ph = p.hash; K pk = p.key; V pv = p.val;
+                               if ((ph & n) == 0)
+                                   ln = new Node<K,V>(ph, pk, pv, ln);
+                               else
+                                   hn = new Node<K,V>(ph, pk, pv, hn);
+                           }
+                           setTabAt(nextTab, i, ln);
+                           setTabAt(nextTab, i + n, hn);
+                           setTabAt(tab, i, fwd);
+                           advance = true;
+                       }
+                       else if (f instanceof TreeBin) {
+                           TreeBin<K,V> t = (TreeBin<K,V>)f;
+                           TreeNode<K,V> lo = null, loTail = null;
+                           TreeNode<K,V> hi = null, hiTail = null;
+                           int lc = 0, hc = 0;
+                           for (Node<K,V> e = t.first; e != null; e = e.next) {
+                               int h = e.hash;
+                               TreeNode<K,V> p = new TreeNode<K,V>
+                                   (h, e.key, e.val, null, null);
+                               if ((h & n) == 0) {
+                                   if ((p.prev = loTail) == null)
+                                       lo = p;
+                                   else
+                                       loTail.next = p;
+                                   loTail = p;
+                                   ++lc;
+                               }
+                               else {
+                                   if ((p.prev = hiTail) == null)
+                                       hi = p;
+                                   else
+                                       hiTail.next = p;
+                                   hiTail = p;
+                                   ++hc;
+                               }
+                           }
+                           ln = (lc <= UNTREEIFY_THRESHOLD) ? untreeify(lo) :
+                               (hc != 0) ? new TreeBin<K,V>(lo) : t;
+                           hn = (hc <= UNTREEIFY_THRESHOLD) ? untreeify(hi) :
+                               (lc != 0) ? new TreeBin<K,V>(hi) : t;
+                           setTabAt(nextTab, i, ln);
+                           setTabAt(nextTab, i + n, hn);
+                           setTabAt(tab, i, fwd);
+                           advance = true;
+                       }
+                   }
+               }
+           }
+       }
+   }
+   ```
+
+是否要扩容，肯定是根据count来判断的，那怎么来存储count的呢？？？看size()的实现
+
+```java
+final long sumCount() {
+    CounterCell[] as = counterCells; CounterCell a;
+    long sum = baseCount;
+    if (as != null) {
+        for (int i = 0; i < as.length; ++i) {
+            if ((a = as[i]) != null)
+                sum += a.value;
+        }
+    }
+    return sum;
+}
+```
+
+可以看出数量存储在两个地方，一个是`baseCount`,一个是`counterCells`，根据文档说明，当不是并发插入时，通过CAS直接累加到`baseCount`中，当有并发时，加到每个CounterCell中？？
+
+再看这两个变量如何被更新的，每次成功插入一个键值对后，都会增加count,具体逻辑见
+
+```java
+
+private final void addCount(long x, int check) {
+    CounterCell[] as; long b, s;
+    if ((as = counterCells) != null ||
+        !U.compareAndSwapLong(this, BASECOUNT, b = baseCount, s = b + x)) {
+        CounterCell a; long v; int m;
+        boolean uncontended = true;
+        if (as == null || (m = as.length - 1) < 0 ||
+            (a = as[ThreadLocalRandom.getProbe() & m]) == null ||
+            !(uncontended =
+              U.compareAndSwapLong(a, CELLVALUE, v = a.value, v + x))) {
+            fullAddCount(x, uncontended);
+            return;
+        }
+        if (check <= 1)
+            return;
+        s = sumCount();
+    }
+    if (check >= 0) {
+        Node<K,V>[] tab, nt; int n, sc;
+        while (s >= (long)(sc = sizeCtl) && (tab = table) != null &&
+               (n = tab.length) < MAXIMUM_CAPACITY) {
+            int rs = resizeStamp(n);
+            if (sc < 0) {
+                if ((sc >>> RESIZE_STAMP_SHIFT) != rs || sc == rs + 1 ||
+                    sc == rs + MAX_RESIZERS || (nt = nextTable) == null ||
+                    transferIndex <= 0)
+                    break;
+                if (U.compareAndSwapInt(this, SIZECTL, sc, sc + 1))
+                    transfer(tab, nt);
+            }
+            else if (U.compareAndSwapInt(this, SIZECTL, sc,
+                                         (rs << RESIZE_STAMP_SHIFT) + 2))
+                transfer(tab, null);
+            s = sumCount();
+        }
+    }
+}
+```
+
+
+
+我曹，看不下去了，怎么这么复杂。。。。。
+
+
+
+ForwardingNode`,hash=MOVED,表示在扩容时插入
+
+> 内置的特殊Node，key ,value都为null，hash为负数，
+>
+> ```java
+> 
+> //
+> ForwardingNode MOVED
+> 
+>   //
+> ReservationNode RESERVED
+> 
+> TreeNode
+> 
+> TreeBin //包装TreeNode,作为树的根节点？？？
+> ```
+>
+> 所以ConcurrentHashMap不允许插入Key或Value为null的键值对
+
 插入元素，会有以下几种场景
 
-1. table未初始化
+1. table未初始化，先初始化之，
 2. 
 
 
