@@ -320,6 +320,41 @@ private final void addCount(long x, int check) {
 
 
 
+
+
+如果在插入过程中，发现数组正在扩容，并且参与扩容的线程数量没达到最大时（`MAX_RESIZERS=65535`），则加入到帮忙大军中，帮助扩容，所谓扩容，有两个动作，一是创建2倍长度的新数组，二是搬移Node到新数组中。在这两个操作中，第一个操作只能是由一个线程完成，能够一起完成的是Node的搬运工作。这就是为什么在保证并发正确的前提下，还能高效的关键所在。
+
+> 这一通说下来，其实还是不懂，为什么可以多个线程并发搬运Node,怎么组织的？
+>
+> 每个线程只分配部分Node的搬运？那怎么计算当前线程需要搬运的Node范围呢？？？？
+
+其实现逻辑如下
+
+```java
+final Node<K,V>[] helpTransfer(Node<K,V>[] tab, Node<K,V> f) {
+    Node<K,V>[] nextTab; int sc;
+    if (tab != null && (f instanceof ForwardingNode) &&
+        (nextTab = ((ForwardingNode<K,V>)f).nextTable) != null) {
+        int rs = resizeStamp(tab.length);
+        while (nextTab == nextTable && table == tab &&
+               (sc = sizeCtl) < 0) {
+            if ((sc >>> RESIZE_STAMP_SHIFT) != rs || sc == rs + 1 ||
+                sc == rs + MAX_RESIZERS || transferIndex <= 0)
+                break;
+            if (U.compareAndSwapInt(this, SIZECTL, sc, sc + 1)) {
+              //真正地扩容实现
+                transfer(tab, nextTab);
+                break;
+            }
+        }
+        return nextTab;
+    }
+    return table;
+}
+```
+
+
+
 ForwardingNode`,hash=MOVED,表示在扩容时插入
 
 > 内置的特殊Node，key ,value都为null，hash为负数，
@@ -343,6 +378,10 @@ ForwardingNode`,hash=MOVED,表示在扩容时插入
 
 1. table未初始化，先初始化之，
 2. 
+
+
+
+
 
 
 
