@@ -7,7 +7,7 @@ package com.learn.algorithm.charactersmatch;
  */
 
 /**
- * 对BF算法的优化
+ * 对BF算法的优化 Rabin-Karp
  * 核心思想是对source中n-m+1个子串和target分别计算其hash值，
  * 然后比对n-m+1个hash中有没有跟target的hash相等的
  * <p>
@@ -39,8 +39,9 @@ public class RKMatcher implements Matcher {
         }
 
         int targetHash = trans62toDecimal(targetChars, 0, targetLen);
-        for (int i = 0; i <= sourceLen - targetLen + 1; i++) {
+        for (int i = 0; i <= sourceLen - targetLen ; i++) {
             if (trans62toDecimal(sourceChars, i, targetLen) == targetHash) {
+                //这里可能会存在hash冲突
                 return true;
             }
         }
@@ -51,9 +52,9 @@ public class RKMatcher implements Matcher {
     static int[] rediuxCache;
 
     static {
-        rediuxCache = new int[10];
+        rediuxCache = new int[62];
         rediuxCache[0] = 1;
-        for (int i = 1; i < 10; i++) {
+        for (int i = 1; i < 62; i++) {
             rediuxCache[i] = rediuxCache[i - 1] * 62;
         }
     }
@@ -66,26 +67,67 @@ public class RKMatcher implements Matcher {
         return trans62toDecimal(s.toCharArray(), 0, s.length());
     }
 
+    /**
+     * 两个优化点
+     * 1.62^n 可以缓存下来，提交效率
+     * 2.from+1子串计算是否可以某种程度上利用from子串的计算结果
+     * @param chars
+     * @param from
+     * @param length
+     * @return
+     */
     private int trans62toDecimal(char[] chars, int from, int length) {
-
         int res = 0;
-
         for (int i = 0; i < length; i++) {
             char c = chars[from + i];
             int ii = BASE.indexOf(c);
-//            for (int j = 0; j < length - i - 1; j++) {
-//                ii *= 62;
-//            }
-            res += ii*rediuxCache[length-i-1];
+            for (int j = 0; j < length - i - 1; j++) {
+                ii *= 62;
+            }
+            res += ii;
         }
 
         return res;
     }
 
+    //这种方案只支持正数
+    private String decimalTo62(int d) {
+        char[] chars = new char[10];
+        int dd = d;
+        int index = -1;
+        while (dd > 0) {
+            int m = dd % 62;
+            chars[++index] = BASE.charAt(m);
+
+            dd /= 62;
+        }
+
+        char[] res = new char[index + 1];
+        int resIndex = 0;
+        for (int i = index; i >= 0; i--) {
+            res[resIndex++] = chars[i];
+        }
+
+        return new String(res);
+    }
+
     public static void main(String[] args) {
         RKMatcher matcher = new RKMatcher();
-        String s = "akdkdkdkkdkdkdkkdkdjdjjdjdjdjdjjd";
-        int i = matcher.trans62toDecimal(s.toCharArray(), 0, s.length());
-        System.err.println(i);
+
+        String s = "1bk8383ddk";
+//        int i = matcher.trans62toDecimal(s);
+//        System.err.println(i);
+//        String ss = matcher.decimalTo62(i);
+//        System.err.println(ss + " ->" + ss.equals(s));
+
+        int i=62;
+        int count=1;
+        int sum=62;
+        while (sum >0 && sum<Integer.MAX_VALUE){
+            count++;
+            sum=sum*i;
+        }
+
+        System.err.println(count);
     }
 }

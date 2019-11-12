@@ -18,8 +18,8 @@ public class MatcherTest {
     public static void main(String[] args) {
 //        Matcher matcher=new BFMatcher();
         Matcher matcher=new RKMatcher();
-        String source="ADBC";
-        String target="DB";
+        String source="ADBCjdjj39922j3jdd";
+        String target="jj39";
         log.info(""+matcher.matches(source,target));
     }
 }

@@ -9,6 +9,7 @@ public class BFMatcher implements Matcher {
 
     /**
      * 暴力匹配
+     * Brute Force
      *
      * @param source
      * @param target
