@@ -23,7 +23,6 @@ public class PrintInOrderJoin {
         C.join();
 
         D.start();
-        D.join();
     }
 
 

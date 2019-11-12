@@ -1,6 +1,6 @@
 package com.learn.algorithm.consistenthash;
 
-import com.learn.algorithm.util.RandomStringUtils;
+import com.learn.algorithm.util.RandomUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,7 +43,7 @@ public class RouterTest {
 
         static {
             for (int i=0;i<capacity;i++){
-                s.add(RandomStringUtils.random(5));
+                s.add(RandomUtils.randomString(5));
             }
         }
 

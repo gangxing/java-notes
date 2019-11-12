@@ -17,10 +17,15 @@ public class PrintInOrderThreadPool {
         Thread D=new Thread(new Printer("D"),"D");
         //这种实现方式只有一个线程
         ExecutorService pool= Executors.newSingleThreadExecutor();
+//        pool.submit(A);
+//        pool.submit(B);
+//        pool.submit(C);
+//        pool.submit(D);
         pool.execute(A);
         pool.execute(B);
         pool.execute(C);
         pool.execute(D);
+        pool.shutdown();
     }
 
 
