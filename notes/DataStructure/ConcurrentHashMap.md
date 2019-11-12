@@ -14,7 +14,7 @@ HashMap有size,table等共享的成员变量，在插入数据时，存在修改
 
 2. CAS
 
-3. synchronized
+3. synchronized,同步肯定是要同步的，只不过尽可能缩小需要同步的范围
 
    关于ConcurrentHashMap的剖析，见下面这篇文章
 
@@ -269,7 +269,7 @@ final long sumCount() {
 }
 ```
 
-可以看出数量存储在两个地方，一个是`baseCount`,一个是`counterCells`，根据文档说明，当不是并发插入时，通过CAS直接累加到`baseCount`中，当有并发时，加到每个CounterCell中？？
+可以看出数量存储在两个地方，一个是`baseCount`,一个是`counterCells`，根据文档说明，当不是并发插入时，通过CAS直接累加到`baseCount`中，当有并发时，加到每个CounterCell中？？这个实现跟`LongAdder`一致，（为什么不直接使用`LongAdder`）
 
 再看这两个变量如何被更新的，每次成功插入一个键值对后，都会增加count,具体逻辑见
 
