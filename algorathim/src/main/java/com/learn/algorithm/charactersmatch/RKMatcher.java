@@ -68,8 +68,8 @@ public class RKMatcher implements Matcher {
     }
 
     /**
-     * 两个优化点
-     * 1.62^n 可以缓存下来，提交效率
+     * TODO 两个优化点
+     * 1.62^n 可以缓存下来，提高效率
      * 2.from+1子串计算是否可以某种程度上利用from子串的计算结果
      * @param chars
      * @param from
