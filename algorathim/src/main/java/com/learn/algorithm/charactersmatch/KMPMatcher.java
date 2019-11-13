@@ -8,7 +8,7 @@ package com.learn.algorithm.charactersmatch;
 public class KMPMatcher implements Matcher {
 
     @Override
-    public boolean matches(String source, String target) {
-        return false;
+    public int matches(String source, String target) {
+        return -1;
     }
 }

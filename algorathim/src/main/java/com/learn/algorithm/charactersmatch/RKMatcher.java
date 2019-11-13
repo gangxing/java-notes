@@ -28,25 +28,24 @@ public class RKMatcher implements Matcher {
      * @return
      */
     @Override
-    public boolean matches(String source, String target) {
+    public int matches(String source, String target) {
         char[] sourceChars = source.toCharArray();
         char[] targetChars = target.toCharArray();
 
         int sourceLen = sourceChars.length;
         int targetLen = targetChars.length;
         if (sourceLen < targetLen) {
-            return false;
+            return -1;
         }
 
         int targetHash = trans62toDecimal(targetChars, 0, targetLen);
-        for (int i = 0; i <= sourceLen - targetLen ; i++) {
+        for (int i = 0; i <= sourceLen - targetLen; i++) {
             if (trans62toDecimal(sourceChars, i, targetLen) == targetHash) {
-                //这里可能会存在hash冲突
-                return true;
+                return i;
             }
         }
 
-        return false;
+        return -1;
     }
 
     static int[] rediuxCache;
@@ -71,6 +70,7 @@ public class RKMatcher implements Matcher {
      * TODO 两个优化点
      * 1.62^n 可以缓存下来，提高效率
      * 2.from+1子串计算是否可以某种程度上利用from子串的计算结果
+     *
      * @param chars
      * @param from
      * @param length
@@ -120,12 +120,12 @@ public class RKMatcher implements Matcher {
 //        String ss = matcher.decimalTo62(i);
 //        System.err.println(ss + " ->" + ss.equals(s));
 
-        int i=62;
-        int count=1;
-        int sum=62;
-        while (sum >0 && sum<Integer.MAX_VALUE){
+        int i = 62;
+        int count = 1;
+        int sum = 62;
+        while (sum > 0 && sum < Integer.MAX_VALUE) {
             count++;
-            sum=sum*i;
+            sum = sum * i;
         }
 
         System.err.println(count);

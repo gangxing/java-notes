@@ -20,14 +20,14 @@ public class BFMatcher implements Matcher {
      * 容易将bug暴露出来并且解决，所以被大量使用
      */
     @Override
-    public boolean matches(String source, String target) {
+    public int matches(String source, String target) {
         char[] sourceChars = source.toCharArray();
         char[] targetChars = target.toCharArray();
 
         int sourceLen = sourceChars.length;
         int targetLen = targetChars.length;
         if (sourceLen < targetLen) {
-            return false;
+            return -1;
         }
         for (int i = 0; i <= sourceLen - targetLen + 1; i++) {
             boolean matches = true;
@@ -38,9 +38,9 @@ public class BFMatcher implements Matcher {
                 }
             }
             if (matches) {
-                return true;
+                return i;
             }
         }
-        return false;
+        return -1;
     }
 }
