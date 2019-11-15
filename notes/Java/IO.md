@@ -1,4 +1,4 @@
-NIO 
+NIO  TODO 归档到Linux下
 
 结合Linux 了解socket原理 什么多路复用 selector epoll poll 
 
@@ -15,6 +15,10 @@ https://www.jianshu.com/p/aed6067eeac9
 https://juejin.im/post/5c725dbe51882575e37ef9ed
 
 [https://woshijpf.github.io/linux/2017/07/10/Linux-IO%E6%A8%A1%E5%9E%8B.html](https://woshijpf.github.io/linux/2017/07/10/Linux-IO模型.html)
+
+https://tech.youzan.com/yi-bu-wang-luo-mo-xing/
+
+
 
 ### 背景知识一
 
@@ -98,8 +102,8 @@ https://juejin.im/post/5c725dbe51882575e37ef9ed
 
 网络IO模型有以下5中
 
-* 阻塞IO Blocking IO
-* 非阻塞IO Non-Blocking IO
+* 同步阻塞IO Blocking IO
+* 同步非阻塞IO Non-Blocking IO
 * 多路复用IO Multiplexing IO
 * 信号驱动IO Signal Driven IO（实际中不常用）
 * 异步IO Asynchronous IO 
@@ -108,23 +112,56 @@ https://juejin.im/post/5c725dbe51882575e37ef9ed
 
 #####一、Blocking IO
 
-在这个模型中，用户进程执行一个系统调用(recv/recvfrom),这会导致进程阻塞（不占用CPU时间片），直到数据准备好，并将数据复制到进程缓冲区，最后进程再处理数据。这种模型从数据处理角度来讲是最及时的，因为数据被复制到进程缓冲区后，进程能及时处理。处理流程图如下：
+在这个模型中，用户进程执行一个系统调用(recv/recvfrom),这会导致进程阻塞（不占用CPU时间片），直到数据准备好，并将数据复制到进程缓冲区，recv/recvfrom函数返回结果，最后进程再处理数据。这种模型从数据处理角度来讲是最及时的，因为数据被复制到进程缓冲区后，进程能及时处理。处理流程图如下：
 
 ![](https://static.oschina.net/uploads/img/201604/20150405_VKYH.png)
 
-
+> 应用进程在两个阶段都被阻塞了
+>
+> 关于recv和recvfrom的区别，见https://www.cnblogs.com/p2liu/archive/2013/04/17/6048755.html
 
 ##### 二、Non-Blocking IO
 
+以非阻塞模式打开，每隔一段时间调用recv/recvfrom,如果数据未准备好，会立即返回一个错误码。这个过程称为轮询。应用进程调用recv/recvfrom时是会被阻塞的，但是在两次调用之间是进程是未被阻塞的，可以获取CPU时间片。从内核角度来看，当收到recv/recvfrom调用时，如果数据未准备好，则立即返回错误码，如果数据已经准备好了，则将数据复制到进程缓冲区。
 
+![](https://static.oschina.net/uploads/img/201604/20152818_DXcj.png)
+
+> 跟同步阻塞模型相比，同步非阻塞模型
+>
+> 优点：在轮询期间可以执行其他任务
+>
+> 缺点：因为是固定时间间隔轮询的（并且这个间隔不会太短），所以数据可能会在两次查询间隔时就已经准备好了，会导致响应时间加大，吞吐量下降。
 
 ##### 三、Multiplexing IO
+
+在讨论前面两种IO模型时，都是基于单个socket来讨论的，实际上一个系统同时会有多个socket(属于同一个用户进程或多个用户进程)。每个socket都需要轮询或被阻塞，如果有单独一个人（这里我不知道用进程、线程还是什么其他东西来描述更准确，等后续再来完善吧），如果数据准备好了，告诉用户进程，在这之前用户进程可以安心干其他事就好了。Linux下的select,poll,epoll就是来干”查看“的工作的，如果查询得知数据已经准备好了，就通知用户进程，用户进程再调用recv/recvfrom来获取数据
+
+> select ,poll,epoll三者功能是一样的，但是epoll是select和poll的改进版，具体区别见https://www.cnblogs.com/anker/p/3265058.html
+
+我的理解，所谓的多路复用，就是将”查询数据状态“和”复制数据“两个操作分开来，并”查询操作“实现了批量化，可以一次查询多个socket的数据状态，将已经准备好的socket相关信息返回回来，用户进程再单独调用recv/recvfrom。跟同步非阻塞模型相比，节省了查询所做的工作量。
+
+> select 操作还是由用户进程调用，并且调用过程中也会被阻塞，一旦有一个socket的数据准备好了就会返回。来个不准确的总结，多路复用将部分工作批量化了,单个的操作跟同步非阻塞模型来说类似。
+>
+> 因此，对于单个socket来说，多路复用并没有什么优势，其优势体现在同时处理多个socket场景下，能实现高并发，什么C10K场景，比如Nginx，Redis？
+
+![](https://static.oschina.net/uploads/img/201604/20164149_LD8E.png)
+
+
+
+从整个IO流程来看，前面三种模型都是用户进程主动等待并且向内核查询数据状态，因此三者都归为同步模型*
 
 
 
 ##### 四、Asynchronous IO
 
+相对于同步IO，异步IO不是顺序执行。`用户进程进行aio_read系统调用之后，无论内核数据是否准备好，都会直接返回给用户进程，然后用户态进程可以去做别的事情`。等到socket数据准备好了，内核直接复制数据给进程，`然后从内核向进程发送通知`。`IO两个阶段，进程都是非阻塞的`。
 
+
+
+![](https://static.oschina.net/uploads/img/201604/20175459_gtgw.png)
+
+> 使用场景
 
 ##### 五、Signal Driven IO
 
+暂时不了解了
