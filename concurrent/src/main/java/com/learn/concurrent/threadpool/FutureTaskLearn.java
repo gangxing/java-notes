@@ -15,7 +15,12 @@ public class FutureTaskLearn {
 
     public static void main(String[] args) {
         ExecutorService pool = Executors.newFixedThreadPool(5);
-        //内部完全调用execute方法的 在哪里将结果放到FutureTask中的呢？？？
+        //TODO 内部完全调用execute方法的 在哪里将结果放到FutureTask中的呢？？？
+        /*
+         * 返回结果是Object outcome,当将call方法的返回值赋值给outcome,
+         * 在调用future.get()时，先判断任务状态(state)，如果任务还未完成，则阻塞等待LockSupport(这种思路和redis分布式锁的获取操作类似)
+         * 如果已经完成，则直接返回outcome
+         */
         //FutureTask
         /**
          * 大概看了下源码，关键在于提交给线程池的task的run
@@ -41,11 +46,19 @@ public class FutureTaskLearn {
          */
         Future<Integer> future = pool.submit(new Task(1, 2));
 
+        try {
+
+            Integer res = future.get();
+            log.info("res is {}", res);
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
+
         //后面的get会抛出CancellationException
 //        future.cancel(true);
 
 
-        Thread getResultThread = new Thread(new GetResult(future), "Get Result Thread");
+        /*Thread getResultThread = new Thread(new GetResult(future), "Get Result Thread");
         getResultThread.start();
         try {
             TimeUnit.MILLISECONDS.sleep(1000);
@@ -58,7 +71,9 @@ public class FutureTaskLearn {
             e.printStackTrace();
 //        }catch (ExecutionException ee){
 //            ee.printStackTrace();
-        }
+        }*/
+
+        pool.shutdown();
 
     }
 
