@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.omg.CORBA.NO_IMPLEMENT;
 
 import java.io.Serializable;
 import java.util.ArrayDeque;
@@ -322,7 +321,7 @@ public class BinarySearchTree<V> implements BinaryTree<V>, Serializable {
 
 
     private boolean isBalancedInOrder(Node node) {
-        System.err.println("in balance");
+        System.err.println("in balance "+node);
         if (node == null) {
             return true;
         }
@@ -335,7 +334,7 @@ public class BinarySearchTree<V> implements BinaryTree<V>, Serializable {
     }
 
     private int height(Node node) {
-        System.err.println("in balance height");
+        System.err.println("in balance height " +node);
         if (node == null)
             return -1;
         return 1 + Math.max(height(node.left), height(node.right));
@@ -347,6 +346,7 @@ public class BinarySearchTree<V> implements BinaryTree<V>, Serializable {
      * 再判断右子树是否平衡 如果平衡 返回右子树高度
      * 再判断父节点是否平衡 比较左右子树高度差是否超过1
      * 时间复杂度O(N)
+     * 主要优势是先判断子树，并且将子树的高度存下来，避免重复计算
      *
      * @return
      */
@@ -450,7 +450,7 @@ public class BinarySearchTree<V> implements BinaryTree<V>, Serializable {
 
         tree.print();
 
-        System.err.println(tree.isBalancedPostOrder());
+        System.err.println(tree.isBalancedInOrder());
     }
 
 }
