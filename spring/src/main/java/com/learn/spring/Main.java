@@ -1,5 +1,8 @@
 package com.learn.spring;
 
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.GenericApplicationContext;
+
 /**
  * @ClassName Main
  * @Description TODO
@@ -8,6 +11,7 @@ package com.learn.spring;
  */
 public class Main {
     public static void main(String[] args) {
+        ApplicationContext context=new GenericApplicationContext();
         System.err.println("开始学习Spring");
     }
 }
