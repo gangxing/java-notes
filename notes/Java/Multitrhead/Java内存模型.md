@@ -28,7 +28,11 @@ Java内存模型是一个规范，为了解决并发模式下的可见性、原�
 
 顺序性规则，符合单线程里面的思维，程序前面对某个变量的修改一定是对后续操作可见的。
 
+传递性规则，如果A Happens-Before B,并且B Happens-Before C,则A Happens-Before C。
 
+管程中锁的规则，对一个锁的解锁Happens-Before于后续对这个锁的加锁。
+
+> 不是应该先加锁再解锁吗？
 
 
 

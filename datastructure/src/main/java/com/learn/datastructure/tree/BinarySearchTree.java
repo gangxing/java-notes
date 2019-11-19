@@ -1,5 +1,11 @@
 package com.learn.datastructure.tree;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.omg.CORBA.NO_IMPLEMENT;
+
 import java.io.Serializable;
 import java.util.ArrayDeque;
 import java.util.Iterator;
@@ -227,6 +233,18 @@ public class BinarySearchTree<V> implements BinaryTree<V>, Serializable {
     }
 
     /**
+     * 所谓前序、中序和后序，是指父节点在三者中的次序，
+     * 对于前序，则父节点第一个被遍历
+     * 中序，父节点第二个被遍历
+     * 后续，父节点最后被遍历
+     * 至于左右两个节点的顺序，先左后右
+     * 则
+     * 前序 父 -> 左 -> 右
+     * 中序 左 -> 父 -> 右
+     * 后序 左 -> 右 -> 父
+     */
+
+    /**
      * 前序 中 左 右
      *
      * @param node
@@ -278,6 +296,98 @@ public class BinarySearchTree<V> implements BinaryTree<V>, Serializable {
         doPrint(node);
     }
 
+    /**
+     * 中序遍历
+     * 时间复杂度O(N^2)
+     * @return
+     */
+    public boolean isBalancedInOrder() {
+        Node node = this.root;
+
+        if (!isBalancedInOrder(node)) {
+            return false;
+        }
+
+        //判断左右子树
+        if (!isBalancedInOrder(node.left)) {
+            return false;
+        }
+
+        if (!isBalancedInOrder(node.right)) {
+            return false;
+        }
+
+        return true;
+    }
+
+
+    private boolean isBalancedInOrder(Node node) {
+        System.err.println("in balance");
+        if (node == null) {
+            return true;
+        }
+
+
+        //分别计算左右子树高度
+        int diff = height(node.left) - height(node.right);
+        return diff < 2 && diff > -2;
+
+    }
+
+    private int height(Node node) {
+        System.err.println("in balance height");
+        if (node == null)
+            return -1;
+        return 1 + Math.max(height(node.left), height(node.right));
+    }
+
+    /**
+     * 后续遍历
+     * 先判断左子树是否平衡 如果平衡 返回左子树高度
+     * 再判断右子树是否平衡 如果平衡 返回右子树高度
+     * 再判断父节点是否平衡 比较左右子树高度差是否超过1
+     * 时间复杂度O(N)
+     *
+     * @return
+     */
+    public boolean isBalancedPostOrder() {
+        Node node = this.root;
+        BalanceVO vo = isBalancedPostOrder(node);
+        return vo.balance;
+    }
+
+    private BalanceVO isBalancedPostOrder(Node node) {
+        System.err.println("post balance"+ node);
+        if (node == null) {
+            return new BalanceVO(true, 0);
+        }
+
+        BalanceVO left = isBalancedPostOrder(node.left);
+        if (!left.balance) {
+            return left;
+        }
+
+        BalanceVO right = isBalancedPostOrder(node.right);
+        if (!right.balance) {
+            return right;
+        }
+
+        boolean balance = left.height - right.height <= 1 && left.height - right.height >= -1;
+        int height = left.height > right.height ? left.height : right.height;
+        return new BalanceVO(balance, height + 1);
+
+    }
+
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    private static class BalanceVO {
+        private boolean balance;
+
+        private int height;
+    }
+
     private void doPrint(Node<V> node) {
         System.err.print(node.key + " ");
     }
@@ -326,6 +436,21 @@ public class BinarySearchTree<V> implements BinaryTree<V>, Serializable {
                     ", value=" + value +
                     '}';
         }
+    }
+
+
+    public static void main(String[] args) {
+        BinarySearchTree<Integer> tree = new BinarySearchTree<>();
+        tree.add(5, 5);
+        tree.add(4, 4);
+        tree.add(3, 3);
+        tree.add(9, 9);
+        tree.add(8, 8);
+//        tree.add(1, 1);
+
+        tree.print();
+
+        System.err.println(tree.isBalancedPostOrder());
     }
 
 }
