@@ -28,11 +28,75 @@ Java内存模型是一个规范，为了解决并发模式下的可见性、原�
 
 顺序性规则，符合单线程里面的思维，程序前面对某个变量的修改一定是对后续操作可见的。
 
+> 语言级语句是按照程序定义的执行，但是一条语句可能需要多条CPU指令完成，这一组CPU指令的执行顺序不一定按照顺序执行
+>
+> 比如创建一个对象，并赋值给某个变量，比如`Object a=new Object();`我们的理解其实现过程可能是
+>
+> 1. 分配一块内存M
+> 2. 在内存M上初始化Object对象
+> 3. 将M的地址赋值给a变量
+>
+> 但是实际上优化后的执行顺序可能是下面这样的
+>
+> 1. 分配一块内存M
+>
+> 2. 将M的地址赋值给a变量
+>
+> 3. 在内存M上初始化Object对象
+>
+>    这个例子。。。。。。。
+
 传递性规则，如果A Happens-Before B,并且B Happens-Before C,则A Happens-Before C。
 
 volatile规则，对一个 volatile 变量的写操作， Happens-Before 于后续对这个 volatile变量的读操作。
 
+> volatile 禁用CPU缓存示例
+>
+> 从CPU缓存讲volatile
+>
+> https://juejin.im/post/5c6b99e66fb9a049d51a1094
+>
+> ```java
+> public class VolatileTest {
+>     int x = 0;
+>   //主线程将run改为false后，因为CPU缓存，子线程没有读取到最新值false，还会继续运行
+>   //当用volatile修饰run变量，主线程将run改为false后，子线程会立即读到，结束运行
+>   //这就是对volatile run变量的写操作，对其他线程后续读操作是可见的。
+>     boolean run = true;
 > 
+>     public static void main(String[] args) {
+>         VolatileTest test = new VolatileTest();
+> 
+>         new Thread(() -> {
+>             while (test.run) {
+>                 test.x++;
+>             }
+>             System.err.println("run end");
+>         }).start();
+> 
+>         try {
+>             TimeUnit.SECONDS.sleep(1);
+>         } catch (InterruptedException e) {
+>             e.printStackTrace();
+>         }
+> 
+>         test.run = false;
+>         System.err.println("run false");
+>     }
+> }
+> ```
+>
+> 
+
+
+
+
+
+> ```java
+> 
+> ```
+
+
 
 管程中锁的规则，对一个锁的解锁Happens-Before于后续对这个锁的加锁。
 
