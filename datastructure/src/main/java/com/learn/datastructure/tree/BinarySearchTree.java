@@ -386,6 +386,8 @@ public class BinarySearchTree<V> implements BinaryTree<V>, Serializable {
         private boolean balance;
 
         private int height;
+
+
     }
 
     private void doPrint(Node<V> node) {
