@@ -24,8 +24,6 @@ public class BubbleSort implements Sort {
                 }
             }
         }
-
-
     }
 
     public static void main(String[] args) {

@@ -17,41 +17,40 @@ public class InsertionSort implements Sort {
      */
     @Override
     public void sort(int[] arr) {
-        sort(arr, 0, arr.length);
+
     }
 
-    //只对部分进行直接排序
-    public void sort(int[] arr, int position, int length) {
-        for (int index = position + 1; index < position + length; index++) {
-            int e = arr[index];
-            //找到当前元素在已排序的子集中的位置
-//            for (int i = position; i < index; i++) {
-//                if (e >= arr[i]) {
-//                    continue;
-//                }
-//                System.arraycopy(arr, i, arr, i + 1, index - i);
-//                arr[i] = e;
-//                break;
-//            }
 
-            //往前遍历
-//            for (int i = index - 1; i >= position; i--) {
-//                if (e <arr[i]) {
-//                    swap(arr, i,i+1);
-//                }
-//            }
-
-            //这里改成while 遇到合适的位置就不再往前遍历了
-            int i=index-1;
-            while (i>=position && arr[i]>arr[i+1]){
-                swap(arr, i,i+1);
+    private void sort1(int[] arr) {
+        for (int index = 1; index < arr.length; index++) {
+            int i = index - 1;
+            while (i >= 0 && arr[i] > arr[i + 1]) {
+                swap(arr, i, i + 1);
                 i--;
             }
         }
     }
 
+    private void sort2(int[] arr) {
+        for (int index = 1; index < arr.length; index++) {
+            int value = arr[index];
+            int i = index - 1;
+            while (i >= 0) {
+                if (arr[i] > value) {
+                    //向后移
+                    arr[i + 1] = arr[i];
+                    i--;
+                } else {
+                    break;
+                }
+            }
+            arr[i] = value;
+        }
+    }
+
+
     public static void main(String[] args) {
-        int[] arr = {4, 5,3,7, 2, 1};
+        int[] arr = {4, 5, 3, 7, 2, 1};
 
         Sort sort = new InsertionSort();
         sort.sort(arr);
