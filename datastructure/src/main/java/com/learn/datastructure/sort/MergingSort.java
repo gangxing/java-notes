@@ -47,10 +47,11 @@ public class MergingSort implements Sort {
         //合并两个组到result中
         int k = start;
         while (start1 <= end1 && start2 <= end) {
-            if (arr[start1] < arr[start2]) {
-                result[k++] = arr[start1++];
-            } else {
+            if (arr[start2] < arr[start1]) {
                 result[k++] = arr[start2++];
+            } else {
+                //如果后部分不小于前部分，可能的情况是两个元素相等，优先取前部分的
+                result[k++] = arr[start1++];
             }
         }
 
@@ -79,7 +80,7 @@ public class MergingSort implements Sort {
                 //mid 是右半部分的第一个元素下标
                 int mid = left + i / 2 >= arr.length ? (arr.length - 1) : (left + i / 2);
                 int right = i * (j + 1) - 1 >= arr.length ? (arr.length - 1) : (i * (j + 1) - 1);
-                int start = /*left*/0, l = left, m = mid;
+                int start = 0, l = left, m = mid;
                 //因为mid是有半部分的第一个元素下标，所以等号在右半部分
                 while (l < mid && m <= right) {
                     if (arr[l] < arr[m]) {
@@ -88,11 +89,14 @@ public class MergingSort implements Sort {
                         orderedArr[start++] = arr[m++];
                     }
                 }
-                while (l < mid)
+                while (l < mid) {
                     orderedArr[start++] = arr[l++];
-                while (m <= right)
+                }
+                while (m <= right) {
                     orderedArr[start++] = arr[m++];
-                System.arraycopy(orderedArr, /*left*/0, arr, left, right - left + 1);
+                }
+                System.arraycopy(orderedArr, 0, arr, left, right - left + 1);
+
             }
         }
 
