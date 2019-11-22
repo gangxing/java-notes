@@ -25,6 +25,8 @@ public class ArraysLearn {
     private static void sortString(){
         String[] a={"Ab","Cc","Mike","Lily"};
         Arrays.sort(a);
+        int[] arr=new int[]{4,8,22,0,1};
+        Arrays.sort(arr);
         System.err.println(Arrays.toString(a));
 
     }
