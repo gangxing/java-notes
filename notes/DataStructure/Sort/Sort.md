@@ -49,14 +49,14 @@ https://mp.weixin.qq.com/s/HQg3BzzQfJXcWyltsgOfCQ
 | :------ | :--------- |:--------- |:--------- |:--------- |:--------- |
 | Bubble Sort | $O(N^2)$ |$O(1)$     | 是 |稳定||
 | Insertion Sort | $O(N^2)$ |$O(1)$     |是     |稳定||
-| Selection Sort | $O(N^2)$ |O(1)     |是   | 不稳定 ||
-| Merging Sort   | $O(NlogN)$ |     |是    | ||
-| Quick Sort     | $O(NlogN)$ |     |是     |||
-| Shell Sort | 单元格     |单元格     |     |||
-| Heap Sort | 单元格     |单元格     |     |||
-| Radix Sort | $O(N)$ |单元格     |不是     |||
-| Counting Sort | $O(N)$ |单元格     |不是     |||
-| Bucket Sort | $O(N)$ |单元格     |不是     |||
+| Selection Sort | $O(N^2)$ |$O(1)$     |是   | **不稳定** ||
+| Merging Sort   | $O(NlogN)$ |$O(N)$     |是    | 稳定 ||
+| Quick Sort     | $O(NlogN)$ |$O(1)$     |是     |**不稳定**||
+| Shell Sort |      |     |     |||
+| Heap Sort |      |     |     |||
+| Radix Sort | $O(N)$ |            |     |||
+| Counting Sort | $O(N)$ |     |     |||
+| Bucket Sort | $O(N)$ |     |     |||
 
 
 
