@@ -6,8 +6,6 @@ Cache Aside Pattern
 
 
 
-
-
 Read/Write Through Pattern
 
 
