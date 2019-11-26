@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<configuration>
+
+    <!--该配置文件自动加载-->
+    <!--这里只能引用application.yml中的配置 而不能引用bootstrap.yml中的配置-->
+    <property   name="SPRING_APPLICATION_NAME" value="webdemo"/>
+
+    <appender name="consoleLog" class="ch.qos.logback.core.ConsoleAppender">
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <pattern>%d - %msg%n</pattern>
+        </layout>
+        <!--<filter>-->
+            <!--<level>DEBUG</level>-->
+        <!--</filter>-->
+    </appender>
+    <appender name="fileInfoLog" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!--<filter class="ch.qos.logback.classic.filter.LevelFilter">-->
+            <!--<level>ERROR</level>-->
+            <!--<onMatch>DENY</onMatch>-->
+            <!--<onMismatch>ACCEPT</onMismatch>-->
+        <!--</filter>-->
+        <encoder>
+            <pattern>[%d{yyyy-MM-dd HH:mm:ss.SSS}] [%thread] [%level] %logger{50} - %msg%n</pattern>
+        </encoder>
+        <file>${user.home}/logs/${SPRING_APPLICATION_NAME}.log</file>
+        <!--滚动策略-->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!--路径-->
+            <fileNamePattern>${user.home}/logs/%d{yyyy-MM-dd}/${SPRING_APPLICATION_NAME}.%i.log</fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy
+                    class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <!-- or whenever the file size reaches 100MB -->
+                <maxFileSize>100mb</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+    </appender>
+
+    <appender name="fileErrorLog" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>ERROR</level>
+        </filter>
+        <encoder>
+            <pattern>[%d{yyyy-MM-dd HH:mm:ss.SSS}] [%thread] [%level] %logger{50} - %msg%n</pattern>
+        </encoder>
+        <file>${user.home}/logs/${SPRING_APPLICATION_NAME}-error.log</file>
+        <!--滚动策略-->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${user.home}/logs/%d{yyyy-MM-dd}/${SPRING_APPLICATION_NAME}-error.%i.log</fileNamePattern>
+            <!--路径-->
+            <timeBasedFileNamingAndTriggeringPolicy
+                    class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <!-- or whenever the file size reaches 100MB -->
+                <maxFileSize>100mb</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+    </appender>
+
+    <logger name="org.springframework" level="DEBUG">
+        <appender-ref ref="consoleLog"></appender-ref>
+    </logger>
+
+    <logger name="com.alibaba.druid" level="INFO">
+        <appender-ref ref="consoleLog"></appender-ref>
+    </logger>
+
+    <!--<logger name="org.mybatis" level="DEBUG">-->
+        <!--<appender-ref ref="consoleLog"></appender-ref>-->
+    <!--</logger>-->
+
+    <logger name="com.hem.webdemo" level="DEBUG">
+        <appender-ref ref="consoleLog"></appender-ref>
+    </logger>
+
+
+    <!--<logger name="org.apache" level="DEBUG">-->
+        <!--<appender-ref ref="consoleLog"></appender-ref>-->
+    <!--</logger>-->
+
+    <!--<springProperty >-->
+        <root level="debug">
+            <!--<appender-ref ref="consoleLog" />-->
+            <appender-ref ref="fileInfoLog" />
+            <appender-ref ref="fileErrorLog" />
+        </root>
+    <!--</springProperty>-->
+
+
+</configuration>

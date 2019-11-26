@@ -1,0 +1,53 @@
+server:
+  port: 9081
+  tomcat:
+    max-threads: 400
+    max-connections: 20000
+
+#datasource
+spring:
+  application:
+    name: webdemo
+  profiles:
+    active: dev
+
+  mvc:
+    throw-exception-if-no-handler-found: true
+  resources:
+    add-mappings: false
+
+
+
+  datasource:
+    #外网域名 注意最后一个参数 指定时区
+    url: jdbc:mysql://47.110.254.134:3307/webdemo?characterEncoding=utf-8&autoReconnect=true&failOverReadOnly=false&useSSL=false&serverTimezone=CTT
+    username: root
+    password: Zjcgdatabase2018k
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    # 使用druid数据源
+    type: com.alibaba.druid.pool.DruidDataSource
+    filters: stat
+    maxActive: 10
+    initialSize: 3
+    maxWait: 60000
+    minIdle: 1
+    timeBetweenEvictionRunsMillis: 60000
+    minEvictableIdleTimeMillis: 300000
+    validationQuery: select 1
+    testWhileIdle: true
+    testOnBorrow: false
+    testOnReturn: false
+    poolPreparedStatements: true
+    maxOpenPreparedStatements: 20
+
+
+
+
+mybatis:
+  mapper-locations: classpath:mapper/*.xml #Mapper的xml文件
+
+  configuration:
+    map-underscore-to-camel-case: true
+
+
+

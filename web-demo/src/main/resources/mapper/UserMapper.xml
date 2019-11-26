@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.learn.webdemo.mapper.UserMapper">
+
+    <resultMap id="BaseResultMap" type="com.learn.webdemo.model.entity.UserEntity">
+        <id column="id" property="id"/>
+
+        <result property="name" column="name"/>
+        <result property="avatar" column="avatar"/>
+        <result property="birthday" column="birthday"/>
+        <result property="fanCount" column="fan_count"/>
+        <result property="followCount" column="follow_count"/>
+
+        <result column="created_at" property="createdAt"/>
+        <result column="updated_at" property="updatedAt"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,
+        name,
+        avatar,
+        birthday,
+        fan_count,
+        follow_count,
+        created_at,
+        updated_at
+    </sql>
+
+    <sql id="Base_Sort">
+        <if test="sort != null">
+            ORDER BY
+            <foreach collection="sort" item="order" index="index"
+                     open="" separator="," close="">
+                ${order.property} ${order.direction}
+            </foreach>
+        </if>
+
+    </sql>
+
+    <sql id="Base_Page">
+        <if test="page != null">
+            limit #{page.offset}, #{page.pageSize}
+        </if>
+    </sql>
+
+    <sql id="Query_Where">
+        <where>
+            1=1
+            <if test="query.ids!=null">
+                and id IN
+                <foreach collection="query.ids" item="item" index="index"
+                         open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="query.createdAtMinInclude != null">
+                AND created_at <![CDATA[ >= ]]> #{query.createdAtMinInclude}
+            </if>
+            <if test="query.createdAtMinExclude != null">
+                AND created_at <![CDATA[ > ]]> #{query.createdAtMinExclude}
+            </if>
+            <if test="query.createdAtMaxInclude != null">
+                AND created_at <![CDATA[ <= ]]> #{query.createdAtMaxInclude}
+            </if>
+            <if test="query.createdAtMaxExclude != null">
+                AND created_at <![CDATA[ < ]]> #{query.createdAtMaxExclude}
+            </if>
+            <if test="query.updatedAtMinInclude != null">
+                AND updated_at <![CDATA[ >= ]]> #{query.updatedAtMinInclude}
+            </if>
+            <if test="query.updatedAtMinExclude != null">
+                AND updated_at <![CDATA[ > ]]> #{query.updatedAtMinExclude}
+            </if>
+            <if test="query.updatedAtMaxInclude != null">
+                AND updated_at <![CDATA[ <= ]]> #{query.updatedAtMaxInclude}
+            </if>
+            <if test="query.updatedAtMaxExclude != null">
+                AND updated_at <![CDATA[ < ]]> #{query.updatedAtMaxExclude}
+            </if>
+        </where>
+    </sql>
+    <select id="selectById" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM user
+        WHERE id = #{id}
+    </select>
+
+    <select id="selectOne" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM user
+        <include refid="Query_Where"/>
+    </select>
+
+    <select id="selectList" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM user
+        <include refid="Query_Where"/>
+        <include refid="Base_Sort"/>
+    </select>
+
+    <select id="pageList" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM user
+        <include refid="Query_Where"/>
+        <include refid="Base_Sort"/>
+        <include refid="Base_Page"/>
+    </select>
+    <select id="count" resultType="java.lang.Integer">
+        SELECT
+        COUNT(*)
+        FROM user
+        <include refid="Query_Where"/>
+    </select>
+
+    <insert id="insert" useGeneratedKeys="true" keyColumn="id" keyProperty="id"
+            parameterType="com.learn.webdemo.model.entity.UserEntity">
+     INSERT INTO user (
+     name,
+     avatar,
+     birthday,
+     fan_count,
+     follow_count,
+     created_at,
+     updated_at
+     )
+     VALUES (
+     #{name},
+     #{avatar},
+     #{birthday},
+     #{fanCount},
+     #{followCount},
+     #{createdAt},
+     #{updatedAt}
+     )
+    </insert>
+
+    <insert id="insertBatch" parameterType="java.util.Map">
+     INSERT INTO user (
+     name,
+     avatar,
+     birthday,
+     fan_count,
+     follow_count,
+     created_at,
+     updated_at
+     )
+     VALUES
+     <foreach collection="entities" item="item" index="index" separator=",">
+     (
+     #{item.name},
+     #{item.avatar},
+     #{item.birthday},
+     #{item.fanCount},
+     #{item.followCount},
+     #{item.createdAt},
+     #{item.updatedAt}
+     )
+     </foreach>
+    </insert>
+
+    <sql id="set">
+        <set>
+           <if test="update.name != null">
+                name = #{update.name},
+           </if>
+           <if test="update.avatar != null">
+                avatar = #{update.avatar},
+           </if>
+           <if test="update.birthday != null">
+                birthday = #{update.birthday},
+           </if>
+           <if test="update.fanCount != null">
+                fan_count = #{update.fanCount},
+           </if>
+           <if test="update.followCount != null">
+                follow_count = #{update.followCount},
+           </if>
+           <if test="update.updatedAt != null">
+                updated_at = #{update.updatedAt}
+           </if>
+        </set>
+    </sql>
+
+    <update id="updateById" parameterType="java.util.Map">
+        UPDATE user
+        <include refid="set"></include>
+        WHERE id = #{update.id}
+    </update>
+
+
+    <update id="incrCount" >
+        UPDATE user
+        set
+        <if test="fanCount != null">
+            fan_count = fan_count + #{fanCount},
+        </if>
+        <if test="followCount != null">
+            follow_count = follow_count + #{followCount},
+        </if>
+        updated_at = now()
+        WHERE id = #{id}
+    </update>
+
+
+</mapper>
