@@ -9,6 +9,7 @@ import com.learn.webdemo.service.FanService;
 import com.learn.webdemo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 
@@ -17,7 +18,7 @@ import java.util.Date;
  * @Author xgangzai
  * @Date 2019/11/26 11:04
  */
-@Service
+@Service("fanService")
 public class FanServiceImpl implements FanService {
 
     @Autowired
@@ -27,6 +28,7 @@ public class FanServiceImpl implements FanService {
     private FanMapper fanMapper;
 
 
+    @Transactional
     @Override
     public void follow(FollowRequest request) {
         FanEntity fan = fanMapper.selectOne(build(request));
@@ -54,6 +56,7 @@ public class FanServiceImpl implements FanService {
 
     }
 
+    @Transactional
     @Override
     public void defollow(FollowRequest request) {
 

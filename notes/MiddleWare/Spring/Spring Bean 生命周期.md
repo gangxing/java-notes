@@ -146,6 +146,12 @@ MyBatis自身的初始化工作(读取配置文件，设置DataSource)在什么�
 
    
 
+当Bean的某个方法开启了@Transactional后，该Bean被Spring通过CGLIB代理（织入事务处理逻辑）
+
+反之，则是原生的实例
+
+   
+
 二、销毁
 
 
