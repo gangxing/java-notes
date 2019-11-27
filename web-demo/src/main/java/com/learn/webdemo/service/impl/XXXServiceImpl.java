@@ -18,8 +18,8 @@ import java.util.Date;
  * @Author xgangzai
  * @Date 2019/11/26 11:04
  */
-@Service("fanService")
-public class FanServiceImpl implements FanService {
+@Service
+public class XXXServiceImpl implements FanService {
 
     @Autowired
     private UserService userService;
@@ -61,24 +61,22 @@ public class FanServiceImpl implements FanService {
     public void defollow(FollowRequest request) {
 
         FanEntity fan = fanMapper.selectOne(build(request));
-        boolean defollow = false;
-        if (fan != null && FlagEnum.no(fan.getDelFlag())) {
-            FanEntity update = new FanEntity();
-            update.setId(fan.getId());
-            update.setDelFlag(FlagEnum.yes());
-            update.setUpdatedAt(new Date());
-            fanMapper.updateById(update);
-            defollow = true;
+        if (fan == null || FlagEnum.yes(fan.getDelFlag())) {
+            return;
         }
 
-        if (defollow) {
-            //减少关注数
-            userService.incrCount(request.getFanUserId(), null, -1);
+        FanEntity update = new FanEntity();
+        update.setId(fan.getId());
+        update.setDelFlag(FlagEnum.yes());
+        update.setUpdatedAt(new Date());
+        fanMapper.updateById(update);
 
-            //减少粉丝数
-            userService.incrCount(request.getUserId(), -1, null);
-        }
 
+        //减少关注数
+        userService.incrCount(request.getFanUserId(), null, -1);
+
+        //减少粉丝数
+        userService.incrCount(request.getUserId(), -1, null);
     }
 
     private FanQuery build(FollowRequest request) {

@@ -12,6 +12,51 @@ https://www.cnblogs.com/ronli/p/11437560.html
 
 明天再看。。。。。
 
+默认是用cglib，源码见
+
+
+
+```java
+//ValidationAutoConfiguration.java
+  
+@Bean
+@ConditionalOnMissingBean
+public static MethodValidationPostProcessor methodValidationPostProcessor(
+      Environment environment, @Lazy Validator validator) {
+   MethodValidationPostProcessor processor = new MethodValidationPostProcessor();
+   boolean proxyTargetClass = environment
+         .getProperty("spring.aop.proxy-target-class", Boolean.class, true);
+   processor.setProxyTargetClass(proxyTargetClass);
+   processor.setValidator(validator);
+   return processor;
+}
+
+
+  //DefaultAopProxyFactory
+  
+ /** Default {@link AopProxyFactory} implementation, creating either a CGLIB proxy
+ * or a JDK dynamic proxy.
+ *
+ * <p>Creates a CGLIB proxy if one the following is true for a given
+ * {@link AdvisedSupport} instance:
+ * <ul>
+ * <li>the {@code optimize} flag is set
+ * <li>the {@code proxyTargetClass} flag is set 默认设置的，所以aop实例会用cglib
+ * <li>no proxy interfaces have been specified
+ * </ul>
+ *
+ * <p>In general, specify {@code proxyTargetClass} to enforce a CGLIB proxy,
+ * or specify one or more interfaces to use a JDK dynamic proxy.
+ */
+//在配置文件application.yml中配置spring.aop.proxy-target-class= false
+//会尝试用JDK动态代理实现。
+
+```
+
+JDK动态代理和CGLIB代理两者比较
+
+https://juejin.im/entry/5b95be3a6fb9a05d06732ec2
+
 
 
 
@@ -140,15 +185,81 @@ MyBatis自身的初始化工作(读取配置文件，设置DataSource)在什么�
    >
    > 是按照名称注入的还是按照类型注入的？
 
+   在DefaultProxyFactory.createProxy中，传入的AdvisedSupport的targetClass是XXServiceImpl，而不是XXService。
+
+   确定在解析成员变量时，是怎么通过接口定位到实现类的。
+
+   AutowiredAnnotationBeanPostProcessor
+
+   找到XXService 成员变量。
+
+   `DefaultListableBeanFactory.resolveDependency`
+
+   `doResolveDependency`，如果获取到多个，则按照某种策略选择，具体是什么策略？
+
+   `findAutowireCandidates`通过成员类型找到可能的xxxImpl(xxs),怎么匹配上的
+
+   `BeanFactoryUtils.beanNamesForTypeIncludingAncestors`
+
+   `predictBeanType`根据已注册的beanName（包括FanServiceImpl）匹配com.learn.webdemo.service.FanService
+
+   看来这里跟名字没有关系，默认逻辑是按照类型注入的呢...
+
+   `addCandidateEntry`
+
+   `getMergedLocalBeanDefinition`
+
+   ```java
+   private final Map<String, RootBeanDefinition> mergedBeanDefinitions
+   ```
+
+   在mergedBeanDefinitions中存有一份<xxService,RootBeanDefinition>(XXServiceImpl)
+
+   在什么时候设置的？
+
+   `beanDefinitionMap`中取的，那`beanDefinitionMap`中的又是什么时候放入的呢
+
+   `registerBeanDefinition`
+
+   前面扫描整个项目，拿到所有的bean（@Component,@Service等注解的类）
+
+   `AnnotationConfigUtils.attributesFor`产生beanName
+
+   底层通过`AnnotationReadingVisitorUtils.convertClassValues`（ASM字节码操作）读取其接口？
+
+   `AnnotationBeanNameGenerator.buildDefaultBeanName`
+
+   ` ClassUtils.getShortName`//com.learn.webdemo.service.impl.UserServiceImpl
+
+   得到UserServiceImpl
+
+   `Introspector.decapitalize`将大写转换成小写？得到userServiceImpl
+
+   看了一圈还是要回到上面，mergedBeanDefinitions怎么获取到的
+
    
 
 3. 将成员变量实例通过反射设置给成员变量。
 
+  > https://juejin.im/post/5c84b5285188257c5b477177
+  >
+  > 默认按照type来获取，如果获取到多个，则再按照名字匹配。如果名没找到或者按照名字匹配到多个都会抛出异常
+  
    
 
 当Bean的某个方法开启了@Transactional后，该Bean被Spring通过CGLIB代理（织入事务处理逻辑）
 
 反之，则是原生的实例
+
+为什么没有用到JDK动态代理
+
+
+
+
+
+整理一个Bean初始化，用到了哪几个map，
+
+
 
    
 
