@@ -17,32 +17,33 @@ import java.util.logging.Logger;
  */
 //@Slf4j
 public class Server {
-    static Logger log=Logger.getLogger(Server.class.getName());
+
+  static Logger log = Logger.getLogger(Server.class.getName());
 
 
-    public static void main(String[] args) throws IOException {
-        ServerSocket socket = new ServerSocket();
-        SocketAddress address = new InetSocketAddress( Const.PORT);
-        socket.bind(address);
+  public static void main(String[] args) throws IOException {
+    ServerSocket socket = new ServerSocket();
+    SocketAddress address = new InetSocketAddress(Const.PORT);
+    socket.bind(address);
 
-        while (true) {
-            Socket socket1 = socket.accept();
-            InputStream inputStream = socket1.getInputStream();
-            byte[] buffer = new byte[1024];
-            inputStream.read(buffer);
-            String recvMsg=new String(buffer);
-            log.info("receive "+recvMsg);
+    while (true) {
+      Socket socket1 = socket.accept();
+      InputStream inputStream = socket1.getInputStream();
+      byte[] buffer = new byte[1024];
+      inputStream.read(buffer);
+      String recvMsg = new String(buffer);
+      log.info("receive " + recvMsg);
 
-            String sendMsg="response "+ recvMsg;
-            OutputStream outputStream=socket1.getOutputStream();
-            outputStream.write(sendMsg.getBytes());
-            outputStream.flush();
-            outputStream.close();
+      String sendMsg = "response " + recvMsg;
+      OutputStream outputStream = socket1.getOutputStream();
+      outputStream.write(sendMsg.getBytes());
+      outputStream.flush();
+      outputStream.close();
 
-            log.info("waiting...");
+      log.info("waiting...");
 
-
-        }
 
     }
+
+  }
 }

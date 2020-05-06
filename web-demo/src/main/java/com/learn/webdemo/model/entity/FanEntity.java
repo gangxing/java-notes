@@ -13,9 +13,9 @@ import lombok.Setter;
 public class FanEntity extends BaseEntity {
 
 
-    private Long userId;
+  private Long userId;
 
-    private Long fanUserId;
+  private Long fanUserId;
 
-    private Integer delFlag;
+  private Integer delFlag;
 }

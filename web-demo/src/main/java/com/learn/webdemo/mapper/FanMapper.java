@@ -2,11 +2,10 @@ package com.learn.webdemo.mapper;
 
 import com.learn.webdemo.model.entity.FanEntity;
 import com.learn.webdemo.model.query.FanQuery;
+import java.util.List;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-
-import java.util.List;
 
 /**
  * @Description
@@ -15,23 +14,22 @@ import java.util.List;
  */
 public interface FanMapper {
 
-    FanEntity selectById(Long id);
+  FanEntity selectById(Long id);
 
-    int insert(FanEntity entity);
+  int insert(FanEntity entity);
 
 //    int insertBatch(Map<String, Object> map);
 
-    FanEntity selectOne(@Param("query") FanQuery query);
+  FanEntity selectOne(@Param("query") FanQuery query);
 
-    List<FanEntity> selectList(@Param("query") FanQuery query, @Param("sort") Sort sort);
+  List<FanEntity> selectList(@Param("query") FanQuery query, @Param("sort") Sort sort);
 
-    List<FanEntity> pageList(@Param("query") FanQuery query, @Param("sort") Sort sort, @Param("page") Pageable pageable);
+  List<FanEntity> pageList(@Param("query") FanQuery query, @Param("sort") Sort sort,
+      @Param("page") Pageable pageable);
 
-    Integer count(@Param("query") FanQuery query);
+  Integer count(@Param("query") FanQuery query);
 
-    int updateById(@Param("update") FanEntity update);
-
-
+  int updateById(@Param("update") FanEntity update);
 
 
 }

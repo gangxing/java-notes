@@ -10,9 +10,10 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-public class Student  {
-    private String name;
+public class Student {
 
-    private Integer age;
+  private String name;
+
+  private Integer age;
 
 }

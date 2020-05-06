@@ -7,16 +7,16 @@ package com.learn.jdk.jvm;
  */
 public class OverLoadTest {
 
-    public void method(int a){
-        System.err.println("primite"+a);
-    }
+  public static void main(String[] args) {
+    OverLoadTest test = new OverLoadTest();
+    test.method(Integer.valueOf(1));
+  }
 
-    public void method(Integer a){
-        System.err.println("object"+a);
-    }
+  public void method(int a) {
+    System.err.println("primite" + a);
+  }
 
-    public static void main(String[] args) {
-        OverLoadTest test=new OverLoadTest();
-        test.method(Integer.valueOf(1));
-    }
+  public void method(Integer a) {
+    System.err.println("object" + a);
+  }
 }

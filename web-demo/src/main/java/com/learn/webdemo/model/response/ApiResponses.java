@@ -11,30 +11,29 @@ import com.learn.webdemo.enums.ErrorCode;
 public class ApiResponses {
 
 
+  public static <T> ApiResponse<T> success(T data) {
+    ApiResponse<T> apiResponse = new ApiResponse<T>();
+    apiResponse.setCode(ErrorCode.SUCCESS.getCode());
+    apiResponse.setData(data);
+    return apiResponse;
+  }
 
-    public static <T> ApiResponse<T> success(T data) {
-        ApiResponse<T> apiResponse = new ApiResponse<T>();
-        apiResponse.setCode(ErrorCode.SUCCESS.getCode());
-        apiResponse.setData(data);
-        return apiResponse;
-    }
+  public static <T> ApiResponse<T> success() {
+    return success(null);
+  }
 
-    public static <T> ApiResponse<T> success() {
-        return success(null);
-    }
+  public static ApiResponse fail(ErrorCode code, String detail) {
+    ApiResponse apiResponse = new ApiResponse();
+    apiResponse.setCode(code.getCode());
+    apiResponse.setDetail(detail);
+    //错误消息统一在拦截器中填充
+    apiResponse.setMsg(code.name());
+    return apiResponse;
+  }
 
-    public static ApiResponse fail(ErrorCode code, String detail) {
-        ApiResponse apiResponse = new ApiResponse();
-        apiResponse.setCode(code.getCode());
-        apiResponse.setDetail(detail);
-        //错误消息统一在拦截器中填充
-        apiResponse.setMsg(code.name());
-        return apiResponse;
-    }
-
-    public static ApiResponse fail(ErrorCode code) {
-        return fail(code, code.name());
-    }
+  public static ApiResponse fail(ErrorCode code) {
+    return fail(code, code.name());
+  }
 
 
 }

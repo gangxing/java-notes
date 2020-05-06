@@ -10,27 +10,26 @@ import java.util.Iterator;
  */
 public class RedblackTreeTest {
 
-    public static void main(String[] args) {
-        RedblackTree<String> tree=new RedblackTree<>();
+  public static void main(String[] args) {
+    RedblackTree<String> tree = new RedblackTree<>();
 
-        int[] keys = {1,2,3};
-        for (int key : keys) {
-            tree.add(key, "value" + key);
-        }
-
-
-        tree.print();
-
-        System.err.println();
-        tree.print();
-        System.err.println();
-        @SuppressWarnings("unchecked")
-        Iterator<RedblackTree.Node<String>> iterator = tree.iterator();
-        while (iterator.hasNext()) {
-            RedblackTree.Node<String> next= iterator.next();
-            System.err.print(next);
-            System.err.println();
-        }
-
+    int[] keys = {1, 2, 3};
+    for (int key : keys) {
+      tree.add(key, "value" + key);
     }
+
+    tree.print();
+
+    System.err.println();
+    tree.print();
+    System.err.println();
+    @SuppressWarnings("unchecked")
+    Iterator<RedblackTree.Node<String>> iterator = tree.iterator();
+    while (iterator.hasNext()) {
+      RedblackTree.Node<String> next = iterator.next();
+      System.err.print(next);
+      System.err.println();
+    }
+
+  }
 }

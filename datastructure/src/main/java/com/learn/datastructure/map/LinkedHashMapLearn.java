@@ -10,15 +10,15 @@ import java.util.LinkedHashMap;
  */
 public class LinkedHashMapLearn {
 
-    public static void main(String[] args) {
+  public static void main(String[] args) {
 //        LinkedHashMap<Integer, String> map = new LinkedHashMap<>(3, 0.75f, true);
-        LinkedHashMap<Integer, String> map = new LinkedHashMap<>(3,0.75f,true);
-        map.put(1,"Value1");
-        map.put(2,"Value2");
-        map.put(3,"Value3");
+    LinkedHashMap<Integer, String> map = new LinkedHashMap<>(3, 0.75f, true);
+    map.put(1, "Value1");
+    map.put(2, "Value2");
+    map.put(3, "Value3");
 
-        String value=map.get(2);
-        System.err.println(value);
+    String value = map.get(2);
+    System.err.println(value);
 
-    }
+  }
 }

@@ -10,8 +10,9 @@ import org.springframework.context.support.GenericApplicationContext;
  * @Date 21/10/2018 20:57
  */
 public class Main {
-    public static void main(String[] args) {
-        ApplicationContext context=new GenericApplicationContext();
-        System.err.println("开始学习Spring");
-    }
+
+  public static void main(String[] args) {
+    ApplicationContext context = new GenericApplicationContext();
+    System.err.println("开始学习Spring");
+  }
 }

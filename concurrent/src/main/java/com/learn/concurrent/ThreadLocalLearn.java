@@ -9,12 +9,12 @@ package com.learn.concurrent;
 public class ThreadLocalLearn {
 
 
-    public static void main(String[] args) {
-        ThreadLocal<Integer> local=new ThreadLocal<>();
-        local.set(4);
+  public static void main(String[] args) {
+    ThreadLocal<Integer> local = new ThreadLocal<>();
+    local.set(4);
 
-        Integer i=local.get();
-        System.err.println(i);
-    }
+    Integer i = local.get();
+    System.err.println(i);
+  }
 
 }

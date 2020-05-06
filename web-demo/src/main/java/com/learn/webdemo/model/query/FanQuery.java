@@ -12,9 +12,9 @@ import lombok.Setter;
 @Setter
 public class FanQuery extends BaseQuery {
 
-    private Long userId;
+  private Long userId;
 
-    private Long fanUserId;
+  private Long fanUserId;
 
-    private Integer delFlag;
+  private Integer delFlag;
 }

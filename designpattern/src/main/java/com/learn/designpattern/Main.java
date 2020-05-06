@@ -7,7 +7,8 @@ package com.learn.designpattern;
  * @Date 21/10/2018 20:53
  */
 public class Main {
-    public static void main(String[] args) {
-        System.err.println("开始学习设计模式");
-    }
+
+  public static void main(String[] args) {
+    System.err.println("开始学习设计模式");
+  }
 }

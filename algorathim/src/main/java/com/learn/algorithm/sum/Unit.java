@@ -1,9 +1,8 @@
 package com.learn.algorithm.sum;
 
+import java.util.Arrays;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.util.Arrays;
 
 /**
  * @Description
@@ -14,38 +13,41 @@ import java.util.Arrays;
 @Setter
 public class Unit {
 
-    private int[] elements;
+  private int[] elements;
 
 
-    public Unit(int... i) {
-        this.elements = i;
+  public Unit(int... i) {
+    this.elements = i;
+  }
+
+  public boolean valid(int sum) {
+    for (int e : elements) {
+      sum -= e;
     }
+    return sum == 0;
+  }
 
-    public boolean valid(int sum) {
-        for (int e : elements) {
-            sum -= e;
-        }
-        return sum == 0;
+  @Override
+  public String toString() {
+    return "Unit" + Arrays.toString(elements);
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
     }
-
-    @Override
-    public String toString() {
-        return "Unit" + Arrays.toString(elements);
+    if (!(o instanceof Unit)) {
+      return false;
     }
+    Unit unit = (Unit) o;
+    return Arrays.equals(getElements(), unit.getElements());
+  }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Unit)) return false;
-        Unit unit = (Unit) o;
-        return Arrays.equals(getElements(), unit.getElements());
-    }
-
-    @Override
-    public int hashCode() {
-        return Arrays.hashCode(getElements());
-    }
-
+  @Override
+  public int hashCode() {
+    return Arrays.hashCode(getElements());
+  }
 
 
 }

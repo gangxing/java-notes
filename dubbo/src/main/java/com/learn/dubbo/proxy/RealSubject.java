@@ -8,15 +8,15 @@ package com.learn.dubbo.proxy;
  */
 public class RealSubject implements Subject {
 
-    @Override
-    public void rent() {
-        System.err.println("rent has been invoked");
-    }
+  @Override
+  public void rent() {
+    System.err.println("rent has been invoked");
+  }
 
-    @Override
-    public String hello(String s) {
-        String res= "hello " + s;
-        System.err.println(res);
-        return res;
-    }
+  @Override
+  public String hello(String s) {
+    String res = "hello " + s;
+    System.err.println(res);
+    return res;
+  }
 }

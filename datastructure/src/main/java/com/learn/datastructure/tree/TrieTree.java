@@ -5,5 +5,6 @@ package com.learn.datastructure.tree;
  * @Author xgangzai
  * @Date 2019/10/23 14:07
  */
-public class TrieTree  {
+public class TrieTree {
+
 }

@@ -12,15 +12,15 @@ import lombok.Setter;
 @Setter
 public class Student extends Person {
 
-    private int classNo;
+  private int classNo;
 
-    private int level;
+  private int level;
 
 
-    public static void main(String[] args) {
-        Student student=new Student();
+  public static void main(String[] args) {
+    Student student = new Student();
 
-    }
+  }
 
 
 }

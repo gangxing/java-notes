@@ -1,10 +1,8 @@
 package com.learn.mybatisjdbcdemo.entity;
 
+import java.util.Date;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.extern.slf4j.Slf4j;
-
-import java.util.Date;
 
 /**
  * @Description
@@ -15,16 +13,17 @@ import java.util.Date;
 @Setter
 public class ClassEntity {
 
-    private Long id;
+  private Long id;
 
-    private Integer grade;
+  private Integer grade;
 
-    private Integer num;
+  private Integer num;
 
-    private Integer studentCount;
+  private Integer studentCount;
 
-    private Date createdAt;;
+  private Date createdAt;
+  ;
 
-    private Date updatedAt;
+  private Date updatedAt;
 
 }

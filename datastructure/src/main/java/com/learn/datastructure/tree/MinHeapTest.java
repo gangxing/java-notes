@@ -10,21 +10,21 @@ import java.util.Iterator;
  */
 public class MinHeapTest {
 
-    public static void main(String[] args) {
-        MinHeap heap = new MinHeap();
-        for (int i = 10; i > 0; i--) {
-            heap.add(i);
-        }
-        heap.print();
-
-        heap.remove(1);
-
-        heap.print();
-
-        Iterator<Integer> iterator = heap.iterator();
-        while (iterator.hasNext()) {
-            Integer next = iterator.next();
-            System.err.println("iterator:" + next);
-        }
+  public static void main(String[] args) {
+    MinHeap heap = new MinHeap();
+    for (int i = 10; i > 0; i--) {
+      heap.add(i);
     }
+    heap.print();
+
+    heap.remove(1);
+
+    heap.print();
+
+    Iterator<Integer> iterator = heap.iterator();
+    while (iterator.hasNext()) {
+      Integer next = iterator.next();
+      System.err.println("iterator:" + next);
+    }
+  }
 }

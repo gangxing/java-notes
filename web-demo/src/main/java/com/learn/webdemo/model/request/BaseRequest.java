@@ -1,9 +1,8 @@
 package com.learn.webdemo.model.request;
 
+import java.io.Serializable;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.io.Serializable;
 
 /**
  * @Description
@@ -13,4 +12,5 @@ import java.io.Serializable;
 @Getter
 @Setter
 public class BaseRequest implements Serializable {
+
 }

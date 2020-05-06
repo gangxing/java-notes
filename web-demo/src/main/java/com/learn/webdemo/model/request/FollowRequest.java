@@ -12,7 +12,7 @@ import lombok.Setter;
 @Setter
 public class FollowRequest extends BaseRequest {
 
-    private Long userId;
+  private Long userId;
 
-    private Long fanUserId;
+  private Long fanUserId;
 }

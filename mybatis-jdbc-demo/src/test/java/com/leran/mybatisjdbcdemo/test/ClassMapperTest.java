@@ -5,11 +5,9 @@ import com.learn.mybatisjdbcdemo.entity.ClassEntity;
 import com.learn.mybatisjdbcdemo.mapper.ClassMapper;
 import com.learn.mybatisjdbcdemo.mapper.impl.ClassMapperImpl;
 import com.learn.mybatisjdbcdemo.util.SqlSessionFactoryUtils;
+import java.util.Date;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.session.SqlSessionFactory;
-import org.junit.Test;
-
-import java.util.Date;
 
 /**
  * @Description
@@ -19,19 +17,19 @@ import java.util.Date;
 @Slf4j
 public class ClassMapperTest {
 
-    @Test
-    public void testInsert(){
+  @Test
+  public void testInsert() {
 
-        ClassEntity entity=new ClassEntity();
-        entity.setGrade(1);
-        entity.setNum(1);
-        entity.setStudentCount(0);
-        entity.setCreatedAt(new Date());
+    ClassEntity entity = new ClassEntity();
+    entity.setGrade(1);
+    entity.setNum(1);
+    entity.setStudentCount(0);
+    entity.setCreatedAt(new Date());
 
-        SqlSessionFactory sessionFactory=SqlSessionFactoryUtils.getDefaultFactory();
+    SqlSessionFactory sessionFactory = SqlSessionFactoryUtils.getDefaultFactory();
 
-        ClassMapper mapper=new ClassMapperImpl(sessionFactory.openSession());
-        mapper.insert(entity);
-        log.info(JSON.toJSONString(entity));
-    }
+    ClassMapper mapper = new ClassMapperImpl(sessionFactory.openSession());
+    mapper.insert(entity);
+    log.info(JSON.toJSONString(entity));
+  }
 }

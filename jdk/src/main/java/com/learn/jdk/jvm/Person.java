@@ -13,10 +13,10 @@ import lombok.Setter;
 public class Person {
 
 
-    private String name;
+  private String name;
 
-    private int age;
+  private int age;
 
-    private boolean male;
+  private boolean male;
 
 }

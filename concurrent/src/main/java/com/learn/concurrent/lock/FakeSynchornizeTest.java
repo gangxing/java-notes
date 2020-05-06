@@ -10,43 +10,46 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class FakeSynchornizeTest {
 
 
-    public static void main(String[] args) {
-        Adder a = new Adder();
-        Adder b = new Adder();
-        Thread ta = new Thread(() -> {
-            for (int i = 0; i < 10000; i++)
-                a.add();
-        });
+  public static void main(String[] args) {
+    Adder a = new Adder();
+    Adder b = new Adder();
+    Thread ta = new Thread(() -> {
+      for (int i = 0; i < 10000; i++) {
+        a.add();
+      }
+    });
 
-        Thread tb = new Thread(() -> {
-            for (int i = 0; i < 10000; i++) b.add();
-        });
-        ta.start();
-        tb.start();
-        try {
+    Thread tb = new Thread(() -> {
+      for (int i = 0; i < 10000; i++) {
+        b.add();
+      }
+    });
+    ta.start();
+    tb.start();
+    try {
 
-            ta.join();
-            tb.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-
-        System.err.println(Adder.v.intValue());
+      ta.join();
+      tb.join();
+    } catch (InterruptedException e) {
+      e.printStackTrace();
     }
 
-    private static class Adder {
-        static AtomicInteger v = new AtomicInteger(0);
+    System.err.println(Adder.v.intValue());
+  }
 
-        Class lock=Adder.class;
+  private static class Adder {
 
-        public  void add() {
+    static AtomicInteger v = new AtomicInteger(0);
+
+    Class lock = Adder.class;
+
+    public void add() {
 //            synchronized (lock) {
 //                v.incrementAndGet();
 //            }
-            v.incrementAndGet();
-        }
-
-
+      v.incrementAndGet();
     }
+
+
+  }
 }

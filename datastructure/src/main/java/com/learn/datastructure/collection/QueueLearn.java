@@ -7,7 +7,7 @@ package com.learn.datastructure.collection;
  */
 public class QueueLearn {
 
-    /**
-     * JDK提供的各种队列学习
-     */
+  /**
+   * JDK提供的各种队列学习
+   */
 }

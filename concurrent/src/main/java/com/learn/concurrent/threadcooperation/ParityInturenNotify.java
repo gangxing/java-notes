@@ -7,54 +7,51 @@ package com.learn.concurrent.threadcooperation;
  */
 public class ParityInturenNotify {
 
-    public static void main(String[] args) {
-        Object lock=new Object();
-        PrintWorker workerA = new PrintWorker(1,lock);
-        PrintWorker workerB = new PrintWorker(2,lock);
+  public static void main(String[] args) {
+    Object lock = new Object();
+    PrintWorker workerA = new PrintWorker(1, lock);
+    PrintWorker workerB = new PrintWorker(2, lock);
 
-        Thread threadA = new Thread(workerA, "jishu");
-        Thread threadB = new Thread(workerB, "oushu");
+    Thread threadA = new Thread(workerA, "jishu");
+    Thread threadB = new Thread(workerB, "oushu");
 
-        threadA.start();
-        threadB.start();
+    threadA.start();
+    threadB.start();
+  }
+
+
+  private static class PrintWorker implements Runnable {
+
+    private static final int STEP = 2;
+    private int num;
+    private Object lock;
+
+    public PrintWorker(int num, Object lock) {
+      this.num = num;
+      this.lock = lock;
     }
 
+    @Override
+    public void run() {
 
-    private static class PrintWorker implements Runnable {
+      while (true) {
 
-        private int num;
+        synchronized (lock) {
+          System.err.println(tName() + "-" + num);
+          num += STEP;
 
-        private static final int STEP = 2;
+          lock.notify();
 
-
-        private Object lock;
-
-        public PrintWorker(int num, Object lock) {
-            this.num = num;
-            this.lock = lock;
+          try {
+            lock.wait();
+          } catch (InterruptedException e) {
+          }
         }
-
-        @Override
-        public void run() {
-
-            while (true) {
-
-                synchronized (lock) {
-                    System.err.println(tName() + "-" + num);
-                    num += STEP;
-
-                    lock.notify();
-
-                    try {
-                        lock.wait();
-                    } catch (InterruptedException e) {
-                    }
-                }
-            }
-        }
-
-        private String tName() {
-            return Thread.currentThread().getName();
-        }
+      }
     }
+
+    private String tName() {
+      return Thread.currentThread().getName();
+    }
+  }
 }

@@ -21,25 +21,22 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/fan")
 public class FanController {
 
-    @Autowired
-    private FanService fxanService;
+  @Autowired
+  private FanService fxanService;
 
 
-
-
-
-    @RequestMapping(value = "/follow", method = RequestMethod.POST)
-    public ApiResponse follow(@RequestBody FollowRequest request) {
-        fxanService.follow(request);
+  @RequestMapping(value = "/follow", method = RequestMethod.POST)
+  public ApiResponse follow(@RequestBody FollowRequest request) {
+    fxanService.follow(request);
 //        log.info(myFanService.getClass().getName());
-        log.info(fxanService.getClass().getName());
+    log.info(fxanService.getClass().getName());
 //        log.info("equals "+myFanService.getClass().equals(fanService.getClass()));
-        return ApiResponses.success();
-    }
+    return ApiResponses.success();
+  }
 
-    @RequestMapping(value = "/defollow", method = RequestMethod.POST)
-    public ApiResponse defollow(@RequestBody FollowRequest request) {
-        fxanService.defollow(request);
-        return ApiResponses.success();
-    }
+  @RequestMapping(value = "/defollow", method = RequestMethod.POST)
+  public ApiResponse defollow(@RequestBody FollowRequest request) {
+    fxanService.defollow(request);
+    return ApiResponses.success();
+  }
 }

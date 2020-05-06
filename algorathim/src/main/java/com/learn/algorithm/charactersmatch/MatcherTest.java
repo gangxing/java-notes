@@ -15,12 +15,12 @@ import lombok.extern.slf4j.Slf4j;
 public class MatcherTest {
 
 
-    public static void main(String[] args) {
+  public static void main(String[] args) {
 //        Matcher matcher=new BFMatcher();
 //        Matcher matcher=new RKMatcher();
-        Matcher matcher=new BMMatcher();
-        String source="ADBCjdjj39922j3jdd";
-        String target="jj39";
-        log.info(""+matcher.matches(source,target));
-    }
+    Matcher matcher = new BMMatcher();
+    String source = "ADBCjdjj39922j3jdd";
+    String target = "jj39";
+    log.info("" + matcher.matches(source, target));
+  }
 }

@@ -14,6 +14,6 @@ import java.lang.annotation.Target;
 @Target({ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER})
 public @interface MapKey {
 
-    String name() default "";
+  String name() default "";
 
 }

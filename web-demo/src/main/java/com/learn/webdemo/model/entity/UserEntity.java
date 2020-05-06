@@ -1,10 +1,8 @@
 package com.learn.webdemo.model.entity;
 
+import java.util.Date;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.io.Serializable;
-import java.util.Date;
 
 /**
  * @Description
@@ -15,15 +13,15 @@ import java.util.Date;
 @Setter
 public class UserEntity extends BaseEntity {
 
-    private String name;
+  private String name;
 
-    private String avatar;
+  private String avatar;
 
-    private Date birthday;
+  private Date birthday;
 
-    private Integer fanCount;
+  private Integer fanCount;
 
-    private Integer followCount;
+  private Integer followCount;
 
 
 }

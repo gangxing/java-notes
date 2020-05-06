@@ -7,7 +7,5 @@
 package com.learn.concurrent;
 
 /**
- * Java并发编程
- * https://www.jianshu.com/nb/27384241
- *
+ * Java并发编程 https://www.jianshu.com/nb/27384241
  */

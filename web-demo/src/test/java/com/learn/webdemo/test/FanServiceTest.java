@@ -12,14 +12,14 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 public class FanServiceTest extends BaseTest {
 
-    @Autowired
-    private FanService fanService;
+  @Autowired
+  private FanService fanService;
 
-    @Test
-    public void testFollow(){
-        FollowRequest request=new FollowRequest();
-        request.setUserId(1000000L);
-        request.setFanUserId(1000001L);
-        fanService.follow(request);
-    }
+  @Test
+  public void testFollow() {
+    FollowRequest request = new FollowRequest();
+    request.setUserId(1000000L);
+    request.setFanUserId(1000001L);
+    fanService.follow(request);
+  }
 }

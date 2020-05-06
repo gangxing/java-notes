@@ -10,34 +10,34 @@ import java.util.Iterator;
  */
 public class MyLinkedListTest {
 
-    public static void main(String[] args) {
-        MyLinkedList list=new MyLinkedList();
-        for (int i=0;i<10;i++){
-            list.add(i);
-        }
-
-        Iterator<MyLinkedList.Node> iterator=list.iterator();
-        while (iterator.hasNext()){
-            MyLinkedList.Node next=iterator.next();
-            System.err.println(next);
-        }
-
-        System.err.println("reverse print");
-        reversePrint(list);
+  public static void main(String[] args) {
+    MyLinkedList list = new MyLinkedList();
+    for (int i = 0; i < 10; i++) {
+      list.add(i);
     }
 
-    private static void reversePrint(MyLinkedList list){
-        MyLinkedList.Node head=list.getHead();
-        reversePrint(head);
-
+    Iterator<MyLinkedList.Node> iterator = list.iterator();
+    while (iterator.hasNext()) {
+      MyLinkedList.Node next = iterator.next();
+      System.err.println(next);
     }
 
-    //递归倒序输出
-    private static void reversePrint(MyLinkedList.Node node){
-        if (node.getNext()!=null){
-            reversePrint(node.getNext());
-        }
-        System.err.println(node);
+    System.err.println("reverse print");
+    reversePrint(list);
+  }
 
+  private static void reversePrint(MyLinkedList list) {
+    MyLinkedList.Node head = list.getHead();
+    reversePrint(head);
+
+  }
+
+  //递归倒序输出
+  private static void reversePrint(MyLinkedList.Node node) {
+    if (node.getNext() != null) {
+      reversePrint(node.getNext());
     }
+    System.err.println(node);
+
+  }
 }

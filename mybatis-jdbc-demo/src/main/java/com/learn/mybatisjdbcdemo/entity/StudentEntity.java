@@ -1,9 +1,8 @@
 package com.learn.mybatisjdbcdemo.entity;
 
+import java.util.Date;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.util.Date;
 
 /**
  * @Description
@@ -14,33 +13,33 @@ import java.util.Date;
 @Setter
 public class StudentEntity {
 
-    private Long id;
+  private Long id;
 
-    private String name;
+  private String name;
 
-    private Integer gender;
+  private Integer gender;
 
-    private Date birthday;
+  private Date birthday;
 
-    private Integer height;
+  private Integer height;
 
-    private Long classId;
+  private Long classId;
 
-    private Date createdAt;
+  private Date createdAt;
 
-    private Date updatedAt;
+  private Date updatedAt;
 
-    @Override
-    public String toString() {
-        return "StudentEntity{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", gender=" + gender +
-                ", birthday=" + birthday +
-                ", height=" + height +
-                ", classId=" + classId +
-                ", createdAt=" + createdAt +
-                ", updatedAt=" + updatedAt +
-                '}';
-    }
+  @Override
+  public String toString() {
+    return "StudentEntity{" +
+        "id=" + id +
+        ", name='" + name + '\'' +
+        ", gender=" + gender +
+        ", birthday=" + birthday +
+        ", height=" + height +
+        ", classId=" + classId +
+        ", createdAt=" + createdAt +
+        ", updatedAt=" + updatedAt +
+        '}';
+  }
 }

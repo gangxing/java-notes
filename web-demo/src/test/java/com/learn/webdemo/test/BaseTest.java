@@ -20,24 +20,24 @@ import org.springframework.test.context.junit4.SpringRunner;
 public class BaseTest {
 
 
-    private long start;
+  private long start;
 
-    @Before
-    public void before(){
-        start=System.currentTimeMillis();
-    }
+  @Before
+  public void before() {
+    start = System.currentTimeMillis();
+  }
 
-    @After
-    public void after(){
-        long end=System.currentTimeMillis();
-        print("耗时："+(end-start)+" ms");
-    }
+  @After
+  public void after() {
+    long end = System.currentTimeMillis();
+    print("耗时：" + (end - start) + " ms");
+  }
 
-    protected void print(Object object) {
-        System.err.println(JSON.toJSONString(object,
-                SerializerFeature.PrettyFormat,
-                SerializerFeature.WriteMapNullValue,
-                SerializerFeature.WriteDateUseDateFormat,
-                SerializerFeature.MapSortField));
-    }
+  protected void print(Object object) {
+    System.err.println(JSON.toJSONString(object,
+        SerializerFeature.PrettyFormat,
+        SerializerFeature.WriteMapNullValue,
+        SerializerFeature.WriteDateUseDateFormat,
+        SerializerFeature.MapSortField));
+  }
 }

@@ -7,15 +7,15 @@ package com.learn.jdk.jmx;
  */
 public interface HelloMBean {
 
-    String getName();
+  String getName();
 
-    void setName(String name);
+  void setName(String name);
 
-    Integer getAge();
+  Integer getAge();
 
-    void setAge(Integer age);
+  void setAge(Integer age);
 
-    public void eat(String param);
+  public void eat(String param);
 
 
 }

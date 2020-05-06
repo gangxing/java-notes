@@ -11,19 +11,19 @@ import java.util.RandomAccess;
  * @Date 2019/6/17 14:09
  */
 public class MyArrayList<E> extends AbstractList<E>
-        implements List<E>, RandomAccess, Cloneable, java.io.Serializable{
+    implements List<E>, RandomAccess, Cloneable, java.io.Serializable {
 
-    @Override
-    public E get(int index) {
-        return null;
-    }
-
-    @Override
-    public int size() {
-        return 0;
-    }
-
-    public static void main(String[] args) {
+  public static void main(String[] args) {
 //        ArrayList
-    }
+  }
+
+  @Override
+  public E get(int index) {
+    return null;
+  }
+
+  @Override
+  public int size() {
+    return 0;
+  }
 }

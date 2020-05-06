@@ -11,28 +11,27 @@ import java.util.Iterator;
 public interface BinaryTree<V> {
 
 
-    /**
-     * 返回当前节点的父节点
-     *
-     * @param key
-     * @param value
-     * @return 如果插入的节点为空节点，则返回null
-     */
-    void add(int key, V value);
+  /**
+   * 返回当前节点的父节点
+   *
+   * @param key
+   * @param value
+   * @return 如果插入的节点为空节点，则返回null
+   */
+  void add(int key, V value);
 
 
-    V search(int key);
+  V search(int key);
 
 
-    void print();
+  void print();
 
 
-    //删除
-    void remove(int key);
+  //删除
+  void remove(int key);
 
 
-    Iterator<Integer> iterator();
-
+  Iterator<Integer> iterator();
 
 
 }

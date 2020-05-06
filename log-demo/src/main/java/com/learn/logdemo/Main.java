@@ -7,14 +7,14 @@ package com.learn.logdemo;
  */
 public class Main {
 
-    static {
-        System.setProperty("logback.configurationFile","console-pattern.xml");
+  static {
+    System.setProperty("logback.configurationFile", "console-pattern.xml");
 
-    }
+  }
 
 
-    public static void main(String[] args) {
-        LoggerSample.main(args);
-    }
+  public static void main(String[] args) {
+    LoggerSample.main(args);
+  }
 
 }

@@ -10,9 +10,9 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-public class UserQuery extends BaseQuery{
+public class UserQuery extends BaseQuery {
 
-    private String name;
+  private String name;
 
 
 }

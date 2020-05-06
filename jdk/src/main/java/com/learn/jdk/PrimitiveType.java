@@ -8,12 +8,12 @@ package com.learn.jdk;
  */
 public class PrimitiveType {
 
-    public static void main(String[] args) {
-        long l=10000;
-        System.err.println(Long.toBinaryString(l));
-       long ll= Long.reverseBytes(l);
-       String s=Long.toBinaryString(ll);
-        System.err.println(s);
-        System.err.println(s.length());
-    }
+  public static void main(String[] args) {
+    long l = 10000;
+    System.err.println(Long.toBinaryString(l));
+    long ll = Long.reverseBytes(l);
+    String s = Long.toBinaryString(ll);
+    System.err.println(s);
+    System.err.println(s.length());
+  }
 }

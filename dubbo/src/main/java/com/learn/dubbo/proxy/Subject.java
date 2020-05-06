@@ -8,8 +8,8 @@ package com.learn.dubbo.proxy;
  */
 public interface Subject {
 
-    void rent();
+  void rent();
 
-    String hello(String s);
+  String hello(String s);
 
 }

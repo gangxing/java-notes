@@ -11,20 +11,20 @@ import org.apache.ibatis.session.SqlSession;
  */
 public class StudentMapperImpl implements StudentMapper {
 
-    private SqlSession session;
+  private SqlSession session;
 
-    public StudentMapperImpl(SqlSession session) {
-        this.session = session;
-    }
+  public StudentMapperImpl(SqlSession session) {
+    this.session = session;
+  }
 
-    @Override
-    public StudentEntity selectById(Long id) {
+  @Override
+  public StudentEntity selectById(Long id) {
 
-        return session.selectOne("StudentMapper.selectById", id);
-    }
+    return session.selectOne("StudentMapper.selectById", id);
+  }
 
-    @Override
-    public int insert(StudentEntity studentEntity) {
-        return session.insert("StudentMapper.insert", studentEntity);
-    }
+  @Override
+  public int insert(StudentEntity studentEntity) {
+    return session.insert("StudentMapper.insert", studentEntity);
+  }
 }

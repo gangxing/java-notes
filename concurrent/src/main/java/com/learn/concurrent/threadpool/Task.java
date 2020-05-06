@@ -10,27 +10,27 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 class Task implements Runnable {
 
-    private String name;
+  private String name;
 
-    public Task(String name) {
-        this.name = name;
-    }
+  public Task(String name) {
+    this.name = name;
+  }
 
-    @Override
-    public void run() {
-        log.info(this + " is running");
+  public static void main(String[] args) {
+    Task task = new Task("hahah");
+    log.info("task is {}", task);
+  }
+
+  @Override
+  public void run() {
+    log.info(this + " is running");
 //            doBiz();
-        log.info(this + " done");
-    }
+    log.info(this + " done");
+  }
 
-    @Override
-    public String toString() {
-        return "Task-" +
-                name;
-    }
-
-    public static void main(String[] args) {
-        Task task=new Task("hahah");
-        log.info("task is {}",task);
-    }
+  @Override
+  public String toString() {
+    return "Task-" +
+        name;
+  }
 }

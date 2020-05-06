@@ -2,10 +2,9 @@ package com.learn.webdemo.test;
 
 import com.learn.webdemo.model.entity.UserEntity;
 import com.learn.webdemo.service.UserService;
+import java.util.Date;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import java.util.Date;
 
 /**
  * @Description
@@ -14,15 +13,15 @@ import java.util.Date;
  */
 public class UserServiceTest extends BaseTest {
 
-    @Autowired
-    private UserService userService;
+  @Autowired
+  private UserService userService;
 
-    @Test
-    public void testCreate(){
+  @Test
+  public void testCreate() {
 
-        for (int i=0;i<100;i++) {
-            UserEntity user = userService.create("Zhangsan"+i, "http://baidu.com"+i, new Date());
-            print(user);
-        }
+    for (int i = 0; i < 100; i++) {
+      UserEntity user = userService.create("Zhangsan" + i, "http://baidu.com" + i, new Date());
+      print(user);
     }
+  }
 }

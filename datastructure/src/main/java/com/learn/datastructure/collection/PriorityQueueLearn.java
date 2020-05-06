@@ -11,16 +11,16 @@ import java.util.PriorityQueue;
  */
 public class PriorityQueueLearn {
 
-    public static void main(String[] args) {
-        PriorityQueue<Integer> queue=new PriorityQueue<>();
-        for (int i=10;i>0;i--) {
-            queue.add(i);
-        }
-        queue.remove(1  );
-        Iterator<Integer> iterator=queue.iterator();
-        while (iterator.hasNext()){
-            Integer next=iterator.next();
-            System.err.println("next:"+next);
-        }
+  public static void main(String[] args) {
+    PriorityQueue<Integer> queue = new PriorityQueue<>();
+    for (int i = 10; i > 0; i--) {
+      queue.add(i);
     }
+    queue.remove(1);
+    Iterator<Integer> iterator = queue.iterator();
+    while (iterator.hasNext()) {
+      Integer next = iterator.next();
+      System.err.println("next:" + next);
+    }
+  }
 }

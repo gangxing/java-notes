@@ -9,8 +9,8 @@ import com.learn.mybatisjdbcdemo.entity.ClassEntity;
  */
 public interface ClassMapper {
 
-    ClassEntity selectById(Long id);
+  ClassEntity selectById(Long id);
 
-    int insert(ClassEntity entity);
+  int insert(ClassEntity entity);
 
 }

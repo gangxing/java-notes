@@ -10,17 +10,17 @@ import com.learn.webdemo.model.request.FollowRequest;
 public interface FanService {
 
 
-    /**
-     * 关注
-     *
-     * @param request
-     */
-    void follow(FollowRequest request);
+  /**
+   * 关注
+   *
+   * @param request
+   */
+  void follow(FollowRequest request);
 
-    /**
-     * 取消关注
-     *
-     * @param request
-     */
-    void defollow(FollowRequest request);
+  /**
+   * 取消关注
+   *
+   * @param request
+   */
+  void defollow(FollowRequest request);
 }

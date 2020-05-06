@@ -14,97 +14,97 @@ import java.util.concurrent.locks.ReentrantLock;
 public class ReentrantLockInterruptTest extends Thread {
 
 
-    public static void main(String[] args) {
+  private static ReentrantLock lock1 = new ReentrantLock();
+  private static ReentrantLock lock2 = new ReentrantLock();
+  int lock;
 
-        ReentrantLockInterruptTest test1 = new ReentrantLockInterruptTest(1, "test1");
-        ReentrantLockInterruptTest test2 = new ReentrantLockInterruptTest(2, "test2");
-        test1.start();
-        test2.start();
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        DeadLockChecker.check();
+  public ReentrantLockInterruptTest(int lock, String name) {
+    super.setName(name);
+    this.lock = lock;
+  }
+
+  public static void main(String[] args) {
+
+    ReentrantLockInterruptTest test1 = new ReentrantLockInterruptTest(1, "test1");
+    ReentrantLockInterruptTest test2 = new ReentrantLockInterruptTest(2, "test2");
+    test1.start();
+    test2.start();
+    try {
+      Thread.sleep(1000);
+    } catch (InterruptedException e) {
+      e.printStackTrace();
     }
+    DeadLockChecker.check();
+  }
 
-    private static ReentrantLock lock1 = new ReentrantLock();
-    private static ReentrantLock lock2 = new ReentrantLock();
+  @Override
+  public void run() {
+    try {
+      if (lock == 1) {
+        lock1.lockInterruptibly();
+        trySleep();
+        lock2.lockInterruptibly();
+        trySleep();
+      } else {
+        lock2.lockInterruptibly();
+        trySleep();
+        lock1.lockInterruptibly();
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+    } finally {
 
-    int lock;
-
-    public ReentrantLockInterruptTest(int lock, String name) {
-        super.setName(name);
-        this.lock = lock;
+      if (lock1.isHeldByCurrentThread()) {
+        lock1.unlock();
+      }
+      if (lock2.isHeldByCurrentThread()) {
+        lock2.unlock();
+      }
+      System.err.println(tName() + "退出");
     }
+  }
 
-    @Override
-    public void run() {
-        try {
-            if (lock == 1) {
-                lock1.lockInterruptibly();
-                trySleep();
-                lock2.lockInterruptibly();
-                trySleep();
-            }else {
-                lock2.lockInterruptibly();
-                trySleep();
-                lock1.lockInterruptibly();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-
-            if (lock1.isHeldByCurrentThread()) {
-                lock1.unlock();
-            }
-            if (lock2.isHeldByCurrentThread()) {
-                lock2.unlock();
-            }
-            System.err.println(tName() + "退出");
-        }
+  private void trySleep() {
+    try {
+      Thread.sleep(1000);
+    } catch (InterruptedException e) {
+      e.printStackTrace();
     }
+  }
 
-    private void trySleep() {
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
+  private String tName() {
+    return Thread.currentThread().getName();
+  }
 
-    private String tName() {
-        return Thread.currentThread().getName();
-    }
+  static class DeadLockChecker {
 
-    static class DeadLockChecker {
-        private final static ThreadMXBean MX_BEAN = ManagementFactory.getThreadMXBean();
+    private final static ThreadMXBean MX_BEAN = ManagementFactory.getThreadMXBean();
 
-        public static void check() {
-            Thread tt = new Thread(() -> {
-                while (true) {
-                    long[] deadLockThreadIds = MX_BEAN.findDeadlockedThreads();
-                    if (deadLockThreadIds != null) {
-                        ThreadInfo[] threadInfos = MX_BEAN.getThreadInfo(deadLockThreadIds);
-                        for (Thread t : Thread.getAllStackTraces().keySet()) {
-                            for (int i = 0; i < threadInfos.length; i++) {
-                                if (t.getId() == threadInfos[i].getThreadId()) {
-                                    System.err.println(t.getName());
-                                    t.interrupt();
-                                }
-                            }
-                        }
-                    }
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
+    public static void check() {
+      Thread tt = new Thread(() -> {
+        while (true) {
+          long[] deadLockThreadIds = MX_BEAN.findDeadlockedThreads();
+          if (deadLockThreadIds != null) {
+            ThreadInfo[] threadInfos = MX_BEAN.getThreadInfo(deadLockThreadIds);
+            for (Thread t : Thread.getAllStackTraces().keySet()) {
+              for (int i = 0; i < threadInfos.length; i++) {
+                if (t.getId() == threadInfos[i].getThreadId()) {
+                  System.err.println(t.getName());
+                  t.interrupt();
                 }
-            });
-            tt.setDaemon(true);
-            tt.start();
+              }
+            }
+          }
+          try {
+            Thread.sleep(1000);
+          } catch (InterruptedException e) {
+            e.printStackTrace();
+          }
         }
-
+      });
+      tt.setDaemon(true);
+      tt.start();
     }
+
+  }
 }

@@ -7,57 +7,54 @@ package com.learn.concurrent.threadcooperation;
  */
 public class ParityInturenInterrupt {
 
-    public static void main(String[] args) {
-        PrintWorker workerA = new PrintWorker(1);
-        PrintWorker workerB = new PrintWorker(2);
+  public static void main(String[] args) {
+    PrintWorker workerA = new PrintWorker(1);
+    PrintWorker workerB = new PrintWorker(2);
 
-        Thread threadA = new Thread(workerA, "jishu");
-        Thread threadB = new Thread(workerB, "oushu");
-        workerA.setOther(threadB);
-        workerB.setOther(threadA);
+    Thread threadA = new Thread(workerA, "jishu");
+    Thread threadB = new Thread(workerB, "oushu");
+    workerA.setOther(threadB);
+    workerB.setOther(threadA);
 
-        threadA.start();
-        threadB.start();
+    threadA.start();
+    threadB.start();
+  }
+
+
+  private static class PrintWorker implements Runnable {
+
+    private static final int STEP = 2;
+    private int num;
+    private Thread other;
+
+    public PrintWorker(int num) {
+      this.num = num;
     }
 
-
-    private static class PrintWorker implements Runnable {
-
-        private int num;
-
-        private static final int STEP = 2;
-
-
-        private Thread other;
-
-        public PrintWorker(int num) {
-            this.num = num;
-        }
-
-        public void setOther(Thread other) {
-            this.other = other;
-        }
-
-        @Override
-        public void run() {
-
-            while (true) {
-
-                System.err.println(tName() + "-" + num);
-                num += STEP;
-
-                other.interrupt();
-
-                try {
-                    Thread.sleep(100000);
-                } catch (InterruptedException e) {
-                    //开始干活啦
-                }
-            }
-        }
-
-        private String tName() {
-            return Thread.currentThread().getName();
-        }
+    public void setOther(Thread other) {
+      this.other = other;
     }
+
+    @Override
+    public void run() {
+
+      while (true) {
+
+        System.err.println(tName() + "-" + num);
+        num += STEP;
+
+        other.interrupt();
+
+        try {
+          Thread.sleep(100000);
+        } catch (InterruptedException e) {
+          //开始干活啦
+        }
+      }
+    }
+
+    private String tName() {
+      return Thread.currentThread().getName();
+    }
+  }
 }
