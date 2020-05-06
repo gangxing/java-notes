@@ -24,6 +24,11 @@
             <artifactId>spring-context</artifactId>
             <version>5.0.7.RELEASE</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+        </dependency>
     </dependencies>
 
 

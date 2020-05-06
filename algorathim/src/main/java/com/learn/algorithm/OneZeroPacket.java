@@ -26,9 +26,7 @@ public class OneZeroPacket {
         for (int i = 0; i <= n; i++) {
             for (int j = 1; j <= c; j++) {
                 if (i > 0 && j >= volume[i]) {
-                    d[i][j] = d[i - 1][j] > d[i - 1][j - volume[i]] + worth[i] ?
-                            d[i - 1][j] :
-                            d[i - 1][j - volume[i]] + worth[i];
+                    d[i][j] = Math.max(d[i - 1][j], d[i - 1][j - volume[i]] + worth[i]);
                     print(d);
                 }
             }
