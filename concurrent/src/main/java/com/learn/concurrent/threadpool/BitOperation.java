@@ -191,7 +191,7 @@ public class BitOperation {
     System.err.println(CAPACITY);
   }
 
-  public static void main2(String[] args) {
+  public static void main(String[] args) {
     /*
      * 利用位运算将字符串类型的ip地址转换成一个数字存储
      * 因为有四段 所以每段用8位来存储
@@ -202,18 +202,20 @@ public class BitOperation {
       String ip = randomIp();
 //        String ip = "239.202.146.90";
 
-      Integer res = encodeIp(ip);
-      if (res < 0) {
-        count++;
-      }
-      String decode = decodeIp(res);
-      System.err
-          .println(ip + "-->" + res + " 解析" + (ip.equals(decode) ? "成功" : "失败") + " " + decode);
-      System.err.println(count);
+      int res = encodeIp(ip);
+      int res1 = encodeIp1(ip);
+      System.err.println(res == res1);
+//      if (res < 0) {
+//        count++;
+//      }
+//      String decode = decodeIp(res);
+//      System.err
+//          .println(ip + "-->" + res + " 解析" + (ip.equals(decode) ? "成功" : "失败") + " " + decode);
+//      System.err.println(count);
     }
   }
 
-  public static void main(String[] args) {
+  public static void main11(String[] args) {
 //        for (int i=-10;i<100;i++){
 //            boolean isEven=isEven(i);
 //            System.err.println(i+(isEven?"是":"不是")+"偶数");

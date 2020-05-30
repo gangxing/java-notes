@@ -44,7 +44,7 @@ public class BitMap {
    * 经常看到redis中bitmap 今天花时间看看到底是个什么鬼
    * <link>https://blog.csdn.net/u011957758/article/details/74783347</link>
    */
-  public static void main(String[] args) {
+  public static void main1(String[] args) {
 //        System.err.println(1L<<32);
 
 //        System.err.println(14 ^ 1);
@@ -256,4 +256,8 @@ public class BitMap {
     return chars;
 //        return new String(chars);
   }
+
+
+
+
 }
