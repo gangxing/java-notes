@@ -17,9 +17,9 @@ import java.sql.Statement;
 public class CRUDSample {
 
   public static void main(String[] args) {
-//        insert();
+        insert();
 //        update();
-    query();
+//    query();
   }
 
 
@@ -31,11 +31,12 @@ public class CRUDSample {
 
       PrintStream out = System.err;
       DriverManager.setLogWriter(new PrintWriter(out));
-      String url = "jdbc:mysql://47.110.254.134:3306/demo?useUnicode=true&characterEncoding=utf8";
-      connection = DriverManager.getConnection(url, "root", "Zjcgdatabase2018k");
+      String url = "jdbc:mysql://127.0.0.1:3306/sancheng?useUnicode=true&characterEncoding=utf8";
+      connection = DriverManager.getConnection(url, "root", "1234");
+      connection.setCatalog("learn_db");
       statement = connection.createStatement();
       //为什么中文是乱码
-      String sql = "INSERT INTO student(`name`,`gender`,`birthday`,`height`,`created_at`) VALUES ('王五',0,'2019-09-22',150,'2019-10-04 23:33:45')";
+      String sql = "INSERT INTO `user`(`name`,`created_at`) VALUES ('王五',now())";
       int affectRows = statement.executeUpdate(sql);
       System.err.println("affectRows:" + affectRows);
     } catch (SQLException e) {

@@ -7,7 +7,7 @@
 
     <appender name="consoleLog" class="ch.qos.logback.core.ConsoleAppender">
         <layout class="ch.qos.logback.classic.PatternLayout">
-            <pattern>%d - %msg%n</pattern>
+            <pattern>%d [%thread] [%level] [%logger{50}] %msg%n</pattern>
         </layout>
         <!--<filter>-->
             <!--<level>DEBUG</level>-->
@@ -55,9 +55,9 @@
         </rollingPolicy>
     </appender>
 
-    <logger name="org.springframework" level="DEBUG">
-        <appender-ref ref="consoleLog"></appender-ref>
-    </logger>
+<!--    <logger name="org.springframework" level="DEBUG">-->
+<!--        <appender-ref ref="consoleLog"></appender-ref>-->
+<!--    </logger>-->
 
     <logger name="com.alibaba.druid" level="INFO">
         <appender-ref ref="consoleLog"></appender-ref>
@@ -67,7 +67,7 @@
         <!--<appender-ref ref="consoleLog"></appender-ref>-->
     <!--</logger>-->
 
-    <logger name="com.hem.webdemo" level="DEBUG">
+    <logger name="com.learn.webdemo.mapper" level="DEBUG">
         <appender-ref ref="consoleLog"></appender-ref>
     </logger>
 

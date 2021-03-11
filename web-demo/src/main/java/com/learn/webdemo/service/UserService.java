@@ -36,6 +36,7 @@ public interface UserService {
    * @param fanCountIncr
    * @param followCountIncr
    */
+
   void incrCount(Long id, Integer fanCountIncr, Integer followCountIncr);
 
 }

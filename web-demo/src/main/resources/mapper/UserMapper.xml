@@ -191,17 +191,36 @@
         WHERE id = #{update.id}
     </update>
 
+  <update id="updateByIds" parameterType="java.util.Map">
+    UPDATE user set fan_count=0,follow_count=0 where id = #{id}
+    <include refid="set"></include>
+    WHERE id in
+    <foreach collection="ids" item="item" index="index" separator=",">
+      (#{item})
+    </foreach>
+  </update>
 
-    <update id="incrCount" >
+
+
+  <update id="incrCount" >
+    UPDATE user
+    set
+    <if test="fanCount != null">
+      fan_count = fan_count + #{fanCount},
+    </if>
+    <if test="followCount != null">
+      follow_count = follow_count + #{followCount},
+    </if>
+    updated_at = now()
+    WHERE id = #{id}
+  </update>
+
+
+  <update id="cleanCount" >
         UPDATE user
         set
-        <if test="fanCount != null">
-            fan_count = fan_count + #{fanCount},
-        </if>
-        <if test="followCount != null">
-            follow_count = follow_count + #{followCount},
-        </if>
-        updated_at = now()
+            fan_count = 0,
+            follow_count = 0
         WHERE id = #{id}
     </update>
 

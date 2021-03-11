@@ -98,6 +98,13 @@
         <include refid="Query_Where"/>
     </select>
 
+  <select id="selectByUserIdAndFanUserId" resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Column_List"/>
+    FROM fan
+    where user_id=#{userId} and fan_user_id=#{fanUserId}
+  </select>
+
     <select id="selectList" resultMap="BaseResultMap">
         SELECT
         <include refid="Base_Column_List"/>
@@ -147,7 +154,7 @@
      created_at,
      updated_at
      )
-     VALUES 
+     VALUES
      <foreach collection="entities" item="item" index="index" separator=",">
      (
      #{item.userId},
@@ -183,4 +190,7 @@
     </update>
 
 
+  <update id="delete" parameterType="java.lang.Long">
+    delete from  fan where user_id=#{userId} and fan_user_id=#{fanUserId}
+  </update>
 </mapper>

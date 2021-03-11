@@ -6,6 +6,9 @@ import com.learn.webdemo.service.UserService;
 import java.util.Date;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @Description
@@ -17,6 +20,9 @@ public class UserServiceImpl implements UserService {
 
   @Autowired
   private UserMapper userMapper;
+
+  @Autowired
+  private PlatformTransactionManager platformTransactionManager;
 
   @Override
   public UserEntity create(String name, String avatar, Date birthday) {
@@ -37,8 +43,16 @@ public class UserServiceImpl implements UserService {
     return userMapper.selectById(id);
   }
 
+  @Transactional(propagation = Propagation.REQUIRED,timeout = 5)
   @Override
   public void incrCount(Long id, Integer fanCountIncr, Integer followCountIncr) {
     userMapper.incrCount(id, fanCountIncr, followCountIncr);
+//    if (id != null) {
+//      throw new RuntimeException("第二个内部事务抛错");
+//    }
+
+
   }
+
+
 }

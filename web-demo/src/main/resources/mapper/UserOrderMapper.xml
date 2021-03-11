@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.learn.webdemo.mapper.UserOrderMapper">
+
+    <resultMap id="BaseResultMap" type="com.learn.webdemo.model.entity.UserOrderEntity">
+        <id column="id" property="id"/>
+
+        <result property="userId" column="user_id"/>
+        <result property="orderSn" column="order_sn"/>
+
+        <result column="created_at" property="createdAt"/>
+        <result column="updated_at" property="updatedAt"/>
+    </resultMap>
+
+
+
+  <!--CREATE TABLE `user_order` (
+  `seller_id` bigint(20) NOT NULL COMMENT '卖家ID',
+  `total_price` bigint(20) NOT NULL COMMENT '商品总价',
+  `delivery_fee` bigint(20) NOT NULL COMMENT '总运费',
+  `total_amount` bigint(20) NOT NULL COMMENT '订单总额',
+  `order_status` tinyint(4) NOT NULL COMMENT '订单状态',
+  `purchase_status` tinyint(4) NOT NULL DEFAULT '0' COMMENT '采购单的采购状态\r\n0:无状态\r\n1:向 M 付款成功\r\n2:向供应商入账成功\r\n3:推送消息(第三方推送)\r\n4:推送失败(通过定时任务再尝试一次)',
+  `delivery_id` tinyint(4) NOT NULL COMMENT '配送方式ID',
+  `payment_id` tinyint(4) NOT NULL COMMENT '支付方式ID',
+  `pay_mark` tinyint(1) NOT NULL DEFAULT '1' COMMENT '是否是该单支付\r\n0:否\r\n1:是',
+  `discount_amount` bigint(20) NOT NULL DEFAULT '0' COMMENT '总优惠额',
+  `discount_mark` tinyint(4) NOT NULL DEFAULT '0' COMMENT '0:无优惠 1:营销优惠 2:余额',
+  `order_time` datetime NOT NULL COMMENT '下单时间',
+  `pay_time` datetime DEFAULT NULL COMMENT '订单支付时间',
+  `receipt_time` datetime DEFAULT NULL COMMENT '订单收货时间',
+  `attach_info` varchar(2000) DEFAULT NULL COMMENT '第三方备注',
+  `cancel_reason` varchar(256) DEFAULT NULL COMMENT '取消原因',
+  `original_order` bigint(20) NOT NULL DEFAULT '0' COMMENT '源订单',
+  `settlement_mark` tinyint(4) NOT NULL DEFAULT '1' COMMENT '已结算完成为0，未结算是1',
+  `refund_mark` int(11) DEFAULT '0' COMMENT '退款标记',
+  `app_type` int(11) DEFAULT NULL COMMENT '下单端类型',
+  `first_order_mark` tinyint(4) DEFAULT '0' COMMENT '首单标志',
+  `return_address` varchar(256) NOT NULL DEFAULT '' COMMENT '退换货地址',
+  `cancel_time` datetime DEFAULT NULL COMMENT '取消订单时间',
+  `delivery_time` datetime DEFAULT NULL COMMENT '发货时间',
+  `finish_time` datetime DEFAULT NULL COMMENT '结束订单时间',
+  `proxy_mark` tinyint(4) NOT NULL DEFAULT '0' COMMENT '是否为代理单, 0:否 1:是',
+  `has_sub_order` tinyint(4) NOT NULL DEFAULT '0' COMMENT '是否为有子单\r\n0:无子单\r\n1:有子单',
+  `t_id` varchar(512) DEFAULT NULL COMMENT '第三方用户追踪id',
+  `show_flag` tinyint(4) NOT NULL DEFAULT '1' COMMENT '订单显示控制',
+  `rookie_mark` tinyint(4) DEFAULT '0' COMMENT '打印状态\\n0未打印\\n1打印\\n2打印失败',
+  `star_user_id` bigint(20) NOT NULL DEFAULT '0' COMMENT '星选客id',
+  `brand_mark` tinyint(4) NOT NULL DEFAULT '0' COMMENT '是否为品牌商定单, 0:否 1:是',
+  `merge_role` tinyint(4) DEFAULT '0' COMMENT '是否展示标志\n0默认值\n1合并订单的主订单\n2合并订单的子订单',
+  `promote_mark` tinyint(4) NOT NULL DEFAULT '0' COMMENT '推广标记，0：普通，1：推广',
+  `tags` varchar(256) DEFAULT NULL COMMENT '订单标签',
+  `user_memo` text COMMENT '买家备注',
+  `seller_memo` text COMMENT '卖家备注',
+  `admin_memo` text COMMENT '管理员备注',
+  `delete_mark` tinyint(2) NOT NULL DEFAULT '0' COMMENT '逻辑删除字段，0:未删除 1:逻辑删除',
+  `delete_timestamp` bigint(20) DEFAULT '0' COMMENT '逻辑删除时间戳，记录删除时刻',
+  `gmt_created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `gmt_modified` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+  `` varchar(32) NOT NULL COMMENT '应用唯一标志',
+  PRIMARY KEY (`id`),-->
+
+
+
+    <insert id="insert" useGeneratedKeys="true" keyColumn="id" keyProperty="id"
+            parameterType="com.learn.webdemo.model.entity.UserOrderEntity">
+     INSERT INTO `user_order` ( `order_sn`, `order_item_ids`, `type`, `user_id`, `user_name`, `head_img_url`, `seller_id`, `total_price`, `delivery_fee`, `total_amount`, `order_status`, `purchase_status`, `delivery_id`, `payment_id`, `pay_mark`, `discount_amount`, `discount_mark`, `order_time`, `pay_time`, `receipt_time`, `attach_info`, `cancel_reason`, `original_order`, `settlement_mark`, `refund_mark`, `app_type`, `first_order_mark`, `return_address`, `cancel_time`, `delivery_time`, `finish_time`, `proxy_mark`, `has_sub_order`, `t_id`, `show_flag`, `rookie_mark`, `star_user_id`, `brand_mark`, `merge_role`, `promote_mark`, `tags`, `user_memo`, `seller_memo`, `admin_memo`, `delete_mark`, `delete_timestamp`, `gmt_created`, `gmt_modified`, `biz_code`, `consignee`, `consignee_mobile`, `tax_fee`, `channel`)
+VALUES
+	( #{orderSn}, '468250', 1, #{userId}, '聪慧过人的唐康鸽', 'https://wdzg-img-online.oss-cn-hangzhou.aliyuncs.com/live_head_img/11.png', 3051462, 2, 0, 2, 23, 0, 1, 20, 1, 0, 0, '2020-08-19 16:20:24', NULL, NULL, '9B464F673E33326AC34FA0D2DCCD2896', NULL, 0, 1, 0, 100, 0, '', '2020-08-19 16:50:25', NULL, NULL, 0, 0, '', 1, 0, 0, 1, 0, 0, 'BRAND SUPPLY ', 'Ly8vdHN0LnFjbG91ZC5jb20jQGVjbWtzZXJ2ZXJ0ZXN0LnNwYXJ0YS5odG1sNS5xcS5jb20=', NULL, 'xgang2_156', 0, 0, '2020-08-19 16:20:24', '2020-09-11 15:59:09', 'weishi', '收货人', '13169717021', 0, 110);
+    </insert>
+
+    <select id="listTables" resultType="hashmap">
+        show tables;
+    </select>
+
+
+    <select id="showTable" resultType="list">
+        select * from information_schema.columns
+
+where table_schema = #{dbName}
+
+and table_name = #{tableName} ;
+    </select>
+
+
+
+</mapper>

@@ -15,12 +15,9 @@ public interface FanService {
    *
    * @param request
    */
-  void follow(FollowRequest request);
+  void follow(FollowRequest request, int propagation,  boolean outerRollback,
+      boolean innerRollback);
 
-  /**
-   * 取消关注
-   *
-   * @param request
-   */
-  void defollow(FollowRequest request);
+
+
 }

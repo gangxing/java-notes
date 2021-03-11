@@ -33,6 +33,8 @@ public interface UserMapper {
 
   int updateByIds(@Param("update") UserEntity update, @Param("ids") List<Long> ids);
 
+  int cleanCount(@Param("id")Long id);
+
 
   int incrCount(@Param("id") Long id,
       @Param("fanCount") Integer fanCount,

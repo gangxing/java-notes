@@ -39,6 +39,7 @@
         <module>servlet-demo</module>
         <module>log-demo</module>
         <module>mybatis-jdbc-demo</module>
+      <module>hbase-demo</module>
     </modules>
 
     <dependencyManagement>

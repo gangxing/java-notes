@@ -4,6 +4,16 @@ server:
     max-threads: 400
     max-connections: 20000
 
+#打开所有端点，提供/actuator/prometheus接口，供prometheus拉取数据
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,prometheus,metrics
+
+  metrics:
+    tags:
+      application: ${spring.application.name}
 #datasource
 spring:
   application:
@@ -24,9 +34,9 @@ spring:
 
   datasource:
     #外网域名 注意最后一个参数 指定时区
-    url: jdbc:mysql://47.110.254.134:3307/webdemo?characterEncoding=utf-8&autoReconnect=true&failOverReadOnly=false&useSSL=false&serverTimezone=CTT
-    username: root
-    password: Zjcgdatabase2018k
+    url: jdbc:mysql://10.10.10.84:3306/trade_db2?characterEncoding=utf-8&autoReconnect=true&failOverReadOnly=false&useSSL=false&serverTimezone=CTT
+    username: canal
+    password: canal
     driver-class-name: com.mysql.cj.jdbc.Driver
     # 使用druid数据源
     type: com.alibaba.druid.pool.DruidDataSource

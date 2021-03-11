@@ -1,10 +1,16 @@
 package com.learn.druiddemo;
 
 import com.alibaba.druid.pool.DruidDataSource;
+import com.alibaba.druid.pool.DruidDataSourceFactory;
 import com.alibaba.druid.pool.DruidPooledConnection;
+import java.sql.Connection;
+import java.sql.Date;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.List;
 import java.util.Properties;
+import javax.sql.DataSource;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -15,32 +21,51 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class DruidDatasourceSample {
 
+
+  private static void query(List<String> columns,String table,Long idMin,Long idMax,int batchSize){
+
+    String sqlTemplate="select %s from %s where id >=%s and id<=%s limit  %s";
+    DruidDataSource dataSource=dataSource();
+    boolean hasNex=true;
+    Long _idMin=idMin;
+    while (hasNex){
+      String cs=String.join(",",columns);
+      String sql=String.format(sqlTemplate,cs,table,_idMin,idMax,batchSize);
+      try {
+
+        Connection connection=dataSource.getConnection();
+        connection.setCatalog("learn_db");
+        Statement  statement=connection.createStatement();
+
+        ResultSet resultSet = statement.executeQuery(sql);
+        while (resultSet.next()) {
+          Long id = resultSet.getLong("id");
+          String name = resultSet.getString("name");
+          Date createdAt = resultSet.getDate("created_at");
+
+          String s=String.format("get one row id=%s,name=%s,createdAT=%s",id,name,createdAt);
+          System.err.println(s);
+          if (id>_idMin){
+            _idMin=id;
+          }
+
+        }
+      }catch (SQLException e){
+        e.printStackTrace();
+      }
+
+
+
+      hasNex=false;
+    }
+  }
+
+
   public static void main(String[] args) {
-    Properties props = System.getProperties();
-    //数据库连接配置
-    props.put("druid.name", "DruidDatasource");
-    props.put("druid.url",
-        "jdbc:mysql://47.110.254.134:3307/demo?useUnicode=true&characterEncoding=utf8");
-    props.put("druid.username", "root");
-    props.put("druid.password", "Zjcgdatabase2018k");
 
-    //连接池配置  内部全用props.getProperty 所以value一定要是字符串
-    //最大活跃数
-    props.put("druid.maxActive", "10");
-    //初始化连接数
-    props.put("druid.initialSize", "0");
-    //TODO 最大等待时间？？？ 这里配置的没用 不会用到
-    props.put("druid.maxWait", "1000");
-
-    //非必须属性
-//        props.put("druid.testWhileIdle",true);
-//        props.put("druid.testOnBorrow",true);
-//        props.put("druid.validationQuery","select 'x'");
-
-    DruidDataSource dataSource = null;
+    DruidDataSource dataSource = dataSource() ;
     try {
-      dataSource = new DruidDataSource();
-      dataSource.setMaxWait(3000);
+//      dataSource.setMaxWait(3000);
       for (int i = 0; i < Integer.MAX_VALUE; i++) {
         new Thread(new InsertTask(dataSource)).start();
         try {
@@ -76,6 +101,8 @@ public class DruidDatasourceSample {
     }
   }
 
+  private static int count=0;
+
   private static class InsertTask implements Runnable {
 
     private DruidDataSource dataSource;
@@ -87,15 +114,21 @@ public class DruidDatasourceSample {
     @Override
     public void run() {
       try {
-        DruidPooledConnection connection = dataSource.getConnection();
+        Connection connection = dataSource.getConnection();
+        connection.setCatalog("learn_db");
+        System.err.println("get Connection"+connection);
         Statement statement = connection.createStatement();
         String name = "王五" + System.currentTimeMillis() + "-" + Thread.currentThread().getName();
         String sql =
-            "INSERT INTO student(`name`,`gender`,`birthday`,`height`,`created_at`) VALUES ('" + name
-                + "',0,'2019-09-22',150,'2019-10-04 23:33:45')";
+            "INSERT INTO `user`(`name`,`created_at`) VALUES ('" + name
+                + "',now())";
 
         int affectRows = statement.executeUpdate(sql);
         log.info("affectRows:" + affectRows);
+        count++;
+        if (count>10){
+          dataSource.setMaxActive(1);
+        }
 
         //用完的连接一定要返还到连接池，不然上面的getConnection将会无连接可取
         //FIXME 所谓的get 和recycle在连接数组上的操作是什么？
@@ -109,10 +142,44 @@ public class DruidDatasourceSample {
          *
          *
          */
-        connection.recycle();
+        connection.close();
       } catch (SQLException e) {
         e.printStackTrace();
       }
     }
   }
+
+  private static DruidDataSource dataSource(){
+    Properties props = new Properties();
+    //数据库连接配置
+    props.put("druid.name", "DruidDatasource");
+    props.put("druid.url",
+      "jdbc:mysql://127.0.0.1/mysql?useUnicode=true&characterEncoding=utf8");
+    props.put("druid.username", "root");
+    props.put("druid.password", "1234");
+
+    //连接池配置  内部全用props.getProperty 所以value一定要是字符串
+    //最大活跃数
+    props.put("druid.maxActive", "2");
+    //初始化连接数
+    props.put("druid.initialSize", "1");
+    //TODO 最大等待时间？？？ 这里配置的没用 不会用到
+    props.put("druid.maxWait", "1000000");
+
+    //非必须属性
+//        props.put("druid.testWhileIdle",true);
+//        props.put("druid.testOnBorrow",true);
+//        props.put("druid.validationQuery","select 'x'");
+
+    try {
+
+      return (DruidDataSource) DruidDataSourceFactory.createDataSource(props);
+    }catch (Exception e){
+      e.printStackTrace();
+      return null;
+    }
+  }
+
 }
+
+

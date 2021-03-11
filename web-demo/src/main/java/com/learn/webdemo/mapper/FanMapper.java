@@ -20,6 +20,8 @@ public interface FanMapper {
 
 //    int insertBatch(Map<String, Object> map);
 
+  FanEntity selectByUserIdAndFanUserId(@Param("userId")Long userId,@Param("fanUserId")Long fanUserId);
+
   FanEntity selectOne(@Param("query") FanQuery query);
 
   List<FanEntity> selectList(@Param("query") FanQuery query, @Param("sort") Sort sort);
@@ -30,6 +32,8 @@ public interface FanMapper {
   Integer count(@Param("query") FanQuery query);
 
   int updateById(@Param("update") FanEntity update);
+
+  int delete(@Param("userId")Long userId,@Param("fanUserId")Long fanUserId);
 
 
 }
